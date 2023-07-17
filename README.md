@@ -1,6 +1,6 @@
-# Unity Plugin (Alpha)
+# Unity Plugin (Coming Soon)
 
-Placeholder repository for the Rivet Unity plugin coming soon.
+Placeholder repository for the Rivet Unity plugin coming soon. [Join our Discord](https://discord.gg/aXYfyNxYVn) to get access to the Unity plugin.
 
 ## Installation
 
