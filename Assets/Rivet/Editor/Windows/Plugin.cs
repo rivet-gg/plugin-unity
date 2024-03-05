@@ -10,7 +10,12 @@ using System.Security.Cryptography;
 
 public struct BootstrapData
 {
-    [JsonProperty("api_endpoint")] public string ApiEndpoint;
+    public string ApiEndpoint
+    {
+        get { return ExtensionData.ApiEndpoint; }
+        set { ExtensionData.ApiEndpoint = value; }
+    }
+
     [JsonProperty("game_id")] public string GameId;
     [JsonProperty("token")] public string Token;
 }
@@ -356,31 +361,25 @@ namespace Rivet
         /// </summary>
         private void GetNamespaceToken()
         {
-            new System.Threading.Thread(() =>
+            var command = thisMachineSelected ? "get-namespace-development-token" : "get-namespace-public-token";
+            var namespaceId = gameData.namespaces[selectedIndex].Item1.name_id;
+
+            var result = RivetCLI.RunCommand("sidekick", command, "--namespace", namespaceId);
+
+            switch (result)
             {
-                var command = thisMachineSelected ? "get-namespace-development-token" : "get-namespace-public-token";
-                var namespaceId = gameData.namespaces[selectedIndex].Item1.name_id;
-
-                var result = RivetCLI.RunCommand("sidekick", command, "--namespace", namespaceId);
-
-                switch (result)
-                {
-                    case SuccessResult<JObject> successResult:
-                        var token = successResult.Data["Ok"]["token"].ToString();
-                        UnityEngine.Debug.Log("Rivet Token: " + token);
-                        rivetEditorToken = token;
-                        UnityEditor.EditorApplication.delayCall += () =>
-                        {
-                            PlayerPrefs.SetString("RIVET_EDITOR_TOKEN", token);
-                            Debug.Log("Saved token to PlayerPrefs");
-                        };
-                        break;
-                    case ErrorResult<JObject> errorResult:
-                        UnityEngine.Debug.LogError(errorResult.Message);
-                        break;
-                }
-
-            }).Start();
+                case SuccessResult<JObject> successResult:
+                    var token = successResult.Data["Ok"]["token"].ToString();
+                    window.RivetToken = token;
+                    UnityEditor.EditorApplication.delayCall += () =>
+                    {
+                        PlayerPrefs.SetString("RIVET_EDITOR_TOKEN", token);
+                    };
+                    break;
+                case ErrorResult<JObject> errorResult:
+                    UnityEngine.Debug.LogError(errorResult.Message);
+                    break;
+            }
         }
     }
 }

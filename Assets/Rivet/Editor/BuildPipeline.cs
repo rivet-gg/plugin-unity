@@ -11,7 +11,8 @@ public class BuildScript : IPreprocessBuildWithReport, IPostprocessBuildWithRepo
     {
         // Create the asset file before the build
         RivetSettings data = ScriptableObject.CreateInstance<RivetSettings>();
-        // data.SomeData = "Some data from the plugin";
+        data.ApiEndpoint = ExtensionData.ApiEndpoint;
+        data.RivetToken = ExtensionData.RivetToken;
         AssetDatabase.CreateAsset(data, "Assets/rivet_export.asset");
         AssetDatabase.SaveAssets();
     }

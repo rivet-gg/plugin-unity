@@ -6,10 +6,34 @@ using System.Diagnostics;
 using System.IO;
 using Newtonsoft.Json.Linq;
 
+public static class ExtensionData
+{
+    public static string RivetToken { get; set; }
+    private static string apiEndpoint = "https://api.rivet.gg";
+
+    public static string ApiEndpoint
+    {
+        get { return apiEndpoint; }
+        set { apiEndpoint = value; }
+    }
+}
+
 namespace Rivet
 {
     public class RivetPluginWindow : EditorWindow
     {
+        public string ApiEndpoint
+        {
+            get { return ExtensionData.ApiEndpoint; }
+            set { ExtensionData.ApiEndpoint = value; }
+        }
+
+        public string RivetToken
+        {
+            get { return ExtensionData.RivetToken; }
+            set { ExtensionData.RivetToken = value; }
+        }
+
         // Define an interface for the states
         public interface IState
         {

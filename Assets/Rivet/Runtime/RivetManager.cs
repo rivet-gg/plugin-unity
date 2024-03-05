@@ -65,15 +65,20 @@ public struct RivetPlayer
 [CreateAssetMenu(fileName = "RivetSettings", menuName = "ScriptableObjects/RivetSettings", order = 1)]
 public class RivetSettings : ScriptableObject
 {
-    public string? rivetToken;
+    public string? RivetToken;
+    public string? ApiEndpoint;
 }
 
 public class RivetManager : MonoBehaviour
 {
-    const string MatchmakerApiEndpoint = "https://api.rivet.gg/matchmaker";
+    [HideInInspector]
+    public string? RivetToken = null;
 
     [HideInInspector]
-    public string? rivetToken = null;
+    public string? ApiEndpoint = null;
+
+    [HideInInspector]
+    public string? MatchmakerApiEndpoint => ApiEndpoint + "/matchmaker";
 
     /// <summary>
     /// The response from the last <see cref="FindLobby"/> call. Used to maintain information about the Rivet player &
@@ -83,17 +88,16 @@ public class RivetManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("RivetManager.Start");
-        // Try to set the Rivet Token from the asset if it exists
-        if (rivetToken == null || rivetToken.Length == 0)
-        {
+        // Try to load Rivet runtime settings
             var rivetSettings = Resources.Load<RivetSettings>("RivetSettings");
             if (rivetSettings != null)
             {
-                Debug.Log("RivetSettings: " + rivetSettings.rivetToken);
-                rivetToken = rivetSettings.rivetToken;
+                Debug.Log("RivetSettings: " + rivetSettings.RivetToken);
+                RivetToken = rivetSettings.RivetToken;
+
+                Debug.Log("RivetSettings: " + rivetSettings.ApiEndpoint);
+                ApiEndpoint = rivetSettings.ApiEndpoint;
             }
-        }
     }
 
     #region API: Matchmaker.Lobbies
@@ -257,9 +261,9 @@ public class RivetManager : MonoBehaviour
             return value;
         }
 
-        if (rivetToken != null && rivetToken.Length > 0)
+        if (RivetToken != null && RivetToken.Length > 0)
         {
-            return rivetToken;
+            return RivetToken;
         }
 
         throw new Exception("RIVET_TOKEN not set");

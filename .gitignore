@@ -74,3 +74,8 @@ crashlytics-build.properties
 # Additional Rivet items
 **/.DS_Store
 /ProjectSettings
+
+# Other items that come up
+mono_crash.*
+Assets/Resources
+Assets/Resources.meta

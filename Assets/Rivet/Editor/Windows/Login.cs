@@ -10,6 +10,7 @@ namespace Rivet
         public RivetPluginWindow window;
         public string url;
         bool loginButtonEnabled = true;
+        private bool showAdvancedOptions = false;
 
         public Login()
         {
@@ -46,10 +47,6 @@ namespace Rivet
 
         public void OnGUI()
         {
-            // Display the URL text box and the Link button
-            EditorGUILayout.LabelField("Enter the URL:");
-            url = EditorGUILayout.TextField(url);
-
             UnityEditor.EditorGUI.BeginDisabledGroup(!loginButtonEnabled);
 
             if (GUILayout.Button("Sign in to Rivet"))
@@ -59,12 +56,9 @@ namespace Rivet
                     // Disable the button sign in button
                     loginButtonEnabled = false;
 
-                    // var api_address = apiEndpointLineEdit.Text; // replace with your actual control
-                    var api_address = "https://api.rivet.gg";
-
                     var getLinkResult = RivetCLI.RunCommand(
                         "--api-endpoint",
-                        api_address,
+                        window.ApiEndpoint,
                         "sidekick",
                         "get-link");
 
@@ -91,7 +85,7 @@ namespace Rivet
                             // Long-poll the Rivet API until the user has logged in
                             var waitForLoginResult = RivetCLI.RunCommand(
                                 "--api-endpoint",
-                                api_address,
+                                window.ApiEndpoint,
                                 "sidekick",
                                 "wait-for-login",
                                 "--device-link-token",
@@ -137,6 +131,15 @@ namespace Rivet
 
             UnityEditor.EditorGUI.EndDisabledGroup();
 
+            // Display the Advanced Options dropdown
+            showAdvancedOptions = EditorGUILayout.Foldout(showAdvancedOptions, "Advanced Options");
+
+            if (showAdvancedOptions)
+            {
+                // Display the API Endpoint text box
+                EditorGUILayout.LabelField("API Endpoint:");
+                window.ApiEndpoint = EditorGUILayout.TextField(window.ApiEndpoint);
+            }
         }
     }
 }
