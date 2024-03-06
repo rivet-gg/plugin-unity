@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.0.0-rc2](https://github.com/rivet-gg/plugin-unity/compare/v1.0.0-rc1...v1.0.0-rc2) (2024-03-06)
+
+
+### Bug Fixes
+
+* Build with correct Rivet config file ([#10](https://github.com/rivet-gg/plugin-unity/issues/10)) ([aeb2898](https://github.com/rivet-gg/plugin-unity/commit/aeb28986dcaf7141b20f5829b57bbb4d96e7a987))
+* Properly include RivetToken and ApiEndpoint with game build ([#7](https://github.com/rivet-gg/plugin-unity/issues/7)) ([f6307e7](https://github.com/rivet-gg/plugin-unity/commit/f6307e72426fbe7a3a535f5f0e345371ee6da81a))
+
+
+### Miscellaneous Chores
+
+* release 1.0.0-rc2 ([#11](https://github.com/rivet-gg/plugin-unity/issues/11)) ([e8f8d74](https://github.com/rivet-gg/plugin-unity/commit/e8f8d74ca2c1934b3210aa0777b41e5ba5b2a619))
+
 ## 1.0.0-rc1 (2024-03-02)
 
 
