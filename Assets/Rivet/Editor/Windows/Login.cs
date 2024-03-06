@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEditor;
-using System.Collections;
 using Newtonsoft.Json.Linq;
 
 namespace Rivet

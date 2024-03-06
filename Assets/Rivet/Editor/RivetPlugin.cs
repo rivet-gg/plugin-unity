@@ -1,10 +1,5 @@
-#define IN_EDITOR
-
 using UnityEngine;
 using UnityEditor;
-using System.Diagnostics;
-using System.IO;
-using Newtonsoft.Json.Linq;
 
 public static class ExtensionData
 {
@@ -59,6 +54,15 @@ namespace Rivet
 
         void OnGUI()
         {
+            // Draw the global Rivet buttons
+
+            // Links
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Hub")) Application.OpenURL("https://hub.rivet.gg/");
+            if (GUILayout.Button("Docs")) Application.OpenURL("https://rivet.gg/docs");
+            if (GUILayout.Button("Discord")) Application.OpenURL("https://rivet.gg/discord");
+            GUILayout.EndHorizontal();
+
             // Call the OnGUI method of the current state
             currentState.OnGUI();
         }

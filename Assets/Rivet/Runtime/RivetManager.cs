@@ -8,7 +8,6 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
-using UnityEngine.Serialization;
 
 [JsonConverter(typeof(StringEnumConverter))]
 public enum CreateLobbyRequestPublicity
@@ -89,15 +88,12 @@ public class RivetManager : MonoBehaviour
     private void Start()
     {
         // Try to load Rivet runtime settings
-            var rivetSettings = Resources.Load<RivetSettings>("RivetSettings");
-            if (rivetSettings != null)
-            {
-                Debug.Log("RivetSettings: " + rivetSettings.RivetToken);
-                RivetToken = rivetSettings.RivetToken;
-
-                Debug.Log("RivetSettings: " + rivetSettings.ApiEndpoint);
-                ApiEndpoint = rivetSettings.ApiEndpoint;
-            }
+        var rivetSettings = Resources.Load<RivetSettings>("RivetSettings");
+        if (rivetSettings != null)
+        {
+            RivetToken = rivetSettings.RivetToken;
+            ApiEndpoint = rivetSettings.ApiEndpoint;
+        }
     }
 
     #region API: Matchmaker.Lobbies
@@ -118,9 +114,6 @@ public class RivetManager : MonoBehaviour
             {
                 // Save response
                 FindLobbyResponse = res;
-
-
-
                 success(res);
             }, fail);
     }
@@ -141,12 +134,6 @@ public class RivetManager : MonoBehaviour
             {
                 // Save response
                 FindLobbyResponse = res;
-
-                // // Connect to server
-                // var port = res.Ports["default"];
-                // Debug.Log("Connecting to " + port.Hostname + ":" + port.Port);
-                // _networkManager.ClientManager.StartConnection(port.Hostname, port.Port);
-
                 success(res);
             }, fail);
     }
@@ -167,12 +154,6 @@ public class RivetManager : MonoBehaviour
             {
                 // Save response
                 FindLobbyResponse = res;
-
-                // // Connect to server
-                // var port = res.Ports["default"];
-                // Debug.Log("Connecting to " + port.Hostname + ":" + port.Port);
-                // _networkManager.ClientManager.StartConnection(port.Hostname, port.Port);
-
                 success(res);
             }, fail);
     }
@@ -235,24 +216,12 @@ public class RivetManager : MonoBehaviour
 
     private string GetToken()
     {
-        // Check which environment we are in
-#if UNITY_SERVER
-        Debug.Log("UNITY_SERVER");
-        Debug.Log(Environment.GetEnvironmentVariable("RIVET_TOKEN"));
-#endif
-#if IN_EDITOR
-        Debug.Log("IN_EDITOR");
-        string value = PlayerPrefs.GetString("RIVET_EDITOR_TOKEN");
-        Debug.Log("Editor token: " + value);
-#endif
-
-#if UNITY_SERVER
+        // Try loading from environment
         var token = Environment.GetEnvironmentVariable("RIVET_TOKEN");
-        if (token != null)
+        if (token != null && token.Length > 0)
         {
             return token;
         }
-#endif
 
         // Try loading from PlayerPrefs
         string value = PlayerPrefs.GetString("RIVET_EDITOR_TOKEN");
@@ -261,6 +230,7 @@ public class RivetManager : MonoBehaviour
             return value;
         }
 
+        // Try loading from RivetSettings
         if (RivetToken != null && RivetToken.Length > 0)
         {
             return RivetToken;
@@ -271,7 +241,6 @@ public class RivetManager : MonoBehaviour
 
     public IEnumerator PostRequest<TReq, TRes>(string url, TReq requestBody, Action<TRes> success, Action<string> fail, string token = "")
     {
-        Debug.Log("PostRequest: " + url);
         if (token.Length == 0)
         {
             token = GetToken();
@@ -281,7 +250,6 @@ public class RivetManager : MonoBehaviour
 
         var requestBodyStr = JsonConvert.SerializeObject(requestBody,
             new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-        Debug.Log(debugRequestDescription + " Request: " + requestBodyStr + "\n" + Environment.StackTrace);
 
         var www = UnityWebRequest.Post(url, requestBodyStr, "application/json");
         www.SetRequestHeader("Authorization", "Bearer " + token);
@@ -291,12 +259,10 @@ public class RivetManager : MonoBehaviour
         switch (www.result)
         {
             case UnityWebRequest.Result.InProgress:
-                Debug.Log("In progress");
                 break;
             case UnityWebRequest.Result.Success:
                 if (www.responseCode == 200)
                 {
-                    Debug.Log(debugRequestDescription + " Success: " + www.downloadHandler.text);
                     var responseBody = JsonConvert.DeserializeObject<TRes>(www.downloadHandler.text);
                     success(responseBody!);
                 }
@@ -336,7 +302,6 @@ public class RivetManager : MonoBehaviour
         }
 
         var debugRequestDescription = "GET " + url;
-        Debug.Log(debugRequestDescription + "\n" + Environment.StackTrace);
 
         var www = UnityWebRequest.Get(url);
         www.SetRequestHeader("Authorization", "Bearer " + GetToken());
@@ -346,12 +311,10 @@ public class RivetManager : MonoBehaviour
         switch (www.result)
         {
             case UnityWebRequest.Result.InProgress:
-                Debug.Log("In progress");
                 break;
             case UnityWebRequest.Result.Success:
                 if (www.responseCode == 200)
                 {
-                    Debug.Log(debugRequestDescription + " Success: " + www.downloadHandler.text);
                     var responseBody = JsonConvert.DeserializeObject<TRes>(www.downloadHandler.text);
                     success(responseBody!);
                 }

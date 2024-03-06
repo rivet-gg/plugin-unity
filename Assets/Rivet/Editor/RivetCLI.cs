@@ -1,13 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Diagnostics;
 using System.IO;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using UnityEngine;
 
 public static class RivetCLI
 {
@@ -38,10 +30,7 @@ public static class RivetCLI
                     return false;
                 }
                 return true;
-            case ErrorResult<JObject> _:
-                return false;
             default:
-                UnityEngine.Debug.Log("Got different result type");
                 return false;
         }
     }
@@ -53,33 +42,28 @@ public static class RivetCLI
 
     public static string GetBinDir()
     {
-        string homePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        string homePath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile);
         return Path.Combine(homePath, ".rivet", REQUIRED_RIVET_CLI_VERSION, "bin");
     }
 
     public static string GetRivetCLIPath()
     {
-        // // Assuming _RivetEditorSettings is a static class with a method GetSetting
-        // string cliPath = _RivetEditorSettings.GetSetting(RIVET_CLI_PATH_SETTING);
-        // if (!string.IsNullOrEmpty(cliPath))
-        // {
-        //     return cliPath;
-        // }
-
         return Path.Combine(GetBinDir(), "rivet");
     }
 
     public static Result<JObject> RunRivetCLI(params string[] args)
     {
-        UnityEngine.Debug.Log($"Running Rivet CLI: {GetRivetCLIPath()} {string.Join(" ", args)}");
+        // TODO: Turn this on if debug is enabled
+        // UnityEngine.Debug.Log($"Running Rivet CLI: {GetRivetCLIPath()} {string.Join(" ", args)}");
 
         if (!File.Exists(GetRivetCLIPath()))
         {
-            UnityEngine.Debug.LogError("File does not exist: " + GetRivetCLIPath());
+            // TODO: Turn this on if debug is enabled
+            // UnityEngine.Debug.LogError("File does not exist: " + GetRivetCLIPath());
             return new ErrorResult<JObject>("File does not exist: " + GetRivetCLIPath());
         }
 
-        var startInfo = new ProcessStartInfo
+        var startInfo = new System.Diagnostics.ProcessStartInfo
         {
             FileName = GetRivetCLIPath(),
             Arguments = string.Join(" ", args),
@@ -90,21 +74,19 @@ public static class RivetCLI
 
         try
         {
-            using (var process = Process.Start(startInfo))
-            {
-                var output = process.StandardOutput.ReadToEnd();
-                process.WaitForExit();
+            using var process = System.Diagnostics.Process.Start(startInfo);
+            var output = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
 
-                return new SuccessResult<JObject>(JObject.Parse(output));
-            }
+            return new SuccessResult<JObject>(JObject.Parse(output));
         }
-        catch (Exception ex)
+        catch (System.Exception ex)
         {
             return new ErrorResult<JObject>("Failed to start process: " + ex.Message);
         }
     }
 
-    public static Result<string> _install()
+    public static Result<string> Install()
     {
         string bin_dir = GetBinDir();
 

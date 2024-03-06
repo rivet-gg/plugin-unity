@@ -17,7 +17,7 @@ public struct BootstrapData
     }
 
     [JsonProperty("game_id")] public string GameId;
-    [JsonProperty("token")] public string Token;
+    [JsonProperty("token")] public string CloudToken;
 }
 
 public class Region
@@ -88,65 +88,62 @@ namespace Rivet
         public RivetPluginWindow window;
         public BootstrapData bootstrapData;
         private bool thisMachineSelected = false;
-        private string rivetEditorToken = "";
 
         public void OnEnter(RivetPluginWindow pluginWindow)
         {
             this.window = pluginWindow;
-            GetBootstrapData();
+            new System.Threading.Thread(() =>
+            {
+                GetBootstrapData();
+            }).Start();
         }
 
         private void GetBootstrapData()
         {
-            new System.Threading.Thread(() =>
+            var getBootstrapResult = RivetCLI.RunCommand(
+                "sidekick",
+                "get-bootstrap-data"
+            );
+
+            switch (getBootstrapResult)
             {
-                var getBootstrapResult = RivetCLI.RunCommand(
-                    "sidekick",
-                    "get-bootstrap-data"
-                );
+                case SuccessResult<JObject> successResult:
+                    var data = successResult.Data["Ok"];
+                    // TODO: Deserialize this better
+                    bootstrapData = new BootstrapData
+                    {
+                        ApiEndpoint = data["api_endpoint"].ToString(),
+                        GameId = data["game_id"].ToString(),
+                        CloudToken = data["token"].ToString()
+                    };
 
-                switch (getBootstrapResult)
-                {
-                    case SuccessResult<JObject> successResult:
-                        var data = successResult.Data["Ok"];
-                        // TODO: Deserialize this better
-                        bootstrapData = new BootstrapData
-                        {
-                            ApiEndpoint = data["api_endpoint"].ToString(),
-                            GameId = data["game_id"].ToString(),
-                            Token = data["token"].ToString()
-                        };
+                    // Update namespaces
+                    FetchPluginData();
 
-                        Debug.Log("Bootstrap data: " + bootstrapData.ApiEndpoint + " " + bootstrapData.GameId + " " + bootstrapData.Token);
-
-                        // Fetch plugin data
-                        gameData = FetchPluginData();
-
-                        break;
-                    case ErrorResult<JObject> errorResult:
-                        UnityEngine.Debug.LogError(errorResult.Message);
-                        break;
-                }
-            }).Start();
+                    break;
+                case ErrorResult<JObject> errorResult:
+                    UnityEngine.Debug.LogError(errorResult.Message);
+                    break;
+            }
         }
 
-        public GameData FetchPluginData()
+        public void FetchPluginData()
         {
             using var httpClient = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Get, $"{bootstrapData.ApiEndpoint}/cloud/games/{bootstrapData.GameId}");
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", bootstrapData.Token);
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", bootstrapData.CloudToken);
             var response = httpClient.SendAsync(request).Result;
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
                 Debug.LogError("Failed to fetch plugin data");
-                return null;
+                return;
             }
 
             var responseBody = response.Content.ReadAsStringAsync().Result;
             var root = JsonConvert.DeserializeObject<Root>(responseBody);
 
-            var gameData = new GameData
+            var newGameData = new GameData
             {
                 namespaces = new List<(Namespace, Version)>()
             };
@@ -157,83 +154,57 @@ namespace Rivet
 
                 if (version != null)
                 {
-                    gameData.namespaces.Add((ns, version));
+                    newGameData.namespaces.Add((ns, version));
                 }
             }
 
             // Return the data to the main thread
-            return gameData;
+            gameData = newGameData;
         }
 
         public void OnGUI()
         {
-            // if (GUILayout.Button("Build and Deploy"))
-            // {
-            //     // Check if Linux build support is installed
-            //     if (!BuildPipeline.IsBuildTargetSupported(BuildTargetGroup.Standalone, BuildTarget.StandaloneLinux64))
-            //     {
-            //         Debug.LogError("Linux build support is not installed");
-            //         // return;
-            //     }
-
-            //     // Set the build settings
-            //     BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
-            //     {
-            //         scenes = EditorBuildSettings.scenes.Select(scene => scene.path).ToArray(),
-            //         locationPathName = "build/LinuxServer/LinuxServer.x86_64", // Output path
-            //         target = BuildTarget.StandaloneLinux64, // Target platform
-            //         subtarget = (int)StandaloneBuildSubtarget.Server // Headless mode for server build
-            //     };
-
-            //     // Build the player
-            //     BuildPipeline.BuildPlayer(buildPlayerOptions);
-
-            //     // Run deploy with CLI
-            //     new System.Threading.Thread(() =>
-            //     {
-            //         var result = RivetCLI.RunCommand(
-            //             "sidekick",
-            //             "--show-terminal",
-            //             "deploy",
-            //             "--namespace",
-            //             gameData.namespaces[selectedIndex].Item1.name_id
-            //         );
-            //     }).Start();
-            // }
-            // return;
-
-            // The existing GUI code goes here
-            // Debug.LogError("Start 1");
             GUILayout.BeginVertical();
 
             try
             {
-
                 // Logo
                 GUILayout.Label(logoTexture, GUILayout.Width(200), GUILayout.Height(200));
 
                 // Horizontal line
                 GUILayout.Label("", GUI.skin.horizontalSlider);
 
-                // Links
-                GUILayout.BeginHorizontal();
-                if (GUILayout.Button("Hub")) Application.OpenURL("https://hub.rivet.gg/");
-                if (GUILayout.Button("Docs")) Application.OpenURL("https://rivet.gg/docs");
-                if (GUILayout.Button("Discord")) Application.OpenURL("https://rivet.gg/discord");
-                GUILayout.EndHorizontal();
-
                 // Buttons
-                if (GUILayout.Button("Playtest")) { showPlaytestOptions = true; showDeployOptions = false; showSettingsOptions = false; }
-                if (GUILayout.Button("Deploy")) { showDeployOptions = true; showPlaytestOptions = false; showSettingsOptions = false; }
+                if (GUILayout.Button("Playtest"))
+                {
+                    showPlaytestOptions = true;
+                    showDeployOptions = false;
+                    showSettingsOptions = false;
+                    new System.Threading.Thread(() =>
+                    {
+                        FetchPluginData();
+                    }).Start();
+                }
+
+                if (GUILayout.Button("Deploy"))
+                {
+                    showDeployOptions = true;
+                    showPlaytestOptions = false;
+                    showSettingsOptions = false;
+                    new System.Threading.Thread(() =>
+                    {
+                        FetchPluginData();
+                    }).Start();
+                }
+
                 if (GUILayout.Button("Settings")) { showSettingsOptions = true; showDeployOptions = false; showPlaytestOptions = false; }
 
                 // Playtest options
                 if (showPlaytestOptions)
                 {
                     GUILayout.Label("Server");
-                    GUIStyle buttonStyle = new GUIStyle(GUI.skin.button);
-                    GUIStyle toggleButtonStyle = new GUIStyle(GUI.skin.button) { normal = GUI.skin.button.active };
-
+                    GUIStyle buttonStyle = new(GUI.skin.button);
+                    GUIStyle toggleButtonStyle = new(GUI.skin.button) { normal = GUI.skin.button.active };
 
                     GUILayout.BeginHorizontal();
                     bool thisMachineClicked = GUILayout.Button("This machine", thisMachineSelected ? toggleButtonStyle : buttonStyle);
@@ -260,7 +231,10 @@ namespace Rivet
 
                         if (thisMachineClicked || rivetServersClicked || oldSelectedIndex != selectedIndex)
                         {
-                            GetNamespaceToken();
+                            new System.Threading.Thread(() =>
+                            {
+                                GetNamespaceToken();
+                            }).Start();
                         }
                     }
                 }
@@ -285,11 +259,14 @@ namespace Rivet
 
                     if (GUILayout.Button("Build and Deploy"))
                     {
+                        // Update the game token
+                        GetNamespaceToken();
+
                         // Check if Linux build support is installed
                         if (!BuildPipeline.IsBuildTargetSupported(BuildTargetGroup.Standalone, BuildTarget.StandaloneLinux64))
                         {
                             Debug.LogError("Linux build support is not installed");
-                            // return;
+                            return;
                         }
 
                         // Set the build settings
@@ -303,7 +280,6 @@ namespace Rivet
 
                         // Build the player
                         var result = BuildPipeline.BuildPlayer(buildPlayerOptions);
-                        Debug.Log("Build result: " + result);
 
                         // Run deploy with CLI
                         new System.Threading.Thread(() =>
@@ -337,7 +313,6 @@ namespace Rivet
                             case SuccessResult<JObject> getLinkSuccessResult:
                                 if (getLinkSuccessResult.Data["Ok"] == null)
                                 {
-                                    // RivetPluginBridge.DisplayCliError(result); TODO:
                                     UnityEngine.Debug.LogError("Error: " + result.Data);
                                     return;
                                 }

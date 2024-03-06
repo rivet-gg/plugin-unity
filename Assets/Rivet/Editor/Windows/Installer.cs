@@ -1,10 +1,5 @@
 using UnityEngine;
 using UnityEditor;
-using System.Diagnostics;
-using System.IO;
-using System.Threading.Tasks;
-using System.Collections;
-using Newtonsoft.Json.Linq;
 
 namespace Rivet
 {
@@ -20,35 +15,7 @@ namespace Rivet
 
         public void OnEnter(RivetPluginWindow pluginWindow)
         {
-            new System.Threading.Thread(() =>
-        {
-
-            // var api_address = apiEndpointLineEdit.Text; // replace with your actual control
-            var api_address = "https://api.rivet.gg";
-
-            var getLinkResult = RivetCLI.RunCommand(
-                "--api-endpoint",
-                api_address,
-                "sidekick",
-                "get-namespace-development-token",
-                "--namespace",
-                "staging"
-            );
-
-            switch (getLinkResult)
-            {
-                case SuccessResult<JObject> successResult:
-                    var token = successResult.Data["Ok"]["token"].ToString();
-                    break;
-                case ErrorResult<JObject> errorResult:
-                    UnityEngine.Debug.LogError(errorResult.Message);
-                    break;
-            }
-
-        }).Start();
-
             this.window = pluginWindow;
-
 
             // Prepare the installer
             installLabelText = ReplacePlaceholders("%%version%% %%bin_dir%%");
@@ -79,9 +46,7 @@ namespace Rivet
                 // Handle the Install button click
                 new System.Threading.Thread(() =>
                 {
-                    // window.TransitionToState(new LoginState(window));
-                    // return;
-                    var result = RivetCLI._install();
+                    var result = RivetCLI.Install();
 
                     switch (result)
                     {
