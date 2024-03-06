@@ -8,6 +8,7 @@ using UnityEngine.Networking;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
+using System.IO;
 
 [JsonConverter(typeof(StringEnumConverter))]
 public enum CreateLobbyRequestPublicity
@@ -61,8 +62,8 @@ public struct RivetPlayer
     [JsonProperty("token")] public string Token;
 }
 
-[CreateAssetMenu(fileName = "RivetSettings", menuName = "ScriptableObjects/RivetSettings", order = 1)]
-public class RivetSettings : ScriptableObject
+[System.Serializable]
+public class RivetSettings
 {
     public string? RivetToken;
     public string? ApiEndpoint;
@@ -70,12 +71,6 @@ public class RivetSettings : ScriptableObject
 
 public class RivetManager : MonoBehaviour
 {
-    [HideInInspector]
-    public string? RivetToken = null;
-
-    [HideInInspector]
-    public string? ApiEndpoint = null;
-
     [HideInInspector]
     public string? MatchmakerApiEndpoint => ApiEndpoint + "/matchmaker";
 
@@ -85,15 +80,61 @@ public class RivetManager : MonoBehaviour
     /// </summary>
     public FindLobbyResponse? FindLobbyResponse { get; private set; }
 
+    [HideInInspector]
+    public string? RivetToken => GetRivetToken();
+
+    [HideInInspector]
+    public string? ApiEndpoint => GetApiEndpoint();
+
+    private string? GetRivetToken()
+    {
+        string? token = PlayerPrefs.GetString("RivetToken");
+        if (string.IsNullOrEmpty(token))
+        {
+            var rivetSettings = LoadRivetSettings();
+            if (rivetSettings != null)
+            {
+                token = rivetSettings.RivetToken;
+            }
+        }
+        return token;
+    }
+
+    private string? GetApiEndpoint()
+    {
+        string? endpoint = PlayerPrefs.GetString("ApiEndpoint");
+        if (string.IsNullOrEmpty(endpoint))
+        {
+            var rivetSettings = LoadRivetSettings();
+            if (rivetSettings != null)
+            {
+                endpoint = rivetSettings.ApiEndpoint;
+            }
+        }
+        return endpoint;
+    }
+
+    private RivetSettings? LoadRivetSettings()
+    {
+        string filePath = Path.Combine(Application.streamingAssetsPath, "rivet_export.json");
+        if (File.Exists(filePath))
+        {
+            string json = File.ReadAllText(filePath);
+            RivetSettings rivetSettings = JsonUtility.FromJson<RivetSettings>(json);
+            return rivetSettings;
+        }
+        else
+        {
+            Debug.LogError("File not found: " + filePath);
+            return null;
+        }
+    }
+
+    // Start function that debugs the Rivet token and API endpoint
     private void Start()
     {
-        // Try to load Rivet runtime settings
-        var rivetSettings = Resources.Load<RivetSettings>("RivetSettings");
-        if (rivetSettings != null)
-        {
-            RivetToken = rivetSettings.RivetToken;
-            ApiEndpoint = rivetSettings.ApiEndpoint;
-        }
+        Debug.Log("Rivet Token: " + RivetToken);
+        Debug.Log("API Endpoint: " + ApiEndpoint);
     }
 
     #region API: Matchmaker.Lobbies

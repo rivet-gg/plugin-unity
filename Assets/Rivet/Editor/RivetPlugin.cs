@@ -1,15 +1,56 @@
 using UnityEngine;
 using UnityEditor;
 
+/// <summary>
+/// Provides extension data for the Rivet plugin.
+/// </summary>
 public static class ExtensionData
 {
-    public static string RivetToken { get; set; }
+    private static string rivetToken;
     private static string apiEndpoint = "https://api.rivet.gg";
 
+    /// <summary>
+    /// Gets or sets the Rivet token.
+    /// </summary>
+    /// <remarks>
+    /// The Rivet token is used for authentication with the Rivet API.
+    /// When the token is set, it is also stored in the PlayerPrefs for persistence.
+    /// </remarks>
+    public static string RivetToken
+    {
+        get { return rivetToken; }
+        set
+        {
+            rivetToken = value;
+            // This might not be called from the main thread, so we need to
+            // delay the call to PlayerPrefs
+            UnityEditor.EditorApplication.delayCall += () =>
+            {
+                PlayerPrefs.SetString("RivetToken", value);
+            };
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the API endpoint.
+    /// </summary>
+    /// <remarks>
+    /// The API endpoint is the base URL for the Rivet API.
+    /// When the endpoint is set, it is also stored in the PlayerPrefs for persistence.
+    /// </remarks>
     public static string ApiEndpoint
     {
         get { return apiEndpoint; }
-        set { apiEndpoint = value; }
+        set
+        {
+            apiEndpoint = value;
+            // This might not be called from the main thread, so we need to
+            // delay the call to PlayerPrefs
+            UnityEditor.EditorApplication.delayCall += () =>
+            {
+                PlayerPrefs.SetString("ApiEndpoint", value);
+            };
+        }
     }
 }
 

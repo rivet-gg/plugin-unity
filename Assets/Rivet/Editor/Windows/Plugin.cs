@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using System.IO;
 
 public struct BootstrapData
 {
@@ -95,6 +96,7 @@ namespace Rivet
             new System.Threading.Thread(() =>
             {
                 GetBootstrapData();
+                GetNamespaceToken();
             }).Start();
         }
 
@@ -280,6 +282,13 @@ namespace Rivet
 
                         // Build the player
                         var result = BuildPipeline.BuildPlayer(buildPlayerOptions);
+
+                        // If the build failed, log an error, and don't continue
+                        if (result.summary.result != UnityEditor.Build.Reporting.BuildResult.Succeeded)
+                        {
+                            Debug.LogError("Build failed: " + result.summary.result);
+                            return;
+                        }
 
                         // Run deploy with CLI
                         new System.Threading.Thread(() =>
