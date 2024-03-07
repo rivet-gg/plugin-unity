@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.0](https://github.com/rivet-gg/plugin-unity/compare/v1.0.0-rc2...v1.0.0) (2024-03-07)
+
+
+### Miscellaneous Chores
+
+* release 1.0.0 ([98668eb](https://github.com/rivet-gg/plugin-unity/commit/98668eb884863643afbe3a36c077cebb779c2650))
+* release 1.0.0-rc.3 ([#15](https://github.com/rivet-gg/plugin-unity/issues/15)) ([0c34633](https://github.com/rivet-gg/plugin-unity/commit/0c34633c3e617cde113143e042510eabfe29528c))
+
 ## [1.0.0-rc2](https://github.com/rivet-gg/plugin-unity/compare/v1.0.0-rc1...v1.0.0-rc2) (2024-03-06)
 
 
