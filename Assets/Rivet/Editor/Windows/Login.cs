@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using Newtonsoft.Json.Linq;
+using Rivet.Rivet;
 
 namespace Rivet
 {

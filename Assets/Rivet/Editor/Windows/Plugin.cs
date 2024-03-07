@@ -8,76 +8,78 @@ using System.Net;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.IO;
-
-public struct BootstrapData
-{
-    public string ApiEndpoint
-    {
-        get { return ExtensionData.ApiEndpoint; }
-        set { ExtensionData.ApiEndpoint = value; }
-    }
-
-    [JsonProperty("game_id")] public string GameId;
-    [JsonProperty("token")] public string CloudToken;
-}
-
-public class Region
-{
-    public string provider;
-    public string provider_display_name;
-    public string region_display_name;
-    public string region_id;
-    public string region_name_id;
-    public string universal_region;
-}
-
-public class Namespace
-{
-    public string create_ts;
-    public string display_name;
-    public string name_id;
-    public string namespace_id;
-    public string version_id;
-}
-
-public class Version
-{
-    public string create_ts;
-    public string display_name;
-    public string version_id;
-}
-
-public class Game
-{
-    public List<Region> available_regions;
-    public string create_ts;
-    public string developer_group_id;
-    public string display_name;
-    public string game_id;
-    public string name_id;
-    public List<Namespace> namespaces;
-    public int total_player_count;
-    public List<Version> versions;
-}
-
-public class Watch
-{
-    public string index;
-}
-
-public class Root
-{
-    public Game game;
-    public Watch watch;
-}
-
-public class GameData
-{
-    public List<(Namespace, Version)> namespaces;
-}
+using Rivet.Rivet;
 
 namespace Rivet
 {
+    public struct BootstrapData
+    {
+        public string ApiEndpoint
+        {
+            get { return ExtensionData.ApiEndpoint; }
+            set { ExtensionData.ApiEndpoint = value; }
+        }
+
+        [JsonProperty("game_id")] public string GameId;
+        [JsonProperty("token")] public string CloudToken;
+    }
+
+    public class Region
+    {
+        public string provider;
+        public string provider_display_name;
+        public string region_display_name;
+        public string region_id;
+        public string region_name_id;
+        public string universal_region;
+    }
+
+    public class Namespace
+    {
+        public string create_ts;
+        public string display_name;
+        public string name_id;
+        public string namespace_id;
+        public string version_id;
+    }
+
+    public class Version
+    {
+        public string create_ts;
+        public string display_name;
+        public string version_id;
+    }
+
+    public class Game
+    {
+        public List<Region> available_regions;
+        public string create_ts;
+        public string developer_group_id;
+        public string display_name;
+        public string game_id;
+        public string name_id;
+        public List<Namespace> namespaces;
+        public int total_player_count;
+        public List<Version> versions;
+    }
+
+    public class Watch
+    {
+        public string index;
+    }
+
+    public class Root
+    {
+        public Game game;
+        public Watch watch;
+    }
+
+    public class GameData
+    {
+        public List<(Namespace, Version)> namespaces;
+    }
+
+
     public class Plugin : RivetPluginWindow.IState
     {
         public Texture logoTexture; // Assign this in the Unity editor
