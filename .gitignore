@@ -79,3 +79,6 @@ crashlytics-build.properties
 mono_crash.*
 Assets/Resources
 Assets/Resources.meta
+
+# Remove asset-store-tools so they aren't redistributed
+Packages/com.unity.asset-store-tools
