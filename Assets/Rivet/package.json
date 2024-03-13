@@ -6,8 +6,8 @@
     "description": "Description of the Rivet package",
     "keywords": ["rivet", "unity", "package"],
     "author": {
-        "name": "Forest Anderson",
-        "email": "forest@rivet.gg",
+        "name": "Rivet",
+        "email": "support@rivet.gg",
         "url": "https://rivet.gg"
     },
     "dependencies": {
