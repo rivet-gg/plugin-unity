@@ -29,8 +29,8 @@ You can install the Rivet Unity plugin in a couple ways:
 
 ## 🚀 Getting started
 
-Head over to our [Learning Center](https://rivet.gg/learn/godot) to get started
-with Rivet and Godot.  
+Head over to our [Learning Center](https://rivet.gg/learn/unity) to get started
+with Rivet and Unity.
 
 ## 🧐 Features
 
