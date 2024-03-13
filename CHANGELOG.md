@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/rivet-gg/plugin-unity/compare/v1.0.1...v1.0.2) (2024-03-13)
+
+
+### Bug Fixes
+
+* Release please action checks out repo on release for build ([610ab76](https://github.com/rivet-gg/plugin-unity/commit/610ab765da5fff9b2d0183a2ebe380719e5bc915))
+
 ## [1.0.1](https://github.com/rivet-gg/plugin-unity/compare/v1.0.0...v1.0.1) (2024-03-13)
 
 
