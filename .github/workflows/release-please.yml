@@ -19,6 +19,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: simple
 
+      - name: Checkout
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/checkout@v2
+
       - uses: game-ci/unity-builder@v2
         if: ${{ steps.release.outputs.release_created }}
         env:
