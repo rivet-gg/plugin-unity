@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/rivet-gg/plugin-unity/compare/v1.0.0...v1.0.1) (2024-03-13)
+
+
+### Bug Fixes
+
+* Fix mention of Godot in readme ([af6a53c](https://github.com/rivet-gg/plugin-unity/commit/af6a53c4397551b18edc3d492022831250468f2b))
+
 ## [1.0.0](https://github.com/rivet-gg/plugin-unity/compare/v1.0.0-rc2...v1.0.0) (2024-03-07)
 
 
