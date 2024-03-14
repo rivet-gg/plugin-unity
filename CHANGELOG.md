@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.0.3](https://github.com/rivet-gg/plugin-unity/compare/v1.0.2...v1.0.3) (2024-03-14)
+
+
+### Bug Fixes
+
+* Bump unity package version with release ([2a1eb18](https://github.com/rivet-gg/plugin-unity/commit/2a1eb18522d39ae4e764d8a92a9ba931b1a06d04))
+
+
+### Continuous Integration
+
+* Fix release please finding config file ([6e6a2fc](https://github.com/rivet-gg/plugin-unity/commit/6e6a2fc8dd726e51159f5bf8aaebba878701d8c5))
+
+
+### Chores
+
+* Fix release please manifest file name ([c071769](https://github.com/rivet-gg/plugin-unity/commit/c0717699cb1131475278061564bebaceabfa1284))
+* Fix version string ([8e0bc96](https://github.com/rivet-gg/plugin-unity/commit/8e0bc96e87caec8315207b677ca01f206a73bde0))
+* Update package author ([1c863d8](https://github.com/rivet-gg/plugin-unity/commit/1c863d8a062d798d74f91b01f75f2893da8833d9))
+
 ## [1.0.2](https://github.com/rivet-gg/plugin-unity/compare/v1.0.1...v1.0.2) (2024-03-13)
 
 
