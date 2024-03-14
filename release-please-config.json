@@ -60,5 +60,17 @@
             "hidden": false,
             "section": "Others"
         }
-    ]
+    ],
+    "extra-files": [
+        {
+            "type": "json",
+            "path": "Assets/Rivet/package.json",
+            "jsonpath": "$.version"
+        }
+    ],
+    "packages": {
+        ".": {
+            "release-type": "simple"
+        }
+    }
 }
