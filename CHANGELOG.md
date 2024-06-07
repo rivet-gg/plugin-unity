@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/rivet-gg/plugin-unity/compare/v1.0.3...v1.0.4) (2024-06-07)
+
+
+### Chores
+
+* bump CLI version ([#31](https://github.com/rivet-gg/plugin-unity/issues/31)) ([57745df](https://github.com/rivet-gg/plugin-unity/commit/57745dfcc265858c81e6b40af63d057709d54438))
+
 ## [1.0.3](https://github.com/rivet-gg/plugin-unity/compare/v1.0.2...v1.0.3) (2024-03-14)
 
 
