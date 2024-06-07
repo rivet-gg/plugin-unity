@@ -5,7 +5,7 @@ namespace Rivet
 {
     public static class RivetCLI
     {
-        public const string REQUIRED_RIVET_CLI_VERSION = "v1.0.1";
+        public const string REQUIRED_RIVET_CLI_VERSION = "v1.3.0";
         public const string RIVET_CLI_PATH_SETTING = "RivetCLIPath";
 
         public static bool CLIInstalled()
