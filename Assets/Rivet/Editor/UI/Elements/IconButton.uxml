@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/Rivet/Editor/UI/Elements/IconButton.uss?fileID=7433441132597879392&amp;guid=46887f7c59052429a8401d1ee5e95e18&amp;type=3#IconButton" />
+    <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="Button" class="tab-bar-button" style="flex-direction: row; align-items: center; justify-content: center; flex-shrink: 1;">
+        <ui:VisualElement name="Icon" class="icon" style="flex-grow: 0; width: 10px; -unity-background-scale-mode: scale-to-fit; height: 10px; align-items: auto; flex-shrink: 0;" />
+        <ui:VisualElement style="flex-grow: 0; width: 4px; flex-shrink: 0;" />
+        <ui:Label tabindex="-1" text="Text" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" class="label" style="flex-shrink: 1; -unity-text-align: middle-center; text-overflow: ellipsis; overflow: hidden; flex-grow: 0;" />
+    </ui:Button>
+</ui:UXML>

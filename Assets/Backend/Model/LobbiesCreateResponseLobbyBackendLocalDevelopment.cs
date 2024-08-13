@@ -39,7 +39,7 @@ namespace Backend.Model.Lobbies
         /// Initializes a new instance of the <see cref="CreateResponseLobbyBackendLocalDevelopment" /> class.
         /// </summary>
         /// <param name="ports">ports (required).</param>
-        public CreateResponseLobbyBackendLocalDevelopment(Dictionary<string, CreateResponseLobbyBackendLocalDevelopmentPortsValue> ports = default(Dictionary<string, CreateResponseLobbyBackendLocalDevelopmentPortsValue>))
+        public CreateResponseLobbyBackendLocalDevelopment(Object ports = default(Object))
         {
             // to ensure "ports" is required (not null)
             if (ports == null)
@@ -53,7 +53,7 @@ namespace Backend.Model.Lobbies
         /// Gets or Sets Ports
         /// </summary>
         [DataMember(Name = "ports", IsRequired = true, EmitDefaultValue = true)]
-        public Dictionary<string, CreateResponseLobbyBackendLocalDevelopmentPortsValue> Ports { get; set; }
+        public Object Ports { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object

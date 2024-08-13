@@ -1,0 +1,12 @@
+.icon {
+    -unity-background-image-tint-color: var(--unity-colors-default-text);
+    display: none;
+}
+
+#Action {
+    display: none;
+}
+
+.action #Action {
+    display: flex;
+}

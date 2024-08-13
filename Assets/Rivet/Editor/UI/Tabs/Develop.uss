@@ -1,0 +1,34 @@
+#EnvironmentHeader .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/folder.svg?fileID=7388822144124034973&guid=45951cf4237d34148b2a4b91f4d66a37&type=3#folder");
+    display: flex;
+}
+
+#LocalGameServerHeader .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/server.svg?fileID=7388822144124034973&guid=7bcd10cbcf44540858a99dc18ebb77c3&type=3#server");
+    display: flex;
+}
+
+#BackendHeader .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/gear-code.svg?fileID=7388822144124034973&guid=e9347091e532b4c26b3832355cb4812a&type=3#gear-code");
+    display: flex;
+}
+
+#StartButton .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/play.svg?fileID=7388822144124034973&guid=9c12e8ede8d8142448922406ab7718f3&type=3#play");
+}
+
+#StopButton .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/stop.svg?fileID=7388822144124034973&guid=c99591954a9734dd5874f07bbdbf144f&type=3#stop");
+}
+
+#RestartButton .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/rotate-right.svg?fileID=7388822144124034973&guid=d0b6bdf11bfe747fca0d95a859c28bee&type=3#rotate-right");
+}
+
+#GenerateSdkButton .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/toolbox.svg?fileID=7388822144124034973&guid=88a989d11336a4755a134a81e2d28080&type=3#toolbox");
+}
+
+#EditConfigButton .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/square-sliders.svg?fileID=7388822144124034973&guid=071bfd08c297a4f43886df844a2cb2d7&type=3#square-sliders");
+}

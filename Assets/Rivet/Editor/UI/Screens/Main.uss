@@ -1,0 +1,40 @@
+.unity-group-box {
+}
+
+.tab-bar-button {
+}
+
+#TabBar #Setup .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/rocket-launch.svg?fileID=7388822144124034973&guid=76690c2b9e2c348588d9da581ef60455&type=3#rocket-launch");
+}
+
+#TabBar #Develop .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/hammer.svg?fileID=7388822144124034973&guid=57861a0f5a3f5403995884fd2bd0639b&type=3#hammer");
+}
+
+#TabBar #Deploy .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/cloud-arrow-up.svg?fileID=7388822144124034973&guid=44dad88c1451c446d807e891e2bad2d8&type=3#cloud-arrow-up");
+}
+
+#TabBar #Settings .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/gear.svg?fileID=7388822144124034973&guid=4395aa38d356747bc8b01eb63a802209&type=3#gear");
+}
+
+#TabBody {
+    flex-grow: 1;
+    background-color: var(--unity-colors-popup-background);
+}
+
+Button {
+    margin-top: 2px;
+    margin-right: 0;
+    margin-bottom: 2px;
+    margin-left: 0;
+}
+
+DropdownField {
+    margin-top: 2px;
+    margin-right: 0;
+    margin-bottom: 2px;
+    margin-left: 0;
+}

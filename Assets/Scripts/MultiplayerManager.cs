@@ -182,41 +182,41 @@ namespace Backend.Modules.Lobbies
             bool isTls = false;
 
             // Handle different backend types
-            if (lobbyResponse.Backend != null)
-            {
-                if (lobbyResponse.Backend.Server != null)
-                {
-                    Debug.LogError($"UNIMPLEMENTED: {lobbyResponse.Backend.Server}");
-                    return;
-                    // TODO:
-                    // Server backend
-                    // if (lobbyResponse.Backend.Server.Ports.TryGetValue(portName, out var serverPort))
-                    // {
-                    //     hostname = serverPort.PublicHostname;
-                    //     port = serverPort.PublicPort;
-                    //     isTls = serverPort.Protocol == "https" || serverPort.Protocol == "tcp_tls";
-                    // }
-                }
-                else if (lobbyResponse.Backend.LocalDevelopment != null)
-                {
-                    // Local development backend
-                    if (lobbyResponse.Backend.LocalDevelopment.Ports.TryGetValue(portName, out var localPort))
-                    {
-                        hostname = localPort.Hostname;
-                        port = (ushort)localPort.Port;
-                    }
-                }
-                else
-                {
-                    Debug.LogError("Unsupported lobby backend type");
-                    return;
-                }
-            }
-            else
-            {
-                Debug.LogError("No backend information found in lobby response");
-                return;
-            }
+            // if (lobbyResponse.Backend != null)
+            // {
+            //     if (lobbyResponse.Backend.Server != null)
+            //     {
+            //         Debug.LogError($"UNIMPLEMENTED: {lobbyResponse.Backend.Server}");
+            //         return;
+            //         // TODO:
+            //         // Server backend
+            //         // if (lobbyResponse.Backend.Server.Ports.TryGetValue(portName, out var serverPort))
+            //         // {
+            //         //     hostname = serverPort.PublicHostname;
+            //         //     port = serverPort.PublicPort;
+            //         //     isTls = serverPort.Protocol == "https" || serverPort.Protocol == "tcp_tls";
+            //         // }
+            //     }
+            //     else if (lobbyResponse.Backend.LocalDevelopment != null)
+            //     {
+            //         // Local development backend
+            //         if (lobbyResponse.Backend.LocalDevelopment.Ports.TryGetValue(portName, out var localPort))
+            //         {
+            //             hostname = localPort.Hostname;
+            //             port = (ushort)localPort.Port;
+            //         }
+            //     }
+            //     else
+            //     {
+            //         Debug.LogError("Unsupported lobby backend type");
+            //         return;
+            //     }
+            // }
+            // else
+            // {
+            //     Debug.LogError("No backend information found in lobby response");
+            //     return;
+            // }
 
             if (string.IsNullOrEmpty(hostname) || port == 0)
             {

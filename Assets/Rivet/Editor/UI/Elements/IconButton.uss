@@ -1,0 +1,3 @@
+#Icon {
+    -unity-background-image-tint-color: var(--unity-colors-button-text);
+}

@@ -1,0 +1,11 @@
+.icon {
+    -unity-background-image-tint-color: var(--unity-colors-default-text);
+}
+
+.active {
+    color: var(--unity-colors-label-text-focus);
+}
+
+.active .icon {
+    -unity-background-image-tint-color: var(--unity-colors-label-text-focus);
+}

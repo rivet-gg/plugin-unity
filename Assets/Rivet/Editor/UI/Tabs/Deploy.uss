@@ -1,0 +1,3 @@
+#BuildDeployButton .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/hammer.svg?fileID=7388822144124034973&guid=57861a0f5a3f5403995884fd2bd0639b&type=3#hammer");
+}
