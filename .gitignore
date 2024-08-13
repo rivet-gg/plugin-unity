@@ -82,3 +82,6 @@ Assets/Resources.meta
 
 # Remove asset-store-tools so they aren't redistributed
 Packages/com.unity.asset-store-tools
+
+# OpenGB files
+.opengb/

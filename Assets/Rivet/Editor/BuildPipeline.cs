@@ -3,7 +3,7 @@ using UnityEditor.Build.Reporting;
 using UnityEngine;
 using System.IO;
 
-namespace Rivet
+namespace Rivet.Editor
 {
     public class BuildScript : IPreprocessBuildWithReport, IPostprocessBuildWithReport
     {
@@ -11,6 +11,8 @@ namespace Rivet
 
         public void OnPreprocessBuild(BuildReport report)
         {
+            PluginSettings.LoadSettings();
+
             // Check if StreamingAssets folder exists and create it if it doesn't
             string streamingAssetsPath = Application.streamingAssetsPath;
             if (!Directory.Exists(streamingAssetsPath))
@@ -21,19 +23,19 @@ namespace Rivet
             // If either is null, add a build error
             if (string.IsNullOrEmpty(ExtensionData.ApiEndpoint))
             {
-                Debug.LogError("Rivet API endpoint is not set. Please set the API endpoint in the Rivet settings.");
+                RivetLogger.Error("Rivet API endpoint is not set. Please set the API endpoint in the Rivet settings.");
             }
 
-            if (string.IsNullOrEmpty(ExtensionData.RivetToken))
+            if (string.IsNullOrEmpty(ExtensionData.CloudToken))
             {
-                Debug.LogError("Rivet token is not set. Please set the Rivet token in the Rivet settings.");
+                RivetLogger.Error("Cloud token is not set. Please set the Rivet token in the Rivet settings.");
             }
 
             // Create the asset file before the build
-            RivetSettings data = new RivetSettings
+            var data = new Rivet.Runtime.RivetSettings
             {
                 ApiEndpoint = ExtensionData.ApiEndpoint,
-                RivetToken = ExtensionData.RivetToken
+                CloudToken = ExtensionData.CloudToken
             };
 
             string json = JsonUtility.ToJson(data);
