@@ -27,7 +27,7 @@
                 <AttributeOverrides element-name="Label" text="Restart" />
             </ui:Instance>
         </ui:VisualElement>
-        <ui:Label tabindex="-1" text="Show Logs" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LogsButton" />
+        <ui:Label tabindex="-1" text="&lt;u&gt;Show Logs&lt;/u&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LogsButton" style="-unity-text-align: upper-center;" />
     </ui:VisualElement>
     <ui:Instance template="Separator" name="Separator" />
     <ui:Instance template="Header" name="BackendHeader">
