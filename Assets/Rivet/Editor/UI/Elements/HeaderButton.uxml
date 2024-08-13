@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" class="header-button" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; width: 24px; height: 24px; padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px; background-color: rgba(188, 188, 188, 0); border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0;">
+        <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Rivet/Editor/Images/FontAwesome/book.svg?fileID=7388822144124034973&amp;guid=6e8f178e0ec88464f9ad9f45ad22d210&amp;type=3#book&quot;);" />
+    </ui:Button>
+</ui:UXML>

@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:Button text="Sign In to Rivet" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SignIn" />
+    <ui:Foldout text="Advanced" name="Advanced" value="false">
+        <ui:TextField picking-mode="Ignore" label="API Endpoint" value="https://api.rivet.gg" name="ApiEndpoint" />
+    </ui:Foldout>
+</ui:UXML>

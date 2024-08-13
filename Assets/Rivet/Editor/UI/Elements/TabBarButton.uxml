@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/Rivet/Editor/UI/Elements/TabBarButton.uss?fileID=7433441132597879392&amp;guid=6c729a310ed88450ba9095f485b9377c&amp;type=3#TabBarButton" />
+    <ui:VisualElement name="Button" style="flex-grow: 1; flex-direction: row; align-items: center; justify-content: center; -unity-background-image-tint-color: rgb(147, 179, 248);">
+        <ui:VisualElement name="Icon" class="icon" style="flex-grow: 0; width: 10px; -unity-background-scale-mode: scale-to-fit; height: 10px; align-items: auto; flex-shrink: 0;" />
+        <ui:VisualElement name="VisualElement" style="flex-grow: 0; width: 6px; flex-shrink: 0;" />
+        <ui:Label tabindex="-1" text="Text" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" class="label" style="font-size: 12px; -unity-font-style: normal; -unity-background-image-tint-color: rgb(147, 179, 248); flex-shrink: 1; overflow: hidden; text-overflow: ellipsis;" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,44 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:Template name="Header" src="project://database/Assets/Rivet/Editor/UI/Elements/Header.uxml?fileID=9197481963319205126&amp;guid=1a49362105f714ca8b863d543d7fde91&amp;type=3#Header" />
+    <ui:Template name="Separator" src="project://database/Assets/Rivet/Editor/UI/Elements/Separator.uxml?fileID=9197481963319205126&amp;guid=c2ac5cf9dac42448aaf41436ee2b5a41&amp;type=3#Separator" />
+    <ui:Template name="IconButton" src="project://database/Assets/Rivet/Editor/UI/Elements/IconButton.uxml?fileID=9197481963319205126&amp;guid=32b758e0c3c244a2ab439452a6b5a3a0&amp;type=3#IconButton" />
+    <Style src="project://database/Assets/Rivet/Editor/UI/Tabs/Develop.uss?fileID=7433441132597879392&amp;guid=e18d51f97e3ac4f8fa83088c3f8d863d&amp;type=3#Develop" />
+    <ui:Instance template="Header" name="EnvironmentHeader" class="action">
+        <AttributeOverrides element-name="Title" text="Environment" />
+    </ui:Instance>
+    <ui:VisualElement name="EnvironmentBody" style="flex-grow: 0; flex-shrink: 0;">
+        <ui:Label tabindex="-1" text="Configure which backend to connect to. &lt;a href=&quot;https://rivet.gg/docs&quot;&gt;Learn More&lt;/a&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" style="margin-top: 0; margin-bottom: 12px; opacity: 1; display: none; white-space: normal;" />
+        <ui:DropdownField choices="Local,Remote" index="0" name="TypeDropdown" label="Type" style="height: 19px; margin-bottom: 4px;" />
+        <ui:DropdownField name="EnvironmentDropdown" label="Environment" index="0" style="height: 19px;" />
+    </ui:VisualElement>
+    <ui:Instance template="Separator" name="Separator" />
+    <ui:Instance template="Header" name="LocalGameServerHeader">
+        <AttributeOverrides element-name="Title" text="Local Game Server" />
+    </ui:Instance>
+    <ui:VisualElement name="LocalGameServerBody" style="flex-grow: 0; flex-shrink: 0;">
+        <ui:VisualElement name="ButtonRow" style="flex-grow: 1; flex-direction: row; margin-bottom: 4px;">
+            <ui:Instance template="IconButton" name="StartButton" style="flex-grow: 1;">
+                <AttributeOverrides element-name="Label" text="Start" />
+            </ui:Instance>
+            <ui:Instance template="IconButton" name="StopButton" style="flex-grow: 1;">
+                <AttributeOverrides element-name="Label" text="Stop" />
+            </ui:Instance>
+            <ui:Instance template="IconButton" name="RestartButton" style="flex-grow: 1;">
+                <AttributeOverrides element-name="Label" text="Restart" />
+            </ui:Instance>
+        </ui:VisualElement>
+        <ui:Label tabindex="-1" text="Show Logs" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LogsButton" />
+    </ui:VisualElement>
+    <ui:Instance template="Separator" name="Separator" />
+    <ui:Instance template="Header" name="BackendHeader">
+        <AttributeOverrides element-name="Title" text="Backend" />
+    </ui:Instance>
+    <ui:VisualElement name="BackendBody" style="flex-grow: 0; flex-shrink: 0;">
+        <ui:Instance template="IconButton" name="GenerateSdkButton">
+            <AttributeOverrides element-name="Label" text="Generate SDK" />
+        </ui:Instance>
+        <ui:Instance template="IconButton" name="EditConfigButton">
+            <AttributeOverrides element-name="Label" text="Edit Config" />
+        </ui:Instance>
+    </ui:VisualElement>
+</ui:UXML>
