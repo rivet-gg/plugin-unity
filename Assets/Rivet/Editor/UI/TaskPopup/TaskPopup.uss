@@ -1,0 +1,19 @@
+#LogList {
+    background-color: var(--unity-colors-default-background);
+}
+
+.logStdOut {
+    color: var(--unity-colors-default-text);
+}
+
+.logStdErr {
+    color: var(--unity-colors-error-text);
+}
+
+.logMeta {
+    color: var(--unity-colors-preview-text);
+}
+
+.unity-list-view__empty-label {
+    display: none;
+}

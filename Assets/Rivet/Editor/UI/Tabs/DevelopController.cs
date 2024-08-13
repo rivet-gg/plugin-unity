@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using Rivet.Editor;
 using Rivet.Editor.Types;
 using Rivet.Editor.UI;
+using Rivet.Editor.UI.TaskPopup;
 using Rivet.Editor.Util;
 using Rivet.UI.Screens;
 using Unity.VisualScripting.YamlDotNet.Core.Tokens;
@@ -85,8 +86,8 @@ namespace Rivet.UI.Tabs
             _lgsRestart.RegisterCallback<ClickEvent>(ev => { OnLocalGameServerStart(); });
             _lgsShowLogs.RegisterCallback<ClickEvent>(ev => { Debug.Log("TODO"); });
 
-            _backendGenerateSdk.RegisterCallback<ClickEvent>(ev => { _ = OnBackendGenerateSDK(); });
-            _backendEditConfig.RegisterCallback<ClickEvent>(ev => { OnBackendEditConfig(); });
+            _backendGenerateSdk.RegisterCallback<ClickEvent>(ev => OnBackendGenerateSDK());
+            _backendEditConfig.RegisterCallback<ClickEvent>(ev => OnBackendEditConfig());
         }
 
         public void OnBootstrap(BootstrapData data)
@@ -123,15 +124,13 @@ namespace Rivet.UI.Tabs
             RivetLogger.Error("UNIMPLEMENTED");
         }
 
-        private async Task OnBackendGenerateSDK()
+        private void OnBackendGenerateSDK()
         {
-            // HACK: Show term instead of running inline
-            var input = new JObject { ["cwd"] = Builder.ProjectRoot(), ["fallback_sdk_path"] = "Assets/Backend", ["target"] = "unity" };
-            await new ToolchainTask("show_term", new JObject
-            {
-                ["command"] = ToolchainTask.GetRivetCLIPath(),
-                ["args"] = new JArray { "task", "run", "--run-config", "{}", "--name", "backend_sdk_gen", "--input", input.ToString(Formatting.None) },
-            }).RunAsync();
+            TaskPopupWindow.ShowWindowInCenter("Generate SDK", "backend_sdk_gen", new JObject {
+                ["cwd"] = Builder.ProjectRoot(),
+                ["fallback_sdk_path"] = "Assets/Backend",
+                ["target"] = "unity",
+            });
         }
 
         private void OnBackendEditConfig()

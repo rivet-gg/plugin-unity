@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Rivet.Editor.Types {
+namespace Rivet.Editor.Types
+{
     public struct BootstrapData
     {
         [JsonProperty("token")] public string Token;
@@ -23,4 +24,5 @@ namespace Rivet.Editor.Types {
         [JsonProperty("environment_id")] public string EnvironmentId;
         [JsonProperty("name_id")] public string NameId;
     }
+
 }

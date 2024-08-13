@@ -11,7 +11,7 @@ using Unity.VisualScripting;
 
 namespace Rivet.Editor
 {
-    public class ToolchainTask : IDisposable
+    public class RivetTask : IDisposable
     {
         public enum LogType { STDOUT, STDERR }
 
@@ -39,7 +39,7 @@ namespace Rivet.Editor
             public string OutputPath;
         }
 
-        public ToolchainTask(string name, JObject input)
+        public RivetTask(string name, JObject input)
         {
             if (string.IsNullOrEmpty(name) || input == null)
             {

@@ -90,7 +90,7 @@ namespace Rivet.Editor.Util
             // HACK: Show term instead of running inline
             // TODO: Better logs dir
             // string logPath = Path.Combine(Path.GetDirectoryName(executablePath), "server_log.txt");
-            await new ToolchainTask("show_term", new JObject
+            await new RivetTask("show_term", new JObject
             {
                 ["command"] = executablePath,
                 // ["args"] = new JArray { "-batchmode", "-nographics", "-logFile", logPath, "-server" },

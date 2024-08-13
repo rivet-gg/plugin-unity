@@ -140,7 +140,7 @@ namespace Rivet.UI.Screens
 
         private async Task GetBootstrapData()
         {
-            var result = await new ToolchainTask("get_bootstrap_data", new JObject()).RunAsync();
+            var result = await new RivetTask("get_bootstrap_data", new JObject()).RunAsync();
             if (result is ResultErr<JObject>) return;
 
             var data = result.Data.ToObject<BootstrapData>();;

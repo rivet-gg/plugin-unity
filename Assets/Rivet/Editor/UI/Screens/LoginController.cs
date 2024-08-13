@@ -40,7 +40,7 @@ namespace Rivet.UI.Screens
 
         private async Task CheckLoginState()
         {
-            var result = await new ToolchainTask(
+            var result = await new RivetTask(
                 "check_login_state",
                 new JObject()
             ).RunAsync();
@@ -67,7 +67,7 @@ namespace Rivet.UI.Screens
             SetLoginButtonEnabled(false);
 
             // Get link token
-            var getLinkResult = await new ToolchainTask(
+            var getLinkResult = await new RivetTask(
                 "start_device_link",
                 new JObject
                 {
@@ -96,7 +96,7 @@ namespace Rivet.UI.Screens
             }
 
             // Wait until the user has logged in
-            var waitForLoginResult = await new ToolchainTask(
+            var waitForLoginResult = await new RivetTask(
                 "wait_for_login",
                 new JObject
                 {
