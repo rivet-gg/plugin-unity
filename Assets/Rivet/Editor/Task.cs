@@ -100,84 +100,113 @@ namespace Rivet.Editor
 
         private Result<JObject> RunTask(string name, JObject input, JObject runConfig)
         {
-            var output = RunRivetCLI("task", "run", "--run-config", runConfig.ToString(Formatting.None), "--name", name, "--input", input.ToString(Formatting.None));
-            switch (output)
+            try
             {
-                case ResultOk<JObject> ok:
-                    if (ok.Data.GetValue("Ok")?.Value<JObject>() is { } okInner)
-                    {
-                        RivetLogger.Log($"Task {name} Success: {okInner.ToString(Formatting.None)}");
-                        return new ResultOk<JObject>(okInner);
-                    }
-                    else if (ok.Data.GetValue("Err") is { } errInner)
-                    {
-                        RivetLogger.Log($"Task {name} Err: {errInner}");
-                        return new ResultErr<JObject>(errInner.ToString(Formatting.None));
-                    }
-                    else
-                    {
-                        throw new Exception("unreachable");
-                    }
-                case ResultErr<JObject> err:
-                    RivetLogger.Log($"Task {name} Command Err: {err.Message}");
-                    return err;
-                default:
+                var outputRaw = RivetToolchain.RunTaskRaw(runConfig.ToString(Formatting.None), name, input.ToString(Formatting.None));
+                var output = JObject.Parse(outputRaw);
+                if (output.GetValue("Ok")?.Value<JObject>() is { } okInner)
+                {
+                    RivetLogger.Log($"Task {name} Success: {okInner.ToString(Formatting.None)}");
+                    return new ResultOk<JObject>(okInner);
+                }
+                else if (output.GetValue("Err") is { } errInner)
+                {
+                    RivetLogger.Log($"Task {name} Err: {errInner}");
+                    return new ResultErr<JObject>(errInner.ToString(Formatting.None));
+                }
+                else
+                {
                     throw new Exception("unreachable");
+                }
+            }
+            catch (Exception error)
+            {
+                UnityEngine.Debug.LogError($"Error running task: {error}");
+                return new ResultErr<JObject>(error.ToString());
             }
         }
 
+        // private Result<JObject> RunTask(string name, JObject input, JObject runConfig)
+        // {
+        //     var output = RunRivetCLI("task", "run", "--run-config", runConfig.ToString(Formatting.None), "--name", name, "--input", input.ToString(Formatting.None));
+        //     switch (output)
+        //     {
+        //         case ResultOk<JObject> ok:
+        //             if (ok.Data.GetValue("Ok")?.Value<JObject>() is { } okInner)
+        //             {
+        //                 RivetLogger.Log($"Task {name} Success: {okInner.ToString(Formatting.None)}");
+        //                 return new ResultOk<JObject>(okInner);
+        //             }
+        //             else if (ok.Data.GetValue("Err") is { } errInner)
+        //             {
+        //                 RivetLogger.Log($"Task {name} Err: {errInner}");
+        //                 return new ResultErr<JObject>(errInner.ToString(Formatting.None));
+        //             }
+        //             else
+        //             {
+        //                 throw new Exception("unreachable");
+        //             }
+        //         case ResultErr<JObject> err:
+        //             RivetLogger.Log($"Task {name} Command Err: {err.Message}");
+        //             return err;
+        //         default:
+        //             throw new Exception("unreachable");
+        //     }
+        // }
+
+        // TODO: Remove this
         public static string GetRivetCLIPath()
         {
             // TODO: Update this path as needed
             return "/Users/nathan/rivet/cli/target/debug/rivet-cli";
         }
 
-        private static Result<JObject> RunRivetCLI(params string[] args)
-        {
-            // TODO: Turn this on if debug is enabled
-            RivetLogger.Log($"Running Rivet CLI: {GetRivetCLIPath()} {string.Join(" ", args)}");
+        // private static Result<JObject> RunRivetCLI(params string[] args)
+        // {
+        //     // TODO: Turn this on if debug is enabled
+        //     RivetLogger.Log($"Running Rivet CLI: {GetRivetCLIPath()} {string.Join(" ", args)}");
 
-            if (!File.Exists(GetRivetCLIPath()))
-            {
-                return new ResultErr<JObject>("File does not exist: " + GetRivetCLIPath());
-            }
+        //     if (!File.Exists(GetRivetCLIPath()))
+        //     {
+        //         return new ResultErr<JObject>("File does not exist: " + GetRivetCLIPath());
+        //     }
 
-            var startInfo = new ProcessStartInfo
-            {
-                FileName = GetRivetCLIPath(),
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-            };
-            foreach (var arg in args) {
-                startInfo.ArgumentList.Add(arg);
-            }
+        //     var startInfo = new ProcessStartInfo
+        //     {
+        //         FileName = GetRivetCLIPath(),
+        //         RedirectStandardOutput = true,
+        //         RedirectStandardError = true,
+        //         UseShellExecute = false,
+        //         CreateNoWindow = true,
+        //     };
+        //     foreach (var arg in args) {
+        //         startInfo.ArgumentList.Add(arg);
+        //     }
 
-            try
-            {
-                using var process = Process.Start(startInfo);
-                var stdout = process.StandardOutput.ReadToEnd();
-                var stderr = process.StandardError.ReadToEnd();
-                process.WaitForExit();
+        //     try
+        //     {
+        //         using var process = Process.Start(startInfo);
+        //         var stdout = process.StandardOutput.ReadToEnd();
+        //         var stderr = process.StandardError.ReadToEnd();
+        //         process.WaitForExit();
 
-                RivetLogger.Log($"Process output:\n\n{stdout}\n\n{stderr}");
+        //         RivetLogger.Log($"Process output:\n\n{stdout}\n\n{stderr}");
 
-                if (process.ExitCode == 0)
-                {
-                    return new ResultOk<JObject>(JObject.Parse(stdout));
-                }
-                else
-                {
-                    return new ResultErr<JObject>($"Process failed with exit code {process.ExitCode}\n\nstdout:\n{stdout}\n\nstderr:\n{stderr}");
-                }
-            }
-            catch (System.Exception ex)
-            {
-                return new ResultErr<JObject>("Failed to start process: " + ex.Message);
-            }
+        //         if (process.ExitCode == 0)
+        //         {
+        //             return new ResultOk<JObject>(JObject.Parse(stdout));
+        //         }
+        //         else
+        //         {
+        //             return new ResultErr<JObject>($"Process failed with exit code {process.ExitCode}\n\nstdout:\n{stdout}\n\nstderr:\n{stderr}");
+        //         }
+        //     }
+        //     catch (System.Exception ex)
+        //     {
+        //         return new ResultErr<JObject>("Failed to start process: " + ex.Message);
+        //     }
 
-        }
+        // }
 
         public void Kill()
         {

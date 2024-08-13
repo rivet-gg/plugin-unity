@@ -16,7 +16,7 @@
             <ui:Button text="Edit User" parse-escape-sequences="true" display-tooltip-when-elided="true" name="EditUserButton" style="flex-shrink: 1; flex-grow: 1;" />
             <ui:Button text="Edit Project" parse-escape-sequences="true" display-tooltip-when-elided="true" name="EditProjectButton" style="flex-shrink: 1; flex-grow: 1;" />
         </ui:VisualElement>
-        <ui:Label tabindex="-1" text="Documentation" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-text-align: upper-center;" />
+        <ui:Label tabindex="-1" text="&lt;u&gt;Documentation&lt;/u&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-text-align: upper-center;" />
     </ui:VisualElement>
     <ui:Instance template="Separator" name="Separator" />
     <ui:Instance template="Header" name="BackendHeader">
@@ -29,6 +29,6 @@
             <ui:Button text="Stop" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StopButton" style="flex-shrink: 1; flex-grow: 1;" />
             <ui:Button text="Restart" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RestartButton" style="flex-shrink: 1; flex-grow: 1;" />
         </ui:VisualElement>
-        <ui:Label tabindex="-1" text="Show Logs" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-text-align: upper-center;" />
+        <ui:Label tabindex="-1" text="&lt;u&gt;Show Logs&lt;/u&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-text-align: upper-center;" />
     </ui:VisualElement>
 </ui:UXML>
