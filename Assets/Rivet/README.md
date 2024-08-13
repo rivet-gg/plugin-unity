@@ -84,10 +84,10 @@ StartCoroutine(rivetManager.FindLobby(new FindLobbyRequest
 {
     // Connect to server
     var port = res.Ports["default"];
-    Debug.Log("Connecting to " + port.Hostname + ":" + port.Port);
+    RivetLogger.("Connecting to " + port.Hostname + ":" + port.Port);
     var networkManager = FindObjectOfType<NetworkManager>();
     networkManager.ClientManager.StartConnection(port.Hostname, port.Port);
 
     UpdateConnectionInfo();
-}, fail => { Debug.Log($"Failed to find lobby: {fail}"); }));
+}, fail => { RivetLogger.($"Failed to find lobby: {fail}"); }));
 ```

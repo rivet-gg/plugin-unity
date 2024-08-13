@@ -1,0 +1,20 @@
+{
+	"extends": "backend.json",
+	"modules": {
+		"lobbies": {
+			"config": {
+				"lobbies": {
+					"regions": ["local"],
+					"backend": {
+						"localDevelopment": {
+							"tags": { "test": "5" },
+							"ports": {
+								"game": { "protocol": "udp", "port": 7777 }
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

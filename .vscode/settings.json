@@ -56,5 +56,10 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "plugin-unity.sln"
+    "dotnet.defaultSolution": "plugin-unity.sln",
+    "dotnet.preferCSharpExtension": true,
+    "cSpell.words": [
+        "Newtonsoft",
+        "subtarget"
+    ]
 }

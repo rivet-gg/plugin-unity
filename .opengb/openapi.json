@@ -1,0 +1,1405 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Open Game Backend",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "description": "Local",
+            "url": "http://localhost:6420"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Open Game Backend",
+            "description": "Open Game Backend"
+        }
+    ],
+    "components": {
+        "schemas": {
+            "users__fetch__Response": {
+                "type": "object",
+                "properties": {
+                    "users": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "username": {
+                                    "type": "string"
+                                },
+                                "createdAt": {
+                                    "type": "string"
+                                },
+                                "updatedAt": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "username",
+                                "createdAt",
+                                "updatedAt"
+                            ]
+                        }
+                    }
+                },
+                "required": [
+                    "users"
+                ]
+            },
+            "users__fetch__Request": {
+                "type": "object",
+                "properties": {
+                    "userIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": [
+                    "userIds"
+                ]
+            },
+            "users__authenticate_token__Response": {
+                "type": "object",
+                "properties": {
+                    "userId": {
+                        "type": "string"
+                    },
+                    "user": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "username": {
+                                "type": "string"
+                            },
+                            "createdAt": {
+                                "type": "string"
+                            },
+                            "updatedAt": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "username",
+                            "createdAt",
+                            "updatedAt"
+                        ]
+                    }
+                },
+                "required": [
+                    "userId"
+                ]
+            },
+            "users__authenticate_token__Request": {
+                "type": "object",
+                "properties": {
+                    "userToken": {
+                        "type": "string"
+                    },
+                    "fetchUser": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "userToken"
+                ]
+            },
+            "lobbies__create__Response": {
+                "type": "object",
+                "properties": {
+                    "lobby": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "version": {
+                                "type": "string"
+                            },
+                            "tags": {
+                                "type": "object",
+                                "additionalProperties": {
+                                    "type": "string"
+                                }
+                            },
+                            "createdAt": {
+                                "type": "number"
+                            },
+                            "readyAt": {
+                                "type": "number"
+                            },
+                            "players": {
+                                "type": "number"
+                            },
+                            "maxPlayers": {
+                                "type": "number"
+                            },
+                            "maxPlayersDirect": {
+                                "type": "number"
+                            },
+                            "backend": {
+                                "type": "object",
+                                "properties": {
+                                    "test": {
+                                        "type": "object",
+                                        "properties": {},
+                                        "nullable": true
+                                    },
+                                    "localDevelopment": {
+                                        "type": "object",
+                                        "properties": {
+                                            "ports": {
+                                                "type": "object",
+                                                "additionalProperties": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "protocol": {
+                                                            "type": "string",
+                                                            "enum": [
+                                                                "http",
+                                                                "tcp",
+                                                                "udp"
+                                                            ]
+                                                        },
+                                                        "hostname": {
+                                                            "type": "string"
+                                                        },
+                                                        "port": {
+                                                            "type": "number"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "protocol",
+                                                        "hostname",
+                                                        "port"
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "required": [
+                                            "ports"
+                                        ],
+                                        "nullable": true
+                                    },
+                                    "server": {
+                                        "type": "object",
+                                        "properties": {
+                                            "serverId": {
+                                                "type": "string"
+                                            },
+                                            "ports": {
+                                                "type": "object",
+                                                "additionalProperties": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "protocol": {
+                                                            "type": "string",
+                                                            "enum": [
+                                                                "http",
+                                                                "tcp",
+                                                                "udp",
+                                                                "https",
+                                                                "tcp_tls"
+                                                            ]
+                                                        },
+                                                        "serverPort": {
+                                                            "type": "number"
+                                                        },
+                                                        "publicHostname": {
+                                                            "type": "string"
+                                                        },
+                                                        "publicPort": {
+                                                            "type": "number"
+                                                        },
+                                                        "routing": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "game_guard": {
+                                                                    "type": "object",
+                                                                    "properties": {}
+                                                                },
+                                                                "host": {
+                                                                    "type": "object",
+                                                                    "properties": {}
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "protocol",
+                                                        "routing"
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "required": [
+                                            "serverId"
+                                        ],
+                                        "nullable": true
+                                    }
+                                }
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "version",
+                            "tags",
+                            "createdAt",
+                            "players",
+                            "maxPlayers",
+                            "maxPlayersDirect",
+                            "backend"
+                        ]
+                    },
+                    "players": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "token": {
+                                    "type": "string"
+                                },
+                                "id": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "token",
+                                "id"
+                            ]
+                        }
+                    }
+                },
+                "required": [
+                    "lobby",
+                    "players"
+                ]
+            },
+            "lobbies__create__Request": {
+                "type": "object",
+                "properties": {
+                    "version": {
+                        "type": "string"
+                    },
+                    "region": {
+                        "type": "string"
+                    },
+                    "tags": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    },
+                    "maxPlayers": {
+                        "type": "number"
+                    },
+                    "maxPlayersDirect": {
+                        "type": "number"
+                    },
+                    "players": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {}
+                        }
+                    },
+                    "noWait": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "version",
+                    "region",
+                    "maxPlayers",
+                    "maxPlayersDirect",
+                    "players"
+                ]
+            },
+            "lobbies__destroy__Response": {
+                "type": "object",
+                "properties": {}
+            },
+            "lobbies__destroy__Request": {
+                "type": "object",
+                "properties": {
+                    "lobbyId": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "lobbyId"
+                ]
+            },
+            "lobbies__find_or_create__Response": {
+                "type": "object",
+                "properties": {
+                    "lobby": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "version": {
+                                "type": "string"
+                            },
+                            "tags": {
+                                "type": "object",
+                                "additionalProperties": {
+                                    "type": "string"
+                                }
+                            },
+                            "createdAt": {
+                                "type": "number"
+                            },
+                            "readyAt": {
+                                "type": "number"
+                            },
+                            "players": {
+                                "type": "number"
+                            },
+                            "maxPlayers": {
+                                "type": "number"
+                            },
+                            "maxPlayersDirect": {
+                                "type": "number"
+                            },
+                            "backend": {
+                                "type": "object",
+                                "properties": {
+                                    "test": {
+                                        "type": "object",
+                                        "properties": {},
+                                        "nullable": true
+                                    },
+                                    "localDevelopment": {
+                                        "type": "object",
+                                        "properties": {
+                                            "ports": {
+                                                "type": "object",
+                                                "additionalProperties": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "protocol": {
+                                                            "type": "string",
+                                                            "enum": [
+                                                                "http",
+                                                                "tcp",
+                                                                "udp"
+                                                            ]
+                                                        },
+                                                        "hostname": {
+                                                            "type": "string"
+                                                        },
+                                                        "port": {
+                                                            "type": "number"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "protocol",
+                                                        "hostname",
+                                                        "port"
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "required": [
+                                            "ports"
+                                        ],
+                                        "nullable": true
+                                    },
+                                    "server": {
+                                        "type": "object",
+                                        "properties": {
+                                            "serverId": {
+                                                "type": "string"
+                                            },
+                                            "ports": {
+                                                "type": "object",
+                                                "additionalProperties": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "protocol": {
+                                                            "type": "string",
+                                                            "enum": [
+                                                                "http",
+                                                                "tcp",
+                                                                "udp",
+                                                                "https",
+                                                                "tcp_tls"
+                                                            ]
+                                                        },
+                                                        "serverPort": {
+                                                            "type": "number"
+                                                        },
+                                                        "publicHostname": {
+                                                            "type": "string"
+                                                        },
+                                                        "publicPort": {
+                                                            "type": "number"
+                                                        },
+                                                        "routing": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "game_guard": {
+                                                                    "type": "object",
+                                                                    "properties": {}
+                                                                },
+                                                                "host": {
+                                                                    "type": "object",
+                                                                    "properties": {}
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "protocol",
+                                                        "routing"
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "required": [
+                                            "serverId"
+                                        ],
+                                        "nullable": true
+                                    }
+                                }
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "version",
+                            "tags",
+                            "createdAt",
+                            "players",
+                            "maxPlayers",
+                            "maxPlayersDirect",
+                            "backend"
+                        ]
+                    },
+                    "players": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "token": {
+                                    "type": "string"
+                                },
+                                "id": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "token",
+                                "id"
+                            ]
+                        }
+                    }
+                },
+                "required": [
+                    "lobby",
+                    "players"
+                ]
+            },
+            "lobbies__find_or_create__Request": {
+                "type": "object",
+                "properties": {
+                    "version": {
+                        "type": "string"
+                    },
+                    "regions": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "tags": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    },
+                    "players": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {}
+                        }
+                    },
+                    "noWait": {
+                        "type": "boolean"
+                    },
+                    "createConfig": {
+                        "type": "object",
+                        "properties": {
+                            "region": {
+                                "type": "string"
+                            },
+                            "tags": {
+                                "type": "object",
+                                "additionalProperties": {
+                                    "type": "string"
+                                }
+                            },
+                            "maxPlayers": {
+                                "type": "number"
+                            },
+                            "maxPlayersDirect": {
+                                "type": "number"
+                            }
+                        },
+                        "required": [
+                            "region",
+                            "maxPlayers",
+                            "maxPlayersDirect"
+                        ]
+                    }
+                },
+                "required": [
+                    "version",
+                    "players",
+                    "createConfig"
+                ]
+            },
+            "lobbies__join__Response": {
+                "type": "object",
+                "properties": {
+                    "lobby": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "version": {
+                                "type": "string"
+                            },
+                            "tags": {
+                                "type": "object",
+                                "additionalProperties": {
+                                    "type": "string"
+                                }
+                            },
+                            "createdAt": {
+                                "type": "number"
+                            },
+                            "readyAt": {
+                                "type": "number"
+                            },
+                            "players": {
+                                "type": "number"
+                            },
+                            "maxPlayers": {
+                                "type": "number"
+                            },
+                            "maxPlayersDirect": {
+                                "type": "number"
+                            },
+                            "backend": {
+                                "type": "object",
+                                "properties": {
+                                    "test": {
+                                        "type": "object",
+                                        "properties": {},
+                                        "nullable": true
+                                    },
+                                    "localDevelopment": {
+                                        "type": "object",
+                                        "properties": {
+                                            "ports": {
+                                                "type": "object",
+                                                "additionalProperties": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "protocol": {
+                                                            "type": "string",
+                                                            "enum": [
+                                                                "http",
+                                                                "tcp",
+                                                                "udp"
+                                                            ]
+                                                        },
+                                                        "hostname": {
+                                                            "type": "string"
+                                                        },
+                                                        "port": {
+                                                            "type": "number"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "protocol",
+                                                        "hostname",
+                                                        "port"
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "required": [
+                                            "ports"
+                                        ],
+                                        "nullable": true
+                                    },
+                                    "server": {
+                                        "type": "object",
+                                        "properties": {
+                                            "serverId": {
+                                                "type": "string"
+                                            },
+                                            "ports": {
+                                                "type": "object",
+                                                "additionalProperties": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "protocol": {
+                                                            "type": "string",
+                                                            "enum": [
+                                                                "http",
+                                                                "tcp",
+                                                                "udp",
+                                                                "https",
+                                                                "tcp_tls"
+                                                            ]
+                                                        },
+                                                        "serverPort": {
+                                                            "type": "number"
+                                                        },
+                                                        "publicHostname": {
+                                                            "type": "string"
+                                                        },
+                                                        "publicPort": {
+                                                            "type": "number"
+                                                        },
+                                                        "routing": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "game_guard": {
+                                                                    "type": "object",
+                                                                    "properties": {}
+                                                                },
+                                                                "host": {
+                                                                    "type": "object",
+                                                                    "properties": {}
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "protocol",
+                                                        "routing"
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "required": [
+                                            "serverId"
+                                        ],
+                                        "nullable": true
+                                    }
+                                }
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "version",
+                            "tags",
+                            "createdAt",
+                            "players",
+                            "maxPlayers",
+                            "maxPlayersDirect",
+                            "backend"
+                        ]
+                    },
+                    "players": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "token": {
+                                    "type": "string"
+                                },
+                                "id": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "token",
+                                "id"
+                            ]
+                        }
+                    }
+                },
+                "required": [
+                    "lobby",
+                    "players"
+                ]
+            },
+            "lobbies__join__Request": {
+                "type": "object",
+                "properties": {
+                    "lobbyId": {
+                        "type": "string"
+                    },
+                    "players": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {}
+                        }
+                    },
+                    "noWait": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "lobbyId",
+                    "players"
+                ]
+            },
+            "lobbies__list__Response": {
+                "type": "object",
+                "properties": {
+                    "lobbies": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "version": {
+                                    "type": "string"
+                                },
+                                "tags": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "version",
+                                "tags"
+                            ]
+                        }
+                    }
+                },
+                "required": [
+                    "lobbies"
+                ]
+            },
+            "lobbies__list__Request": {
+                "type": "object",
+                "properties": {
+                    "version": {
+                        "type": "string"
+                    },
+                    "regions": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "tags": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": [
+                    "version"
+                ]
+            },
+            "lobbies__set_lobby_ready__Response": {
+                "type": "object",
+                "properties": {}
+            },
+            "lobbies__set_lobby_ready__Request": {
+                "type": "object",
+                "properties": {
+                    "lobbyId": {
+                        "type": "string"
+                    },
+                    "lobbyToken": {
+                        "type": "string"
+                    }
+                }
+            },
+            "lobbies__set_player_connected__Response": {
+                "type": "object",
+                "properties": {}
+            },
+            "lobbies__set_player_connected__Request": {
+                "type": "object",
+                "properties": {
+                    "lobbyId": {
+                        "type": "string"
+                    },
+                    "lobbyToken": {
+                        "type": "string"
+                    },
+                    "playerTokens": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": [
+                    "playerTokens"
+                ]
+            },
+            "lobbies__set_player_disconnected__Response": {
+                "type": "object",
+                "properties": {}
+            },
+            "lobbies__set_player_disconnected__Request": {
+                "type": "object",
+                "properties": {
+                    "lobbyId": {
+                        "type": "string"
+                    },
+                    "lobbyToken": {
+                        "type": "string"
+                    },
+                    "playerTokens": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": [
+                    "playerTokens"
+                ]
+            },
+            "lobbies__find__Response": {
+                "type": "object",
+                "properties": {
+                    "lobby": {
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "version": {
+                                "type": "string"
+                            },
+                            "tags": {
+                                "type": "object",
+                                "additionalProperties": {
+                                    "type": "string"
+                                }
+                            },
+                            "createdAt": {
+                                "type": "number"
+                            },
+                            "readyAt": {
+                                "type": "number"
+                            },
+                            "players": {
+                                "type": "number"
+                            },
+                            "maxPlayers": {
+                                "type": "number"
+                            },
+                            "maxPlayersDirect": {
+                                "type": "number"
+                            },
+                            "backend": {
+                                "type": "object",
+                                "properties": {
+                                    "test": {
+                                        "type": "object",
+                                        "properties": {},
+                                        "nullable": true
+                                    },
+                                    "localDevelopment": {
+                                        "type": "object",
+                                        "properties": {
+                                            "ports": {
+                                                "type": "object",
+                                                "additionalProperties": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "protocol": {
+                                                            "type": "string",
+                                                            "enum": [
+                                                                "http",
+                                                                "tcp",
+                                                                "udp"
+                                                            ]
+                                                        },
+                                                        "hostname": {
+                                                            "type": "string"
+                                                        },
+                                                        "port": {
+                                                            "type": "number"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "protocol",
+                                                        "hostname",
+                                                        "port"
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "required": [
+                                            "ports"
+                                        ],
+                                        "nullable": true
+                                    },
+                                    "server": {
+                                        "type": "object",
+                                        "properties": {
+                                            "serverId": {
+                                                "type": "string"
+                                            },
+                                            "ports": {
+                                                "type": "object",
+                                                "additionalProperties": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "protocol": {
+                                                            "type": "string",
+                                                            "enum": [
+                                                                "http",
+                                                                "tcp",
+                                                                "udp",
+                                                                "https",
+                                                                "tcp_tls"
+                                                            ]
+                                                        },
+                                                        "serverPort": {
+                                                            "type": "number"
+                                                        },
+                                                        "publicHostname": {
+                                                            "type": "string"
+                                                        },
+                                                        "publicPort": {
+                                                            "type": "number"
+                                                        },
+                                                        "routing": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "game_guard": {
+                                                                    "type": "object",
+                                                                    "properties": {}
+                                                                },
+                                                                "host": {
+                                                                    "type": "object",
+                                                                    "properties": {}
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "protocol",
+                                                        "routing"
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "required": [
+                                            "serverId"
+                                        ],
+                                        "nullable": true
+                                    }
+                                }
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "version",
+                            "tags",
+                            "createdAt",
+                            "players",
+                            "maxPlayers",
+                            "maxPlayersDirect",
+                            "backend"
+                        ]
+                    },
+                    "players": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "token": {
+                                    "type": "string"
+                                },
+                                "id": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "token",
+                                "id"
+                            ]
+                        }
+                    }
+                },
+                "required": [
+                    "lobby",
+                    "players"
+                ]
+            },
+            "lobbies__find__Request": {
+                "type": "object",
+                "properties": {
+                    "version": {
+                        "type": "string"
+                    },
+                    "regions": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "tags": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    },
+                    "players": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {}
+                        }
+                    },
+                    "noWait": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "version",
+                    "players"
+                ]
+            }
+        },
+        "parameters": {}
+    },
+    "paths": {
+        "/modules/users/scripts/fetch/call": {
+            "post": {
+                "description": "Call users.fetch script.",
+                "tags": [
+                    "Backend"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/users__fetch__Response"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/modules/users/scripts/authenticate_token/call": {
+            "post": {
+                "description": "Call users.authenticate_token script.",
+                "tags": [
+                    "Backend"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/users__authenticate_token__Response"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/modules/lobbies/scripts/create/call": {
+            "post": {
+                "description": "Call lobbies.create script.",
+                "tags": [
+                    "Backend"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/lobbies__create__Response"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/modules/lobbies/scripts/destroy/call": {
+            "post": {
+                "description": "Call lobbies.destroy script.",
+                "tags": [
+                    "Backend"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/lobbies__destroy__Response"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/modules/lobbies/scripts/find_or_create/call": {
+            "post": {
+                "description": "Call lobbies.find_or_create script.",
+                "tags": [
+                    "Backend"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/lobbies__find_or_create__Response"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/modules/lobbies/scripts/join/call": {
+            "post": {
+                "description": "Call lobbies.join script.",
+                "tags": [
+                    "Backend"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/lobbies__join__Response"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/modules/lobbies/scripts/list/call": {
+            "post": {
+                "description": "Call lobbies.list script.",
+                "tags": [
+                    "Backend"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/lobbies__list__Response"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/modules/lobbies/scripts/set_lobby_ready/call": {
+            "post": {
+                "description": "Call lobbies.set_lobby_ready script.",
+                "tags": [
+                    "Backend"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/lobbies__set_lobby_ready__Response"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/modules/lobbies/scripts/set_player_connected/call": {
+            "post": {
+                "description": "Call lobbies.set_player_connected script.",
+                "tags": [
+                    "Backend"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/lobbies__set_player_connected__Response"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/modules/lobbies/scripts/set_player_disconnected/call": {
+            "post": {
+                "description": "Call lobbies.set_player_disconnected script.",
+                "tags": [
+                    "Backend"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/lobbies__set_player_disconnected__Response"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/modules/lobbies/scripts/find/call": {
+            "post": {
+                "description": "Call lobbies.find script.",
+                "tags": [
+                    "Backend"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {}
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/lobbies__find__Response"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "webhooks": {}
+}

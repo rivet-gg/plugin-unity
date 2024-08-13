@@ -1,0 +1,2699 @@
+{
+    "config": {
+        "registries": {
+            "default": {
+                "local": {
+                    "directory": "/Users/nathan/rivet/opengb-modules/modules"
+                }
+            }
+        },
+        "modules": {
+            "users": {},
+            "rate_limit": {},
+            "tokens": {},
+            "lobbies": {
+                "config": {
+                    "lobbies": {
+                        "regions": [
+                            "local"
+                        ],
+                        "backend": {
+                            "localDevelopment": {
+                                "tags": {
+                                    "test": "5"
+                                },
+                                "ports": {
+                                    "game": {
+                                        "protocol": "udp",
+                                        "port": 7777
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "rivet": {}
+        },
+        "runtime": {}
+    },
+    "registries": {
+        "default": {
+            "path": "/Users/nathan/rivet/opengb-modules/modules",
+            "name": "default",
+            "config": {
+                "local": {
+                    "directory": "/Users/nathan/rivet/opengb-modules/modules"
+                }
+            },
+            "isExternal": false
+        }
+    },
+    "modules": {
+        "users": {
+            "path": "/Users/nathan/rivet/opengb-modules/modules/users",
+            "name": "users",
+            "nameCamel": "users",
+            "namePascal": "Users",
+            "config": {
+                "status": "stable",
+                "name": "Users",
+                "description": "Identify and manage users.",
+                "icon": "user",
+                "tags": [
+                    "core",
+                    "social"
+                ],
+                "authors": [
+                    "rivet-gg",
+                    "NathanFlurry"
+                ],
+                "scripts": {
+                    "fetch": {
+                        "name": "Fetch User",
+                        "public": true
+                    },
+                    "create": {
+                        "name": "Create User",
+                        "public": false
+                    },
+                    "authenticate_token": {
+                        "name": "Authenticate User Token",
+                        "description": "Validate a user token. Throws an error if the token is invalid.",
+                        "public": true
+                    },
+                    "create_token": {
+                        "name": "Create User Token",
+                        "description": "Create a token for a user to authenticate future requests.",
+                        "public": false
+                    }
+                },
+                "errors": {
+                    "token_not_user_token": {
+                        "name": "Token Not User Token"
+                    },
+                    "unknown_identity_type": {
+                        "name": "Unknown Identity Type"
+                    }
+                },
+                "dependencies": {
+                    "rate_limit": {},
+                    "tokens": {}
+                }
+            },
+            "registryName": "default",
+            "userConfig": {},
+            "userConfigSchema": {
+                "type": "any"
+            },
+            "scripts": {
+                "fetch": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/users/scripts/fetch.ts",
+                    "name": "fetch",
+                    "nameCamel": "fetch",
+                    "namePascal": "Fetch",
+                    "config": {
+                        "name": "Fetch User",
+                        "public": true
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "userIds": {
+                                "type": "array",
+                                "item": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {
+                            "users": {
+                                "type": "array",
+                                "item": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "username": {
+                                            "type": "string"
+                                        },
+                                        "createdAt": {
+                                            "type": "date"
+                                        },
+                                        "updatedAt": {
+                                            "type": "date"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "create": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/users/scripts/create.ts",
+                    "name": "create",
+                    "nameCamel": "create",
+                    "namePascal": "Create",
+                    "config": {
+                        "name": "Create User",
+                        "public": false
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "username": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {
+                            "user": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "createdAt": {
+                                        "type": "date"
+                                    },
+                                    "updatedAt": {
+                                        "type": "date"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "authenticate_token": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/users/scripts/authenticate_token.ts",
+                    "name": "authenticate_token",
+                    "nameCamel": "authenticateToken",
+                    "namePascal": "AuthenticateToken",
+                    "config": {
+                        "name": "Authenticate User Token",
+                        "description": "Validate a user token. Throws an error if the token is invalid.",
+                        "public": true
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "userToken": {
+                                "type": "string"
+                            },
+                            "fetchUser": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {
+                            "userId": {
+                                "type": "string"
+                            },
+                            "user": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "username": {
+                                            "type": "string"
+                                        },
+                                        "createdAt": {
+                                            "type": "date"
+                                        },
+                                        "updatedAt": {
+                                            "type": "date"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "create_token": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/users/scripts/create_token.ts",
+                    "name": "create_token",
+                    "nameCamel": "createToken",
+                    "namePascal": "CreateToken",
+                    "config": {
+                        "name": "Create User Token",
+                        "description": "Create a token for a user to authenticate future requests.",
+                        "public": false
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "userId": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {
+                            "token": {
+                                "type": "object",
+                                "properties": {
+                                    "token": {
+                                        "type": "string"
+                                    },
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "type": {
+                                        "type": "string"
+                                    },
+                                    "meta": {
+                                        "type": "any"
+                                    },
+                                    "createdAt": {
+                                        "type": "string"
+                                    },
+                                    "expireAt": {
+                                        "type": "nullable",
+                                        "item": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "revokedAt": {
+                                        "type": "nullable",
+                                        "item": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "db": {
+                "schema": "module_users"
+            },
+            "hasUserConfigSchema": false
+        },
+        "rate_limit": {
+            "path": "/Users/nathan/rivet/opengb-modules/modules/rate_limit",
+            "name": "rate_limit",
+            "nameCamel": "rateLimit",
+            "namePascal": "RateLimit",
+            "config": {
+                "status": "stable",
+                "name": "Rate Limit",
+                "description": "Prevent abuse by limiting request rate.",
+                "icon": "gauge-circle-minus",
+                "tags": [
+                    "core",
+                    "utility"
+                ],
+                "authors": [
+                    "rivet-gg",
+                    "NathanFlurry"
+                ],
+                "scripts": {
+                    "throttle": {
+                        "name": "Throttle",
+                        "description": "Limit the amount of times an request can be made by a given key.",
+                        "public": false
+                    },
+                    "throttle_public": {
+                        "name": "Throttle Public",
+                        "description": "Limit the amount of times a public request can be made by a given key. This will rate limit based off the user's IP address.",
+                        "public": false
+                    }
+                },
+                "actors": {
+                    "limiter": {}
+                },
+                "errors": {
+                    "rate_limit_exceeded": {
+                        "name": "Rate Limit Exceeded"
+                    }
+                }
+            },
+            "registryName": "default",
+            "userConfig": {},
+            "userConfigSchema": {
+                "type": "any"
+            },
+            "scripts": {
+                "throttle": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/rate_limit/scripts/throttle.ts",
+                    "name": "throttle",
+                    "nameCamel": "throttle",
+                    "namePascal": "Throttle",
+                    "config": {
+                        "name": "Throttle",
+                        "description": "Limit the amount of times an request can be made by a given key.",
+                        "public": false
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "type": "string"
+                            },
+                            "key": {
+                                "type": "string"
+                            },
+                            "requests": {
+                                "type": "number"
+                            },
+                            "period": {
+                                "type": "number"
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "record",
+                        "elementType": {
+                            "type": "never"
+                        }
+                    }
+                },
+                "throttle_public": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/rate_limit/scripts/throttle_public.ts",
+                    "name": "throttle_public",
+                    "nameCamel": "throttlePublic",
+                    "namePascal": "ThrottlePublic",
+                    "config": {
+                        "name": "Throttle Public",
+                        "description": "Limit the amount of times a public request can be made by a given key. This will rate limit based off the user's IP address.",
+                        "public": false
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "requests": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "number"
+                                }
+                            },
+                            "period": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "record",
+                        "elementType": {
+                            "type": "never"
+                        }
+                    }
+                }
+            },
+            "db": {
+                "schema": "module_rate_limit"
+            },
+            "hasUserConfigSchema": false
+        },
+        "tokens": {
+            "path": "/Users/nathan/rivet/opengb-modules/modules/tokens",
+            "name": "tokens",
+            "nameCamel": "tokens",
+            "namePascal": "Tokens",
+            "config": {
+                "status": "stable",
+                "name": "Tokens",
+                "description": "Create & verify tokens for authorization purposes.",
+                "icon": "lock",
+                "tags": [
+                    "core",
+                    "utility"
+                ],
+                "authors": [
+                    "rivet-gg",
+                    "NathanFlurry"
+                ],
+                "scripts": {
+                    "create": {
+                        "name": "Create Token",
+                        "public": false
+                    },
+                    "fetch": {
+                        "name": "Fetch Token",
+                        "description": "Get a token by its ID.",
+                        "public": false
+                    },
+                    "fetch_by_token": {
+                        "name": "Fetch by Token",
+                        "description": "Get a token by its secret token.",
+                        "public": false
+                    },
+                    "revoke": {
+                        "name": "Revoke Token",
+                        "description": "Revoke a token, preventing it from being used again.",
+                        "public": false
+                    },
+                    "validate": {
+                        "name": "Validate Token",
+                        "description": "Validate a token. Throws an error if the token is invalid.",
+                        "public": false
+                    },
+                    "extend": {
+                        "name": "Extend Token",
+                        "description": "Extend or remove the expiration date of a token. (Only works on valid tokens.)",
+                        "public": false
+                    }
+                },
+                "errors": {
+                    "token_not_found": {
+                        "name": "Token Not Found"
+                    },
+                    "token_revoked": {
+                        "name": "Token Revoked"
+                    },
+                    "token_expired": {
+                        "name": "Token Expired"
+                    }
+                }
+            },
+            "registryName": "default",
+            "userConfig": {},
+            "userConfigSchema": {
+                "type": "any"
+            },
+            "scripts": {
+                "create": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/tokens/scripts/create.ts",
+                    "name": "create",
+                    "nameCamel": "create",
+                    "namePascal": "Create",
+                    "config": {
+                        "name": "Create Token",
+                        "public": false
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "type": {
+                                "type": "string"
+                            },
+                            "meta": {
+                                "type": "record",
+                                "elementType": {
+                                    "type": "string"
+                                }
+                            },
+                            "expireAt": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {
+                            "token": {
+                                "type": "object",
+                                "properties": {
+                                    "token": {
+                                        "type": "string"
+                                    },
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "type": {
+                                        "type": "string"
+                                    },
+                                    "meta": {
+                                        "type": "any"
+                                    },
+                                    "createdAt": {
+                                        "type": "string"
+                                    },
+                                    "expireAt": {
+                                        "type": "nullable",
+                                        "item": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "revokedAt": {
+                                        "type": "nullable",
+                                        "item": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "fetch": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/tokens/scripts/fetch.ts",
+                    "name": "fetch",
+                    "nameCamel": "fetch",
+                    "namePascal": "Fetch",
+                    "config": {
+                        "name": "Fetch Token",
+                        "description": "Get a token by its ID.",
+                        "public": false
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "tokenIds": {
+                                "type": "array",
+                                "item": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {
+                            "tokens": {
+                                "type": "array",
+                                "item": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "meta": {
+                                            "type": "any"
+                                        },
+                                        "createdAt": {
+                                            "type": "string"
+                                        },
+                                        "expireAt": {
+                                            "type": "nullable",
+                                            "item": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "revokedAt": {
+                                            "type": "nullable",
+                                            "item": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "fetch_by_token": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/tokens/scripts/fetch_by_token.ts",
+                    "name": "fetch_by_token",
+                    "nameCamel": "fetchByToken",
+                    "namePascal": "FetchByToken",
+                    "config": {
+                        "name": "Fetch by Token",
+                        "description": "Get a token by its secret token.",
+                        "public": false
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "tokens": {
+                                "type": "array",
+                                "item": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {
+                            "tokens": {
+                                "type": "array",
+                                "item": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "type": {
+                                            "type": "string"
+                                        },
+                                        "meta": {
+                                            "type": "any"
+                                        },
+                                        "createdAt": {
+                                            "type": "string"
+                                        },
+                                        "expireAt": {
+                                            "type": "nullable",
+                                            "item": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "revokedAt": {
+                                            "type": "nullable",
+                                            "item": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "revoke": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/tokens/scripts/revoke.ts",
+                    "name": "revoke",
+                    "nameCamel": "revoke",
+                    "namePascal": "Revoke",
+                    "config": {
+                        "name": "Revoke Token",
+                        "description": "Revoke a token, preventing it from being used again.",
+                        "public": false
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "tokenIds": {
+                                "type": "array",
+                                "item": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {
+                            "updates": {
+                                "type": "object",
+                                "properties": {}
+                            }
+                        }
+                    }
+                },
+                "validate": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/tokens/scripts/validate.ts",
+                    "name": "validate",
+                    "nameCamel": "validate",
+                    "namePascal": "Validate",
+                    "config": {
+                        "name": "Validate Token",
+                        "description": "Validate a token. Throws an error if the token is invalid.",
+                        "public": false
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "token": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {
+                            "token": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "type": {
+                                        "type": "string"
+                                    },
+                                    "meta": {
+                                        "type": "any"
+                                    },
+                                    "createdAt": {
+                                        "type": "string"
+                                    },
+                                    "expireAt": {
+                                        "type": "nullable",
+                                        "item": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "revokedAt": {
+                                        "type": "nullable",
+                                        "item": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "extend": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/tokens/scripts/extend.ts",
+                    "name": "extend",
+                    "nameCamel": "extend",
+                    "namePascal": "Extend",
+                    "config": {
+                        "name": "Extend Token",
+                        "description": "Extend or remove the expiration date of a token. (Only works on valid tokens.)",
+                        "public": false
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "token": {
+                                "type": "string"
+                            },
+                            "newExpiration": {
+                                "type": "nullable",
+                                "item": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {
+                            "token": {
+                                "type": "object",
+                                "properties": {
+                                    "token": {
+                                        "type": "string"
+                                    },
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "type": {
+                                        "type": "string"
+                                    },
+                                    "meta": {
+                                        "type": "any"
+                                    },
+                                    "createdAt": {
+                                        "type": "string"
+                                    },
+                                    "expireAt": {
+                                        "type": "nullable",
+                                        "item": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "revokedAt": {
+                                        "type": "nullable",
+                                        "item": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "db": {
+                "schema": "module_tokens"
+            },
+            "hasUserConfigSchema": false
+        },
+        "lobbies": {
+            "path": "/Users/nathan/rivet/opengb-modules/modules/lobbies",
+            "name": "lobbies",
+            "nameCamel": "lobbies",
+            "namePascal": "Lobbies",
+            "config": {
+                "status": "stable",
+                "name": "Lobbies",
+                "description": "Lobby & player management.",
+                "icon": "game-board",
+                "tags": [
+                    "core",
+                    "multiplayer"
+                ],
+                "authors": [
+                    "NathanFlurry"
+                ],
+                "scripts": {
+                    "create": {
+                        "name": "Create Lobby",
+                        "description": "Creates a new lobby on-demand.",
+                        "public": true
+                    },
+                    "destroy": {
+                        "name": "Destroy Lobby",
+                        "description": "Destroys an existing lobby.",
+                        "public": true
+                    },
+                    "find_or_create": {
+                        "name": "Find Or Create Lobby",
+                        "description": "Finds a lobby or creates one if there are no available spots for players.",
+                        "public": true
+                    },
+                    "join": {
+                        "name": "Join Lobby",
+                        "description": "Add a player to an existing lobby.",
+                        "public": true
+                    },
+                    "list": {
+                        "name": "List Lobbies",
+                        "description": "List & query all lobbies.",
+                        "public": true
+                    },
+                    "set_lobby_ready": {
+                        "name": "Set Lobby Ready",
+                        "description": "Called on lobby startup after initiation to notify it can start accepting player. This should be called after operations like loading maps are complete.",
+                        "public": true
+                    },
+                    "set_player_connected": {
+                        "name": "Set Player Connected",
+                        "description": "Called when a player connects to the lobby.",
+                        "public": true
+                    },
+                    "set_player_disconnected": {
+                        "name": "Set Player Disconnected",
+                        "description": "Called when a player disconnects from the lobby.",
+                        "public": true
+                    },
+                    "find": {
+                        "name": "Find Lobby",
+                        "description": "Finds an existing lobby with a given query. This will not create a new lobby, see `find_or_create` instead.",
+                        "public": true
+                    },
+                    "force_gc": {
+                        "name": "Force Garbage Collection",
+                        "description": "Rarely used. Forces the matchmaker to purge lobbies & players.",
+                        "public": false
+                    },
+                    "list_regions": {
+                        "name": "List Regions",
+                        "description": "List available regions.",
+                        "public": false
+                    }
+                },
+                "actors": {
+                    "lobby_manager": {}
+                },
+                "errors": {
+                    "lobby_not_found": {
+                        "name": "Lobby Not Found",
+                        "description": "Lobby not found."
+                    },
+                    "lobby_cancelled": {
+                        "name": "Lobby Cancelled",
+                        "description": "Lobby stopped while attempting to join."
+                    },
+                    "lobby_create_missing_players": {
+                        "name": "Lobby Create Missing Players",
+                        "description": "When creating a lobby with `config.lobbies.autoDestroyWhenEmpty`, a lobby must be created with players in order to avoid creating an empty lobby."
+                    },
+                    "lobby_full": {
+                        "name": "Lobby Full",
+                        "description": "No more players can join this lobby."
+                    },
+                    "more_players_than_max": {
+                        "name": "More Players Than Max",
+                        "description": "More players were passed to the create lobby than the number of max players in a lobby."
+                    },
+                    "lobby_already_ready": {
+                        "name": "Lobby Already Ready",
+                        "description": "Lobby already set as ready."
+                    },
+                    "player_already_connected": {
+                        "name": "Player Already Connected",
+                        "description": "The player has already connected to this server. This error helps mitigate botting attacks by only allowing one scoket to connect to a game server for every player."
+                    },
+                    "player_disconnected": {
+                        "name": "Player Disconnected",
+                        "description": "The player has already disconnected from the server. Create a new player for the specified lobby using the `join` script."
+                    },
+                    "no_matching_lobbies": {
+                        "name": "No Matching Lobbies",
+                        "description": "No lobbies matched the given query."
+                    },
+                    "too_many_players_for_ip": {
+                        "name": "Too Many Players For IP",
+                        "description": "The player has too many existing players for the given IP."
+                    },
+                    "cannot_mutate_lobbies": {
+                        "name": "Cannot Mutate Lobbies",
+                        "description": "This backend doesn't let you create or destroy lobbies."
+                    },
+                    "lobby_token_required": {
+                        "name": "Lobby Token Required",
+                        "description": "A lobby token was not provided when required for authentication."
+                    },
+                    "region_not_found": {
+                        "name": "Region Not Found",
+                        "description": "Region not found."
+                    }
+                },
+                "dependencies": {
+                    "tokens": {},
+                    "rivet": {}
+                },
+                "defaultConfig": {
+                    "lobbies": {
+                        "destroyOnEmptyAfter": 60000,
+                        "unreadyExpireAfter": 300000,
+                        "maxPlayers": 16,
+                        "maxPlayersDirect": 16,
+                        "enableCreate": false,
+                        "enableDestroy": false,
+                        "enableFind": true,
+                        "enableFindOrCreate": true,
+                        "enableJoin": true,
+                        "enableList": true
+                    },
+                    "lobbyRules": [],
+                    "players": {
+                        "maxPerIp": 8,
+                        "maxUnconnected": 128,
+                        "unconnectedExpireAfter": 60000,
+                        "autoDestroyAfter": 4147200000
+                    }
+                }
+            },
+            "registryName": "default",
+            "userConfig": {
+                "lobbies": {
+                    "destroyOnEmptyAfter": 60000,
+                    "unreadyExpireAfter": 300000,
+                    "maxPlayers": 16,
+                    "maxPlayersDirect": 16,
+                    "enableCreate": false,
+                    "enableDestroy": false,
+                    "enableFind": true,
+                    "enableFindOrCreate": true,
+                    "enableJoin": true,
+                    "enableList": true,
+                    "regions": [
+                        "local"
+                    ],
+                    "backend": {
+                        "localDevelopment": {
+                            "tags": {
+                                "test": "5"
+                            },
+                            "ports": {
+                                "game": {
+                                    "protocol": "udp",
+                                    "port": 7777
+                                }
+                            }
+                        }
+                    }
+                },
+                "lobbyRules": [],
+                "players": {
+                    "maxPerIp": 8,
+                    "maxUnconnected": 128,
+                    "unconnectedExpireAfter": 60000,
+                    "autoDestroyAfter": 4147200000
+                }
+            },
+            "userConfigSchema": {
+                "type": "object",
+                "properties": {
+                    "lobbies": {
+                        "type": "object",
+                        "properties": {
+                            "regions": {
+                                "type": "array",
+                                "item": {
+                                    "type": "string"
+                                }
+                            },
+                            "destroyOnEmptyAfter": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "number"
+                                }
+                            },
+                            "unreadyExpireAfter": {
+                                "type": "number"
+                            },
+                            "maxPlayers": {
+                                "type": "number"
+                            },
+                            "maxPlayersDirect": {
+                                "type": "number"
+                            },
+                            "enableDynamicMaxPlayers": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "object",
+                                    "properties": {
+                                        "min": {
+                                            "type": "number"
+                                        },
+                                        "max": {
+                                            "type": "number"
+                                        }
+                                    }
+                                }
+                            },
+                            "enableDynamicMaxPlayersDirect": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "object",
+                                    "properties": {
+                                        "min": {
+                                            "type": "number"
+                                        },
+                                        "max": {
+                                            "type": "number"
+                                        }
+                                    }
+                                }
+                            },
+                            "enableCreate": {
+                                "type": "boolean"
+                            },
+                            "enableDestroy": {
+                                "type": "boolean"
+                            },
+                            "enableFind": {
+                                "type": "boolean"
+                            },
+                            "enableFindOrCreate": {
+                                "type": "boolean"
+                            },
+                            "enableJoin": {
+                                "type": "boolean"
+                            },
+                            "enableList": {
+                                "type": "boolean"
+                            },
+                            "backend": {
+                                "type": "union",
+                                "items": [
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "test": {
+                                                "type": "object",
+                                                "properties": {}
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "localDevelopment": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "version": {
+                                                        "type": "optional",
+                                                        "value": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "tags": {
+                                                        "type": "optional",
+                                                        "value": {
+                                                            "type": "record",
+                                                            "elementType": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    },
+                                                    "maxPlayers": {
+                                                        "type": "optional",
+                                                        "value": {
+                                                            "type": "number"
+                                                        }
+                                                    },
+                                                    "maxPlayersDirect": {
+                                                        "type": "optional",
+                                                        "value": {
+                                                            "type": "number"
+                                                        }
+                                                    },
+                                                    "ports": {
+                                                        "type": "record",
+                                                        "elementType": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "protocol": {
+                                                                    "type": "union",
+                                                                    "items": [
+                                                                        {
+                                                                            "type": "literal",
+                                                                            "value": "http"
+                                                                        },
+                                                                        {
+                                                                            "type": "literal",
+                                                                            "value": "tcp"
+                                                                        },
+                                                                        {
+                                                                            "type": "literal",
+                                                                            "value": "udp"
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "hostname": {
+                                                                    "type": "optional",
+                                                                    "value": {
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "port": {
+                                                                    "type": "number"
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "type": "object",
+                                        "properties": {
+                                            "server": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "resources": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "cpu": {
+                                                                "type": "number"
+                                                            },
+                                                            "memory": {
+                                                                "type": "number"
+                                                            }
+                                                        }
+                                                    },
+                                                    "arguments": {
+                                                        "type": "optional",
+                                                        "value": {
+                                                            "type": "array",
+                                                            "item": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    },
+                                                    "environment": {
+                                                        "type": "optional",
+                                                        "value": {
+                                                            "type": "record",
+                                                            "elementType": {
+                                                                "type": "string"
+                                                            }
+                                                        }
+                                                    },
+                                                    "networkMode": {
+                                                        "type": "optional",
+                                                        "value": {
+                                                            "type": "union",
+                                                            "items": [
+                                                                {
+                                                                    "type": "literal",
+                                                                    "value": "bridge"
+                                                                },
+                                                                {
+                                                                    "type": "literal",
+                                                                    "value": "host"
+                                                                }
+                                                            ]
+                                                        }
+                                                    },
+                                                    "ports": {
+                                                        "type": "record",
+                                                        "elementType": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "protocol": {
+                                                                    "type": "union",
+                                                                    "items": [
+                                                                        {
+                                                                            "type": "literal",
+                                                                            "value": "http"
+                                                                        },
+                                                                        {
+                                                                            "type": "literal",
+                                                                            "value": "tcp"
+                                                                        },
+                                                                        {
+                                                                            "type": "literal",
+                                                                            "value": "udp"
+                                                                        },
+                                                                        {
+                                                                            "type": "literal",
+                                                                            "value": "https"
+                                                                        },
+                                                                        {
+                                                                            "type": "literal",
+                                                                            "value": "tcp_tls"
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "serverPort": {
+                                                                    "type": "optional",
+                                                                    "value": {
+                                                                        "type": "number"
+                                                                    }
+                                                                },
+                                                                "routing": {
+                                                                    "type": "optional",
+                                                                    "value": {
+                                                                        "type": "object",
+                                                                        "properties": {
+                                                                            "game_guard": {
+                                                                                "type": "optional",
+                                                                                "value": {
+                                                                                    "type": "object",
+                                                                                    "properties": {}
+                                                                                }
+                                                                            },
+                                                                            "host": {
+                                                                                "type": "optional",
+                                                                                "value": {
+                                                                                    "type": "object",
+                                                                                    "properties": {}
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    },
+                    "lobbyRules": {
+                        "type": "array",
+                        "item": {
+                            "type": "object",
+                            "properties": {
+                                "tags": {
+                                    "type": "record",
+                                    "elementType": {
+                                        "type": "string"
+                                    }
+                                },
+                                "config": {
+                                    "type": "record",
+                                    "elementType": {
+                                        "type": "unknown"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "players": {
+                        "type": "object",
+                        "properties": {
+                            "maxPerIp": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "number"
+                                }
+                            },
+                            "maxUnconnected": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "number"
+                                }
+                            },
+                            "unconnectedExpireAfter": {
+                                "type": "number"
+                            },
+                            "autoDestroyAfter": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "scripts": {
+                "create": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/lobbies/scripts/create.ts",
+                    "name": "create",
+                    "nameCamel": "create",
+                    "namePascal": "Create",
+                    "config": {
+                        "name": "Create Lobby",
+                        "description": "Creates a new lobby on-demand.",
+                        "public": true
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "version": {
+                                "type": "string"
+                            },
+                            "region": {
+                                "type": "string"
+                            },
+                            "tags": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "record",
+                                    "elementType": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "maxPlayers": {
+                                "type": "number"
+                            },
+                            "maxPlayersDirect": {
+                                "type": "number"
+                            },
+                            "players": {
+                                "type": "array",
+                                "item": {
+                                    "type": "object",
+                                    "properties": {}
+                                }
+                            },
+                            "noWait": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {
+                            "lobby": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "version": {
+                                        "type": "string"
+                                    },
+                                    "tags": {
+                                        "type": "record",
+                                        "elementType": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "createdAt": {
+                                        "type": "number"
+                                    },
+                                    "readyAt": {
+                                        "type": "optional",
+                                        "value": {
+                                            "type": "number"
+                                        }
+                                    },
+                                    "players": {
+                                        "type": "number"
+                                    },
+                                    "maxPlayers": {
+                                        "type": "number"
+                                    },
+                                    "maxPlayersDirect": {
+                                        "type": "number"
+                                    },
+                                    "backend": {
+                                        "type": "union",
+                                        "items": [
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "test": {
+                                                        "type": "object",
+                                                        "properties": {}
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "localDevelopment": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "ports": {
+                                                                "type": "record",
+                                                                "elementType": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "protocol": {
+                                                                            "type": "union",
+                                                                            "items": [
+                                                                                {
+                                                                                    "type": "literal",
+                                                                                    "value": "http"
+                                                                                },
+                                                                                {
+                                                                                    "type": "literal",
+                                                                                    "value": "tcp"
+                                                                                },
+                                                                                {
+                                                                                    "type": "literal",
+                                                                                    "value": "udp"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        "hostname": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "port": {
+                                                                            "type": "number"
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "server": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "serverId": {
+                                                                "type": "string"
+                                                            },
+                                                            "ports": {
+                                                                "type": "optional",
+                                                                "value": {
+                                                                    "type": "record",
+                                                                    "elementType": {
+                                                                        "type": "object",
+                                                                        "properties": {
+                                                                            "protocol": {
+                                                                                "type": "union",
+                                                                                "items": [
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "http"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "tcp"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "udp"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "https"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "tcp_tls"
+                                                                                    }
+                                                                                ]
+                                                                            },
+                                                                            "serverPort": {
+                                                                                "type": "optional",
+                                                                                "value": {
+                                                                                    "type": "number"
+                                                                                }
+                                                                            },
+                                                                            "publicHostname": {
+                                                                                "type": "optional",
+                                                                                "value": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "publicPort": {
+                                                                                "type": "optional",
+                                                                                "value": {
+                                                                                    "type": "number"
+                                                                                }
+                                                                            },
+                                                                            "routing": {
+                                                                                "type": "object",
+                                                                                "properties": {
+                                                                                    "game_guard": {
+                                                                                        "type": "optional",
+                                                                                        "value": {
+                                                                                            "type": "object",
+                                                                                            "properties": {}
+                                                                                        }
+                                                                                    },
+                                                                                    "host": {
+                                                                                        "type": "optional",
+                                                                                        "value": {
+                                                                                            "type": "object",
+                                                                                            "properties": {}
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "players": {
+                                "type": "array",
+                                "item": {
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "destroy": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/lobbies/scripts/destroy.ts",
+                    "name": "destroy",
+                    "nameCamel": "destroy",
+                    "namePascal": "Destroy",
+                    "config": {
+                        "name": "Destroy Lobby",
+                        "description": "Destroys an existing lobby.",
+                        "public": true
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "lobbyId": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {}
+                    }
+                },
+                "find_or_create": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/lobbies/scripts/find_or_create.ts",
+                    "name": "find_or_create",
+                    "nameCamel": "findOrCreate",
+                    "namePascal": "FindOrCreate",
+                    "config": {
+                        "name": "Find Or Create Lobby",
+                        "description": "Finds a lobby or creates one if there are no available spots for players.",
+                        "public": true
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "version": {
+                                "type": "string"
+                            },
+                            "regions": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "array",
+                                    "item": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "tags": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "record",
+                                    "elementType": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "players": {
+                                "type": "array",
+                                "item": {
+                                    "type": "object",
+                                    "properties": {}
+                                }
+                            },
+                            "noWait": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "createConfig": {
+                                "type": "object",
+                                "properties": {
+                                    "region": {
+                                        "type": "string"
+                                    },
+                                    "tags": {
+                                        "type": "optional",
+                                        "value": {
+                                            "type": "record",
+                                            "elementType": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    },
+                                    "maxPlayers": {
+                                        "type": "number"
+                                    },
+                                    "maxPlayersDirect": {
+                                        "type": "number"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {
+                            "lobby": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "version": {
+                                        "type": "string"
+                                    },
+                                    "tags": {
+                                        "type": "record",
+                                        "elementType": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "createdAt": {
+                                        "type": "number"
+                                    },
+                                    "readyAt": {
+                                        "type": "optional",
+                                        "value": {
+                                            "type": "number"
+                                        }
+                                    },
+                                    "players": {
+                                        "type": "number"
+                                    },
+                                    "maxPlayers": {
+                                        "type": "number"
+                                    },
+                                    "maxPlayersDirect": {
+                                        "type": "number"
+                                    },
+                                    "backend": {
+                                        "type": "union",
+                                        "items": [
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "test": {
+                                                        "type": "object",
+                                                        "properties": {}
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "localDevelopment": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "ports": {
+                                                                "type": "record",
+                                                                "elementType": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "protocol": {
+                                                                            "type": "union",
+                                                                            "items": [
+                                                                                {
+                                                                                    "type": "literal",
+                                                                                    "value": "http"
+                                                                                },
+                                                                                {
+                                                                                    "type": "literal",
+                                                                                    "value": "tcp"
+                                                                                },
+                                                                                {
+                                                                                    "type": "literal",
+                                                                                    "value": "udp"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        "hostname": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "port": {
+                                                                            "type": "number"
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "server": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "serverId": {
+                                                                "type": "string"
+                                                            },
+                                                            "ports": {
+                                                                "type": "optional",
+                                                                "value": {
+                                                                    "type": "record",
+                                                                    "elementType": {
+                                                                        "type": "object",
+                                                                        "properties": {
+                                                                            "protocol": {
+                                                                                "type": "union",
+                                                                                "items": [
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "http"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "tcp"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "udp"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "https"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "tcp_tls"
+                                                                                    }
+                                                                                ]
+                                                                            },
+                                                                            "serverPort": {
+                                                                                "type": "optional",
+                                                                                "value": {
+                                                                                    "type": "number"
+                                                                                }
+                                                                            },
+                                                                            "publicHostname": {
+                                                                                "type": "optional",
+                                                                                "value": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "publicPort": {
+                                                                                "type": "optional",
+                                                                                "value": {
+                                                                                    "type": "number"
+                                                                                }
+                                                                            },
+                                                                            "routing": {
+                                                                                "type": "object",
+                                                                                "properties": {
+                                                                                    "game_guard": {
+                                                                                        "type": "optional",
+                                                                                        "value": {
+                                                                                            "type": "object",
+                                                                                            "properties": {}
+                                                                                        }
+                                                                                    },
+                                                                                    "host": {
+                                                                                        "type": "optional",
+                                                                                        "value": {
+                                                                                            "type": "object",
+                                                                                            "properties": {}
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "players": {
+                                "type": "array",
+                                "item": {
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "join": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/lobbies/scripts/join.ts",
+                    "name": "join",
+                    "nameCamel": "join",
+                    "namePascal": "Join",
+                    "config": {
+                        "name": "Join Lobby",
+                        "description": "Add a player to an existing lobby.",
+                        "public": true
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "lobbyId": {
+                                "type": "string"
+                            },
+                            "players": {
+                                "type": "array",
+                                "item": {
+                                    "type": "object",
+                                    "properties": {}
+                                }
+                            },
+                            "noWait": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {
+                            "lobby": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "version": {
+                                        "type": "string"
+                                    },
+                                    "tags": {
+                                        "type": "record",
+                                        "elementType": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "createdAt": {
+                                        "type": "number"
+                                    },
+                                    "readyAt": {
+                                        "type": "optional",
+                                        "value": {
+                                            "type": "number"
+                                        }
+                                    },
+                                    "players": {
+                                        "type": "number"
+                                    },
+                                    "maxPlayers": {
+                                        "type": "number"
+                                    },
+                                    "maxPlayersDirect": {
+                                        "type": "number"
+                                    },
+                                    "backend": {
+                                        "type": "union",
+                                        "items": [
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "test": {
+                                                        "type": "object",
+                                                        "properties": {}
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "localDevelopment": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "ports": {
+                                                                "type": "record",
+                                                                "elementType": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "protocol": {
+                                                                            "type": "union",
+                                                                            "items": [
+                                                                                {
+                                                                                    "type": "literal",
+                                                                                    "value": "http"
+                                                                                },
+                                                                                {
+                                                                                    "type": "literal",
+                                                                                    "value": "tcp"
+                                                                                },
+                                                                                {
+                                                                                    "type": "literal",
+                                                                                    "value": "udp"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        "hostname": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "port": {
+                                                                            "type": "number"
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "server": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "serverId": {
+                                                                "type": "string"
+                                                            },
+                                                            "ports": {
+                                                                "type": "optional",
+                                                                "value": {
+                                                                    "type": "record",
+                                                                    "elementType": {
+                                                                        "type": "object",
+                                                                        "properties": {
+                                                                            "protocol": {
+                                                                                "type": "union",
+                                                                                "items": [
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "http"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "tcp"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "udp"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "https"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "tcp_tls"
+                                                                                    }
+                                                                                ]
+                                                                            },
+                                                                            "serverPort": {
+                                                                                "type": "optional",
+                                                                                "value": {
+                                                                                    "type": "number"
+                                                                                }
+                                                                            },
+                                                                            "publicHostname": {
+                                                                                "type": "optional",
+                                                                                "value": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "publicPort": {
+                                                                                "type": "optional",
+                                                                                "value": {
+                                                                                    "type": "number"
+                                                                                }
+                                                                            },
+                                                                            "routing": {
+                                                                                "type": "object",
+                                                                                "properties": {
+                                                                                    "game_guard": {
+                                                                                        "type": "optional",
+                                                                                        "value": {
+                                                                                            "type": "object",
+                                                                                            "properties": {}
+                                                                                        }
+                                                                                    },
+                                                                                    "host": {
+                                                                                        "type": "optional",
+                                                                                        "value": {
+                                                                                            "type": "object",
+                                                                                            "properties": {}
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "players": {
+                                "type": "array",
+                                "item": {
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "list": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/lobbies/scripts/list.ts",
+                    "name": "list",
+                    "nameCamel": "list",
+                    "namePascal": "List",
+                    "config": {
+                        "name": "List Lobbies",
+                        "description": "List & query all lobbies.",
+                        "public": true
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "version": {
+                                "type": "string"
+                            },
+                            "regions": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "array",
+                                    "item": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "tags": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "record",
+                                    "elementType": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {
+                            "lobbies": {
+                                "type": "array",
+                                "item": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "version": {
+                                            "type": "string"
+                                        },
+                                        "tags": {
+                                            "type": "record",
+                                            "elementType": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "set_lobby_ready": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/lobbies/scripts/set_lobby_ready.ts",
+                    "name": "set_lobby_ready",
+                    "nameCamel": "setLobbyReady",
+                    "namePascal": "SetLobbyReady",
+                    "config": {
+                        "name": "Set Lobby Ready",
+                        "description": "Called on lobby startup after initiation to notify it can start accepting player. This should be called after operations like loading maps are complete.",
+                        "public": true
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "lobbyId": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "string"
+                                }
+                            },
+                            "lobbyToken": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {}
+                    }
+                },
+                "set_player_connected": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/lobbies/scripts/set_player_connected.ts",
+                    "name": "set_player_connected",
+                    "nameCamel": "setPlayerConnected",
+                    "namePascal": "SetPlayerConnected",
+                    "config": {
+                        "name": "Set Player Connected",
+                        "description": "Called when a player connects to the lobby.",
+                        "public": true
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "lobbyId": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "string"
+                                }
+                            },
+                            "lobbyToken": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "string"
+                                }
+                            },
+                            "playerTokens": {
+                                "type": "array",
+                                "item": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {}
+                    }
+                },
+                "set_player_disconnected": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/lobbies/scripts/set_player_disconnected.ts",
+                    "name": "set_player_disconnected",
+                    "nameCamel": "setPlayerDisconnected",
+                    "namePascal": "SetPlayerDisconnected",
+                    "config": {
+                        "name": "Set Player Disconnected",
+                        "description": "Called when a player disconnects from the lobby.",
+                        "public": true
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "lobbyId": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "string"
+                                }
+                            },
+                            "lobbyToken": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "string"
+                                }
+                            },
+                            "playerTokens": {
+                                "type": "array",
+                                "item": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {}
+                    }
+                },
+                "find": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/lobbies/scripts/find.ts",
+                    "name": "find",
+                    "nameCamel": "find",
+                    "namePascal": "Find",
+                    "config": {
+                        "name": "Find Lobby",
+                        "description": "Finds an existing lobby with a given query. This will not create a new lobby, see `find_or_create` instead.",
+                        "public": true
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "version": {
+                                "type": "string"
+                            },
+                            "regions": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "array",
+                                    "item": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "tags": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "record",
+                                    "elementType": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "players": {
+                                "type": "array",
+                                "item": {
+                                    "type": "object",
+                                    "properties": {}
+                                }
+                            },
+                            "noWait": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {
+                            "lobby": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "version": {
+                                        "type": "string"
+                                    },
+                                    "tags": {
+                                        "type": "record",
+                                        "elementType": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "createdAt": {
+                                        "type": "number"
+                                    },
+                                    "readyAt": {
+                                        "type": "optional",
+                                        "value": {
+                                            "type": "number"
+                                        }
+                                    },
+                                    "players": {
+                                        "type": "number"
+                                    },
+                                    "maxPlayers": {
+                                        "type": "number"
+                                    },
+                                    "maxPlayersDirect": {
+                                        "type": "number"
+                                    },
+                                    "backend": {
+                                        "type": "union",
+                                        "items": [
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "test": {
+                                                        "type": "object",
+                                                        "properties": {}
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "localDevelopment": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "ports": {
+                                                                "type": "record",
+                                                                "elementType": {
+                                                                    "type": "object",
+                                                                    "properties": {
+                                                                        "protocol": {
+                                                                            "type": "union",
+                                                                            "items": [
+                                                                                {
+                                                                                    "type": "literal",
+                                                                                    "value": "http"
+                                                                                },
+                                                                                {
+                                                                                    "type": "literal",
+                                                                                    "value": "tcp"
+                                                                                },
+                                                                                {
+                                                                                    "type": "literal",
+                                                                                    "value": "udp"
+                                                                                }
+                                                                            ]
+                                                                        },
+                                                                        "hostname": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "port": {
+                                                                            "type": "number"
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "server": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "serverId": {
+                                                                "type": "string"
+                                                            },
+                                                            "ports": {
+                                                                "type": "optional",
+                                                                "value": {
+                                                                    "type": "record",
+                                                                    "elementType": {
+                                                                        "type": "object",
+                                                                        "properties": {
+                                                                            "protocol": {
+                                                                                "type": "union",
+                                                                                "items": [
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "http"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "tcp"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "udp"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "https"
+                                                                                    },
+                                                                                    {
+                                                                                        "type": "literal",
+                                                                                        "value": "tcp_tls"
+                                                                                    }
+                                                                                ]
+                                                                            },
+                                                                            "serverPort": {
+                                                                                "type": "optional",
+                                                                                "value": {
+                                                                                    "type": "number"
+                                                                                }
+                                                                            },
+                                                                            "publicHostname": {
+                                                                                "type": "optional",
+                                                                                "value": {
+                                                                                    "type": "string"
+                                                                                }
+                                                                            },
+                                                                            "publicPort": {
+                                                                                "type": "optional",
+                                                                                "value": {
+                                                                                    "type": "number"
+                                                                                }
+                                                                            },
+                                                                            "routing": {
+                                                                                "type": "object",
+                                                                                "properties": {
+                                                                                    "game_guard": {
+                                                                                        "type": "optional",
+                                                                                        "value": {
+                                                                                            "type": "object",
+                                                                                            "properties": {}
+                                                                                        }
+                                                                                    },
+                                                                                    "host": {
+                                                                                        "type": "optional",
+                                                                                        "value": {
+                                                                                            "type": "object",
+                                                                                            "properties": {}
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "players": {
+                                "type": "array",
+                                "item": {
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        },
+                                        "id": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "force_gc": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/lobbies/scripts/force_gc.ts",
+                    "name": "force_gc",
+                    "nameCamel": "forceGc",
+                    "namePascal": "ForceGc",
+                    "config": {
+                        "name": "Force Garbage Collection",
+                        "description": "Rarely used. Forces the matchmaker to purge lobbies & players.",
+                        "public": false
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {}
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {}
+                    }
+                },
+                "list_regions": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/lobbies/scripts/list_regions.ts",
+                    "name": "list_regions",
+                    "nameCamel": "listRegions",
+                    "namePascal": "ListRegions",
+                    "config": {
+                        "name": "List Regions",
+                        "description": "List available regions.",
+                        "public": false
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "tags": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "record",
+                                    "elementType": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {
+                            "regions": {
+                                "type": "array",
+                                "item": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "display_name": {
+                                            "type": "string"
+                                        },
+                                        "latitude": {
+                                            "type": "number"
+                                        },
+                                        "longitude": {
+                                            "type": "number"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "hasUserConfigSchema": true
+        },
+        "rivet": {
+            "path": "/Users/nathan/rivet/opengb-modules/modules/rivet",
+            "name": "rivet",
+            "nameCamel": "rivet",
+            "namePascal": "Rivet",
+            "config": {
+                "status": "stable",
+                "name": "Rivet API",
+                "description": "Helper for calling the Rivet API.",
+                "icon": "r",
+                "tags": [
+                    "core",
+                    "api"
+                ],
+                "authors": [
+                    "NathanFlurry"
+                ],
+                "scripts": {
+                    "call": {
+                        "name": "Call",
+                        "description": "Call a Rivet REST endpoint.",
+                        "public": false
+                    }
+                },
+                "errors": {
+                    "rivet_error": {
+                        "name": "Rivet Error",
+                        "description": "An error from the Rivet API."
+                    }
+                },
+                "defaultConfig": {
+                    "apiEndpoint": "https://api.rivet.gg",
+                    "serviceTokenVariable": "RIVET_SERVICE_TOKEN"
+                }
+            },
+            "registryName": "default",
+            "userConfig": {
+                "apiEndpoint": "https://api.rivet.gg",
+                "serviceTokenVariable": "RIVET_SERVICE_TOKEN"
+            },
+            "userConfigSchema": {
+                "type": "object",
+                "properties": {
+                    "apiEndpoint": {
+                        "type": "string"
+                    },
+                    "serviceTokenVariable": {
+                        "type": "string"
+                    }
+                }
+            },
+            "scripts": {
+                "call": {
+                    "path": "/Users/nathan/rivet/opengb-modules/modules/rivet/scripts/call.ts",
+                    "name": "call",
+                    "nameCamel": "call",
+                    "namePascal": "Call",
+                    "config": {
+                        "name": "Call",
+                        "description": "Call a Rivet REST endpoint.",
+                        "public": false
+                    },
+                    "requestSchema": {
+                        "type": "object",
+                        "properties": {
+                            "method": {
+                                "type": "string"
+                            },
+                            "path": {
+                                "type": "string"
+                            },
+                            "body": {
+                                "type": "optional",
+                                "value": {
+                                    "type": "any"
+                                }
+                            }
+                        }
+                    },
+                    "responseSchema": {
+                        "type": "object",
+                        "properties": {
+                            "body": {
+                                "type": "any"
+                            }
+                        }
+                    }
+                }
+            },
+            "hasUserConfigSchema": true
+        }
+    }
+}

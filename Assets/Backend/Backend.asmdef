@@ -1,0 +1,7 @@
+{
+    "name": "Backend",
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Newtonsoft.Json.dll"
+    ]
+}

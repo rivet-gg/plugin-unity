@@ -1,0 +1,26 @@
+{
+    "name": "Rivet.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:2bf413eea16a14e4f8e638a86e6f7e68"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false,
+        "analyzerConfigs": [
+        {
+            "name": "Nullable",
+            "value": {
+                "enabled": true
+            }
+        }
+    ]
+}

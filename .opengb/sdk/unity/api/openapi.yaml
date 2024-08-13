@@ -1,0 +1,748 @@
+openapi: 3.1.0
+info:
+  title: Open Game Backend
+  version: 1.0.0
+servers:
+- description: Local
+  url: http://localhost:6420
+tags:
+- description: Open Game Backend
+  name: Open Game Backend
+paths:
+  /modules/users/scripts/fetch/call:
+    post:
+      description: Call users.fetch script.
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/users__fetch__Response'
+          description: Success
+      tags:
+      - Backend
+  /modules/users/scripts/authenticate_token/call:
+    post:
+      description: Call users.authenticate_token script.
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/users__authenticate_token__Response'
+          description: Success
+      tags:
+      - Backend
+  /modules/lobbies/scripts/create/call:
+    post:
+      description: Call lobbies.create script.
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/lobbies__create__Response'
+          description: Success
+      tags:
+      - Backend
+  /modules/lobbies/scripts/destroy/call:
+    post:
+      description: Call lobbies.destroy script.
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/lobbies__destroy__Response'
+          description: Success
+      tags:
+      - Backend
+  /modules/lobbies/scripts/find_or_create/call:
+    post:
+      description: Call lobbies.find_or_create script.
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/lobbies__find_or_create__Response'
+          description: Success
+      tags:
+      - Backend
+  /modules/lobbies/scripts/join/call:
+    post:
+      description: Call lobbies.join script.
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/lobbies__join__Response'
+          description: Success
+      tags:
+      - Backend
+  /modules/lobbies/scripts/list/call:
+    post:
+      description: Call lobbies.list script.
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/lobbies__list__Response'
+          description: Success
+      tags:
+      - Backend
+  /modules/lobbies/scripts/set_lobby_ready/call:
+    post:
+      description: Call lobbies.set_lobby_ready script.
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/lobbies__set_lobby_ready__Response'
+          description: Success
+      tags:
+      - Backend
+  /modules/lobbies/scripts/set_player_connected/call:
+    post:
+      description: Call lobbies.set_player_connected script.
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/lobbies__set_player_connected__Response'
+          description: Success
+      tags:
+      - Backend
+  /modules/lobbies/scripts/set_player_disconnected/call:
+    post:
+      description: Call lobbies.set_player_disconnected script.
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/lobbies__set_player_disconnected__Response'
+          description: Success
+      tags:
+      - Backend
+  /modules/lobbies/scripts/find/call:
+    post:
+      description: Call lobbies.find script.
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/lobbies__find__Response'
+          description: Success
+      tags:
+      - Backend
+components:
+  parameters: {}
+  schemas:
+    users__fetch__Response:
+      example:
+        users:
+        - createdAt: createdAt
+          id: id
+          username: username
+          updatedAt: updatedAt
+        - createdAt: createdAt
+          id: id
+          username: username
+          updatedAt: updatedAt
+      properties:
+        users:
+          items:
+            $ref: '#/components/schemas/users__fetch__Response_users_inner'
+          type: array
+      required:
+      - users
+    users__fetch__Request:
+      properties:
+        userIds:
+          items:
+            type: string
+          type: array
+      required:
+      - userIds
+    users__authenticate_token__Response:
+      example:
+        userId: userId
+        user:
+          createdAt: createdAt
+          id: id
+          username: username
+          updatedAt: updatedAt
+      properties:
+        userId:
+          type: string
+        user:
+          $ref: '#/components/schemas/users__fetch__Response_users_inner'
+      required:
+      - userId
+    users__authenticate_token__Request:
+      properties:
+        userToken:
+          type: string
+        fetchUser:
+          type: boolean
+      required:
+      - userToken
+    lobbies__create__Response:
+      example:
+        lobby:
+          readyAt: 6.027456183070403
+          createdAt: 0.8008281904610115
+          maxPlayers: 5.962133916683182
+          players: 1.4658129805029452
+          maxPlayersDirect: 5.637376656633329
+          backend:
+            server:
+              ports: "{}"
+              serverId: serverId
+            test: "{}"
+            localDevelopment:
+              ports: "{}"
+          id: id
+          version: version
+          tags:
+            key: tags
+        players:
+        - id: id
+          token: token
+        - id: id
+          token: token
+      properties:
+        lobby:
+          $ref: '#/components/schemas/lobbies__create__Response_lobby'
+        players:
+          items:
+            $ref: '#/components/schemas/lobbies__create__Response_players_inner'
+          type: array
+      required:
+      - lobby
+      - players
+    lobbies__create__Request:
+      properties:
+        version:
+          type: string
+        region:
+          type: string
+        tags:
+          additionalProperties:
+            type: string
+        maxPlayers:
+          type: number
+        maxPlayersDirect:
+          type: number
+        players:
+          items:
+            properties: {}
+            type: object
+          type: array
+        noWait:
+          type: boolean
+      required:
+      - maxPlayers
+      - maxPlayersDirect
+      - players
+      - region
+      - version
+    lobbies__destroy__Response:
+      properties: {}
+      type: object
+    lobbies__destroy__Request:
+      properties:
+        lobbyId:
+          type: string
+      required:
+      - lobbyId
+    lobbies__find_or_create__Response:
+      example:
+        lobby:
+          readyAt: 6.027456183070403
+          createdAt: 0.8008281904610115
+          maxPlayers: 5.962133916683182
+          players: 1.4658129805029452
+          maxPlayersDirect: 5.637376656633329
+          backend:
+            server:
+              ports: "{}"
+              serverId: serverId
+            test: "{}"
+            localDevelopment:
+              ports: "{}"
+          id: id
+          version: version
+          tags:
+            key: tags
+        players:
+        - id: id
+          token: token
+        - id: id
+          token: token
+      properties:
+        lobby:
+          $ref: '#/components/schemas/lobbies__create__Response_lobby'
+        players:
+          items:
+            $ref: '#/components/schemas/lobbies__create__Response_players_inner'
+          type: array
+      required:
+      - lobby
+      - players
+    lobbies__find_or_create__Request:
+      properties:
+        version:
+          type: string
+        regions:
+          items:
+            type: string
+          type: array
+        tags:
+          additionalProperties:
+            type: string
+        players:
+          items:
+            properties: {}
+            type: object
+          type: array
+        noWait:
+          type: boolean
+        createConfig:
+          $ref: '#/components/schemas/lobbies__find_or_create__Request_createConfig'
+      required:
+      - createConfig
+      - players
+      - version
+    lobbies__join__Response:
+      example:
+        lobby:
+          readyAt: 6.027456183070403
+          createdAt: 0.8008281904610115
+          maxPlayers: 5.962133916683182
+          players: 1.4658129805029452
+          maxPlayersDirect: 5.637376656633329
+          backend:
+            server:
+              ports: "{}"
+              serverId: serverId
+            test: "{}"
+            localDevelopment:
+              ports: "{}"
+          id: id
+          version: version
+          tags:
+            key: tags
+        players:
+        - id: id
+          token: token
+        - id: id
+          token: token
+      properties:
+        lobby:
+          $ref: '#/components/schemas/lobbies__create__Response_lobby'
+        players:
+          items:
+            $ref: '#/components/schemas/lobbies__create__Response_players_inner'
+          type: array
+      required:
+      - lobby
+      - players
+    lobbies__join__Request:
+      properties:
+        lobbyId:
+          type: string
+        players:
+          items:
+            properties: {}
+            type: object
+          type: array
+        noWait:
+          type: boolean
+      required:
+      - lobbyId
+      - players
+    lobbies__list__Response:
+      example:
+        lobbies:
+        - id: id
+          version: version
+          tags:
+            key: tags
+        - id: id
+          version: version
+          tags:
+            key: tags
+      properties:
+        lobbies:
+          items:
+            $ref: '#/components/schemas/lobbies__list__Response_lobbies_inner'
+          type: array
+      required:
+      - lobbies
+    lobbies__list__Request:
+      properties:
+        version:
+          type: string
+        regions:
+          items:
+            type: string
+          type: array
+        tags:
+          additionalProperties:
+            type: string
+      required:
+      - version
+    lobbies__set_lobby_ready__Response:
+      properties: {}
+      type: object
+    lobbies__set_lobby_ready__Request:
+      properties:
+        lobbyId:
+          type: string
+        lobbyToken:
+          type: string
+    lobbies__set_player_connected__Response:
+      properties: {}
+      type: object
+    lobbies__set_player_connected__Request:
+      properties:
+        lobbyId:
+          type: string
+        lobbyToken:
+          type: string
+        playerTokens:
+          items:
+            type: string
+          type: array
+      required:
+      - playerTokens
+    lobbies__set_player_disconnected__Response:
+      properties: {}
+      type: object
+    lobbies__set_player_disconnected__Request:
+      properties:
+        lobbyId:
+          type: string
+        lobbyToken:
+          type: string
+        playerTokens:
+          items:
+            type: string
+          type: array
+      required:
+      - playerTokens
+    lobbies__find__Response:
+      example:
+        lobby:
+          readyAt: 6.027456183070403
+          createdAt: 0.8008281904610115
+          maxPlayers: 5.962133916683182
+          players: 1.4658129805029452
+          maxPlayersDirect: 5.637376656633329
+          backend:
+            server:
+              ports: "{}"
+              serverId: serverId
+            test: "{}"
+            localDevelopment:
+              ports: "{}"
+          id: id
+          version: version
+          tags:
+            key: tags
+        players:
+        - id: id
+          token: token
+        - id: id
+          token: token
+      properties:
+        lobby:
+          $ref: '#/components/schemas/lobbies__create__Response_lobby'
+        players:
+          items:
+            $ref: '#/components/schemas/lobbies__create__Response_players_inner'
+          type: array
+      required:
+      - lobby
+      - players
+    lobbies__find__Request:
+      properties:
+        version:
+          type: string
+        regions:
+          items:
+            type: string
+          type: array
+        tags:
+          additionalProperties:
+            type: string
+        players:
+          items:
+            properties: {}
+            type: object
+          type: array
+        noWait:
+          type: boolean
+      required:
+      - players
+      - version
+    users__fetch__Response_users_inner:
+      example:
+        createdAt: createdAt
+        id: id
+        username: username
+        updatedAt: updatedAt
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+      - createdAt
+      - id
+      - updatedAt
+      - username
+    lobbies__create__Response_lobby_backend_localDevelopment_ports_value:
+      properties:
+        protocol:
+          enum:
+          - http
+          - tcp
+          - udp
+          type: string
+        hostname:
+          type: string
+        port:
+          type: number
+      required:
+      - hostname
+      - port
+      - protocol
+    lobbies__create__Response_lobby_backend_localDevelopment:
+      example:
+        ports: "{}"
+      properties:
+        ports:
+          additionalProperties:
+            $ref: '#/components/schemas/lobbies__create__Response_lobby_backend_localDevelopment_ports_value'
+      required:
+      - ports
+      nullable: true
+    lobbies__create__Response_lobby_backend_server_ports_value_routing:
+      properties:
+        game_guard:
+          properties: {}
+          type: object
+        host:
+          properties: {}
+          type: object
+    lobbies__create__Response_lobby_backend_server_ports_value:
+      properties:
+        protocol:
+          enum:
+          - http
+          - tcp
+          - udp
+          - https
+          - tcp_tls
+          type: string
+        serverPort:
+          type: number
+        publicHostname:
+          type: string
+        publicPort:
+          type: number
+        routing:
+          $ref: '#/components/schemas/lobbies__create__Response_lobby_backend_server_ports_value_routing'
+      required:
+      - protocol
+      - routing
+    lobbies__create__Response_lobby_backend_server:
+      example:
+        ports: "{}"
+        serverId: serverId
+      properties:
+        serverId:
+          type: string
+        ports:
+          additionalProperties:
+            $ref: '#/components/schemas/lobbies__create__Response_lobby_backend_server_ports_value'
+      required:
+      - serverId
+      nullable: true
+    lobbies__create__Response_lobby_backend:
+      example:
+        server:
+          ports: "{}"
+          serverId: serverId
+        test: "{}"
+        localDevelopment:
+          ports: "{}"
+      properties:
+        test:
+          properties: {}
+          type: object
+          nullable: true
+        localDevelopment:
+          $ref: '#/components/schemas/lobbies__create__Response_lobby_backend_localDevelopment'
+        server:
+          $ref: '#/components/schemas/lobbies__create__Response_lobby_backend_server'
+    lobbies__create__Response_lobby:
+      example:
+        readyAt: 6.027456183070403
+        createdAt: 0.8008281904610115
+        maxPlayers: 5.962133916683182
+        players: 1.4658129805029452
+        maxPlayersDirect: 5.637376656633329
+        backend:
+          server:
+            ports: "{}"
+            serverId: serverId
+          test: "{}"
+          localDevelopment:
+            ports: "{}"
+        id: id
+        version: version
+        tags:
+          key: tags
+      properties:
+        id:
+          type: string
+        version:
+          type: string
+        tags:
+          additionalProperties:
+            type: string
+        createdAt:
+          type: number
+        readyAt:
+          type: number
+        players:
+          type: number
+        maxPlayers:
+          type: number
+        maxPlayersDirect:
+          type: number
+        backend:
+          $ref: '#/components/schemas/lobbies__create__Response_lobby_backend'
+      required:
+      - backend
+      - createdAt
+      - id
+      - maxPlayers
+      - maxPlayersDirect
+      - players
+      - tags
+      - version
+    lobbies__create__Response_players_inner:
+      example:
+        id: id
+        token: token
+      properties:
+        token:
+          type: string
+        id:
+          type: string
+      required:
+      - id
+      - token
+    lobbies__find_or_create__Request_createConfig:
+      properties:
+        region:
+          type: string
+        tags:
+          additionalProperties:
+            type: string
+        maxPlayers:
+          type: number
+        maxPlayersDirect:
+          type: number
+      required:
+      - maxPlayers
+      - maxPlayersDirect
+      - region
+    lobbies__list__Response_lobbies_inner:
+      example:
+        id: id
+        version: version
+        tags:
+          key: tags
+      properties:
+        id:
+          type: string
+        version:
+          type: string
+        tags:
+          additionalProperties:
+            type: string
+      required:
+      - id
+      - tags
+      - version
+

@@ -1,0 +1,11 @@
+# Backend.Model.LobbiesCreateResponseLobbyBackendServerPortsValueRouting
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**GameGuard** | **Object** |  | [optional] 
+**Host** | **Object** |  | [optional] 
+
+[[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
+
