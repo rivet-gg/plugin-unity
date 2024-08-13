@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/Rivet/Editor/UI/TaskPopup/TaskPopup.uss?fileID=7433441132597879392&amp;guid=f896382e4243243558606d769c10fcb1&amp;type=3#TaskPopup" />
+    <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+        <ui:ListView name="LogList" virtualization-method="DynamicHeight" show-bound-collection-size="false" style="flex-grow: 1; padding-top: 4px; padding-right: 4px; padding-bottom: 4px; padding-left: 4px;" />
+        <ui:VisualElement name="ActionRow" style="flex-grow: 0; flex-direction: row; flex-shrink: 0; border-top-width: 0; margin-top: 4px; margin-bottom: 4px; margin-right: 4px; margin-left: 4px; align-items: flex-start; border-left-color: rgba(0, 0, 0, 0.25); border-left-width: 1px;">
+            <ui:Button text="Clear" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ClearButton" style="flex-shrink: 0; flex-grow: 0;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

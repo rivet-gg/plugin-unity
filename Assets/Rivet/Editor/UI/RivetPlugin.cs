@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using Rivet.UI.Screens;
+using Rivet.Editor.UI.TaskPanel;
 
 namespace Rivet.Editor.UI
 {
@@ -17,6 +18,8 @@ namespace Rivet.Editor.UI
 
     public class RivetPlugin : EditorWindow
     {
+        public static RivetPlugin? Singleton;
+
         [SerializeField]
         private VisualTreeAsset m_VisualTreeAsset;
 
@@ -27,18 +30,20 @@ namespace Rivet.Editor.UI
         private VisualElement _screenLogin;
         private VisualElement _screenMain;
 
-        private LoginController _loginController;
-        private MainController _mainController;
+        public LoginController LoginController;
+        public MainController MainController;
 
-        [MenuItem("Window/UI Toolkit/RivetPlugin")]
-        public static void ShowExample()
+        [MenuItem("Window/Rivet/Rivet", false, 20)]
+        public static void ShowPlugin()
         {
-            RivetPlugin wnd = GetWindow<RivetPlugin>();
-            wnd.titleContent = new GUIContent("RivetPlugin");
+            RivetPlugin window = GetWindow<RivetPlugin>();
+            window.titleContent = new GUIContent("Rivet");
         }
 
         public void CreateGUI()
         {
+            Singleton = this;
+
             PluginSettings.LoadSettings();
 
             m_VisualTreeAsset.CloneTree(rootVisualElement);
@@ -54,8 +59,8 @@ namespace Rivet.Editor.UI
             rootVisualElement.Q(className: "discordButton").RegisterCallback<ClickEvent>((ev) => Application.OpenURL("https://rivet.gg/discord"));
             rootVisualElement.Q(className: "feedbackButton").RegisterCallback<ClickEvent>((ev) => Application.OpenURL("https://hub.rivet.gg/?modal=feedback&utm=unity"));
 
-            _loginController = new LoginController(this, _screenLogin);
-            _mainController = new MainController(this, _screenMain);
+            LoginController = new LoginController(this, _screenLogin);
+            MainController = new MainController(this, _screenMain);
 
             SetScreen(Screen.Login);
         }

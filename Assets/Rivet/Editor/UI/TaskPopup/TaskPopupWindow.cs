@@ -46,7 +46,7 @@ namespace Rivet.Editor.UI.TaskPopup
         // Events
         public event Action<object> TaskOutput;
 
-        public static void ShowWindowInCenter(string title, string taskName, JObject taskInput)
+        public static void RunTask(string title, string taskName, JObject taskInput)
         {
             var window = CreateInstance<TaskPopupWindow>();
             window.TaskName = taskName;

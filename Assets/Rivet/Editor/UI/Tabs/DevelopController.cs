@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using Rivet.Editor;
 using Rivet.Editor.Types;
 using Rivet.Editor.UI;
+using Rivet.Editor.UI.TaskPanel;
 using Rivet.Editor.UI.TaskPopup;
 using Rivet.Editor.Util;
 using Rivet.UI.Screens;
@@ -60,6 +62,9 @@ namespace Rivet.UI.Tabs
             _backendEditConfig = _root.Q("BackendBody").Q("EditConfigButton").Q<Button>("Button");
 
             // Callbacks
+            _mainController.LocalGameServerManager.StateChange += OnLocalGameServerStateChange;
+            OnLocalGameServerStateChange(false);
+
             _environmentTypeDropdown.RegisterValueChangedCallback(ev =>
             {
                 _mainController.EnvironmentType = (EnvironmentType)_environmentTypeDropdown.index;
@@ -81,10 +86,11 @@ namespace Rivet.UI.Tabs
                 }
             });
 
+
             _lgsStart.RegisterCallback<ClickEvent>(ev => { OnLocalGameServerStart(); });
-            _lgsStop.RegisterCallback<ClickEvent>(ev => { OnLocalGameServerStop(); });
+            _lgsStop.RegisterCallback<ClickEvent>(ev => _mainController.LocalGameServerManager.StopTask());
             _lgsRestart.RegisterCallback<ClickEvent>(ev => { OnLocalGameServerStart(); });
-            _lgsShowLogs.RegisterCallback<ClickEvent>(ev => { Debug.Log("TODO"); });
+            _lgsShowLogs.RegisterCallback<ClickEvent>(ev => GameServerWindow.ShowGameServer());
 
             _backendGenerateSdk.RegisterCallback<ClickEvent>(ev => OnBackendGenerateSDK());
             _backendEditConfig.RegisterCallback<ClickEvent>(ev => OnBackendEditConfig());
@@ -114,19 +120,24 @@ namespace Rivet.UI.Tabs
             _remoteEnvironmentDropdown.style.display = _environmentTypeDropdown.index == (int)EnvironmentType.Local ? DisplayStyle.None : DisplayStyle.Flex;
         }
 
-        private void OnLocalGameServerStart()
+        private void OnLocalGameServerStateChange(bool running)
         {
-            Builder.BuildAndRunServer();
+            // Use parent since this is a template holding a button
+            _lgsStart.parent.style.display = running ? DisplayStyle.None : DisplayStyle.Flex;
+            _lgsStop.parent.style.display = running ? DisplayStyle.Flex : DisplayStyle.None;
+            _lgsRestart.parent.style.display = running ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
-        private void OnLocalGameServerStop()
+        private void OnLocalGameServerStart()
         {
-            RivetLogger.Error("UNIMPLEMENTED");
+            _mainController.LocalGameServerExecutablePath = Builder.BuildDevServer();
+            _ = _mainController.LocalGameServerManager.StartTask();
         }
 
         private void OnBackendGenerateSDK()
         {
-            TaskPopupWindow.ShowWindowInCenter("Generate SDK", "backend_sdk_gen", new JObject {
+            TaskPopupWindow.RunTask("Generate SDK", "backend_sdk_gen", new JObject
+            {
                 ["cwd"] = Builder.ProjectRoot(),
                 ["fallback_sdk_path"] = "Assets/Backend",
                 ["target"] = "unity",

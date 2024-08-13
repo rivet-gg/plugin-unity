@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
@@ -29,13 +30,17 @@ namespace Rivet.Editor.Util
             return BuildTarget.StandaloneOSX;
         }
 
-        public static void BuildAndRunServer()
+        /// <summary>
+        /// Builds a server used for local development.
+        /// </summary>
+        /// <returns>Returns the task config to run the server.</returns>
+        public static string? BuildDevServer()
         {
             // Ensure a scene is included
             if (EditorBuildSettings.scenes.Length == 0)
             {
                 RivetLogger.Error("No scenes in build settings. Please add at least one scene.");
-                return;
+                return null;
             }
 
             // Configure build settings
@@ -74,53 +79,14 @@ namespace Rivet.Editor.Util
             if (result == BuildResult.Succeeded)
             {
                 RivetLogger.Log("Dedicated server build completed successfully.");
-                LaunchServer(buildPlayerOptions.locationPathName);
+
+                return FindExecutablePath(buildPlayerOptions.locationPathName);
             }
             else
             {
                 RivetLogger.Error("Dedicated server build failed.");
+                return null;
             }
-        }
-
-        public static async void LaunchServer(string buildPath)
-        {
-            // Add path to binary for macOS
-            string executablePath = FindExecutablePath(buildPath);
-
-            // HACK: Show term instead of running inline
-            // TODO: Better logs dir
-            // string logPath = Path.Combine(Path.GetDirectoryName(executablePath), "server_log.txt");
-            await new RivetTask("show_term", new JObject
-            {
-                ["command"] = executablePath,
-                // ["args"] = new JArray { "-batchmode", "-nographics", "-logFile", logPath, "-server" },
-                ["args"] = new JArray { "-batchmode", "-nographics", "-logFile", "-server" },
-            }).RunAsync();
-
-            // OLD:
-            // string logPath = Path.Combine(Path.GetDirectoryName(serverPath), "server_log.txt");
-
-            // ProcessStartInfo startInfo = new ProcessStartInfo
-            // {
-            //     FileName = serverPath,
-            //     Arguments = $"-batchmode -nographics -logFile \"{logPath}\"",
-            //     UseShellExecute = false,
-            //     CreateNoWindow = true
-            // };
-
-            // RivetLogger.Log($"Launching dedicated server with command: {startInfo.FileName} {startInfo.Arguments}");
-
-            // try
-            // {
-            //     using (Process serverProcess = Process.Start(startInfo))
-            //     {
-            //         RivetLogger.Log("Dedicated server launched successfully.");
-            //     }
-            // }
-            // catch (System.Exception e)
-            // {
-            //     RivetLogger.Error($"Failed to launch dedicated server: {e.Message}");
-            // }
         }
 
         public static string FindExecutablePath(string serverPath)
