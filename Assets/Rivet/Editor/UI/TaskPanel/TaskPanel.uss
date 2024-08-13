@@ -1,4 +1,5 @@
 #LogList {
+    background-color: var(--unity-colors-default-background);
 }
 
 .logStdOut {

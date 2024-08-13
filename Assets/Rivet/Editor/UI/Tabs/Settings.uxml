@@ -22,13 +22,13 @@
     <ui:Instance template="Header" name="BackendHeader">
         <AttributeOverrides element-name="Title" text="Local Backend Daemon" />
     </ui:Instance>
-    <ui:VisualElement style="flex-grow: 0; flex-shrink: 0; flex-direction: column;">
+    <ui:VisualElement name="BackendBody" style="flex-grow: 0; flex-shrink: 0; flex-direction: column;">
         <ui:Label tabindex="-1" text="Runs your local backend server used for development in the background. Rarely needs to be stopped." parse-escape-sequences="true" display-tooltip-when-elided="true" style="white-space: normal;" />
-        <ui:VisualElement style="flex-grow: 0; flex-shrink: 0; flex-direction: row;">
+        <ui:VisualElement name="ButtonRow" style="flex-grow: 0; flex-shrink: 0; flex-direction: row;">
             <ui:Button text="Start" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StartButton" style="flex-grow: 1;" />
             <ui:Button text="Stop" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StopButton" style="flex-shrink: 1; flex-grow: 1;" />
             <ui:Button text="Restart" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RestartButton" style="flex-shrink: 1; flex-grow: 1;" />
         </ui:VisualElement>
-        <ui:Label tabindex="-1" text="&lt;u&gt;Show Logs&lt;/u&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-text-align: upper-center;" />
+        <ui:Label tabindex="-1" text="&lt;u&gt;Show Logs&lt;/u&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LogsButton" style="-unity-text-align: upper-center;" />
     </ui:VisualElement>
 </ui:UXML>

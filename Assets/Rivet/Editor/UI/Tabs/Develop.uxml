@@ -17,7 +17,7 @@
     </ui:Instance>
     <ui:VisualElement name="LocalGameServerBody" style="flex-grow: 0; flex-shrink: 0;">
         <ui:VisualElement name="ButtonRow" style="flex-grow: 1; flex-direction: row; margin-bottom: 4px;">
-            <ui:Instance template="IconButton" name="StartButton" style="flex-grow: 1;">
+            <ui:Instance template="IconButton" name="StartButton" style="flex-grow: 1; display: flex;">
                 <AttributeOverrides element-name="Label" text="Start" />
             </ui:Instance>
             <ui:Instance template="IconButton" name="StopButton" style="flex-grow: 1;">

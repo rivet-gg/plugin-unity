@@ -34,7 +34,8 @@
                 }
             },
             "rivet": {}
-        }
+        },
+        "runtime": {}
     },
     "registries": {
         "default": {
