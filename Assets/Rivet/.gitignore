@@ -2,6 +2,6 @@
 Editor/PluginSettings.asset*
 
 # Don't save dylibs
-Editor/Native/*.dll
-Editor/Native/*.dylib
-Editor/Native/*.so
+# Editor/Native/*.dll
+# Editor/Native/*.dylib
+# Editor/Native/*.so
