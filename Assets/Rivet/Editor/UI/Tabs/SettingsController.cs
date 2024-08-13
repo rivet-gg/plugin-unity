@@ -35,9 +35,9 @@ namespace Rivet.UI.Tabs
             // HACK: Show term instead of running inline
 
             var input = new JObject { ["port"] = 6420, ["cwd"] = Builder.ProjectRoot() };
-            await new ToolchainTask("show_term", new JObject
+            await new RivetTask("show_term", new JObject
             {
-                ["command"] = ToolchainTask.GetRivetCLIPath(),
+                ["command"] = RivetTask.GetRivetCLIPath(),
                 ["args"] = new JArray { "task", "run", "--run-config", "{}", "--name", "backend_dev", "--input", input.ToString(Formatting.None) },
             }).RunAsync();
         }
@@ -50,7 +50,7 @@ namespace Rivet.UI.Tabs
 
         private async Task OnUnlinkGame()
         {
-            await new ToolchainTask("unlink", new JObject()).RunAsync();
+            await new RivetTask("unlink", new JObject()).RunAsync();
             _pluginWindow.SetScreen(Editor.UI.Screen.Login);
         }
     }
