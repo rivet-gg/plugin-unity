@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.0.0-rc.1](https://github.com/rivet-gg/plugin-unity/compare/v1.0.3...v2.0.0-rc.1) (2024-08-13)
+
+
+### Chores
+
+* add game server & backend panel ([#37](https://github.com/rivet-gg/plugin-unity/issues/37)) ([865b967](https://github.com/rivet-gg/plugin-unity/commit/865b96778b7af63edf6a47227ae3c0eda548e72a))
+* add popup ([#36](https://github.com/rivet-gg/plugin-unity/issues/36)) ([77e6324](https://github.com/rivet-gg/plugin-unity/commit/77e6324b0647b878ee528102e555de652ae4e8a0))
+* bump CLI version ([#31](https://github.com/rivet-gg/plugin-unity/issues/31)) ([57745df](https://github.com/rivet-gg/plugin-unity/commit/57745dfcc265858c81e6b40af63d057709d54438))
+* migrate to ui toolkit ([#34](https://github.com/rivet-gg/plugin-unity/issues/34)) ([a362b69](https://github.com/rivet-gg/plugin-unity/commit/a362b694dc89db1574295b4c967c6a1f5d17de5a))
+* refactor on to toolchain ([#33](https://github.com/rivet-gg/plugin-unity/issues/33)) ([31df965](https://github.com/rivet-gg/plugin-unity/commit/31df9652b9aa41f85508a0474c0e2c62b938d0b4))
+* release 2.0.0-rc.1 ([890fce4](https://github.com/rivet-gg/plugin-unity/commit/890fce44b16b18b5e71b471ba47cf8ee3eecffde))
+* switch to toolchain ([#35](https://github.com/rivet-gg/plugin-unity/issues/35)) ([7e5da4d](https://github.com/rivet-gg/plugin-unity/commit/7e5da4dd2bdb51f7330cc22e827d1b9c32a22524))
+
 ## [1.0.3](https://github.com/rivet-gg/plugin-unity/compare/v1.0.2...v1.0.3) (2024-03-14)
 
 
