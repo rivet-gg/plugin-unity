@@ -6,15 +6,7 @@
 			]
 		}
 	},
-	"registries": {
-		"default": {
-			"local": {
-				"directory": "/Users/nathan/rivet/opengb-modules/modules"
-			}
-		}
-	},
 	"modules": {
-		"users": {},
 		"rate_limit": {},
 		"tokens": {},
 		"lobbies": {

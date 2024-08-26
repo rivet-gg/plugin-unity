@@ -4,5 +4,5 @@
         <ui:Label tabindex="-1" text="Step 1: Create Game &amp; Backend Configs" parse-escape-sequences="true" display-tooltip-when-elided="true" style="flex-grow: 1; flex-shrink: 1;" />
         <ui:Button text="Setup" parse-escape-sequences="true" display-tooltip-when-elided="true" />
     </ui:VisualElement>
-    <ui:Label tabindex="-1" text="WIP" parse-escape-sequences="true" display-tooltip-when-elided="true" />
+    <ui:Label tabindex="-1" text="Please see &lt;a href=&quot;https://rivet.gg/learn/unity&quot;&gt;Quickstart Guide&lt;/a&gt; to get setarted\n\nSetup wizard coming soon" parse-escape-sequences="true" display-tooltip-when-elided="true" />
 </ui:UXML>

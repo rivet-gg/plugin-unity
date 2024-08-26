@@ -1,3 +1,7 @@
 Assets/Rivet/Editor/Native/*.dll filter=lfs diff=lfs merge=lfs -text
 Assets/Rivet/Editor/Native/*.so filter=lfs diff=lfs merge=lfs -text
 Assets/Rivet/Editor/Native/*.dylib filter=lfs diff=lfs merge=lfs -text
+Assets/Rivet/Editor/Native/cli/rivet-aarch64-apple filter=lfs diff=lfs merge=lfs -text
+Assets/Rivet/Editor/Native/cli/rivet-linux filter=lfs diff=lfs merge=lfs -text
+Assets/Rivet/Editor/Native/cli/rivet-windows.exe filter=lfs diff=lfs merge=lfs -text
+Assets/Rivet/Editor/Native/cli/rivet-x86-apple filter=lfs diff=lfs merge=lfs -text

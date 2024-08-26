@@ -82,7 +82,7 @@ namespace Rivet.Editor.UI
             // Bind links
             var links = rootVisualElement.Q(name: "Header").Q(name: "Links");
             links.Q(name: "DashboardButton").RegisterCallback<ClickEvent>((ev) => Application.OpenURL("https://hub.rivet.gg"));
-            rootVisualElement.Q(className: "docsButton").RegisterCallback<ClickEvent>((ev) => Application.OpenURL("https://rivet.gg/docs/unity"));
+            rootVisualElement.Q(className: "docsButton").RegisterCallback<ClickEvent>((ev) => Application.OpenURL("https://rivet.gg/learn/unity"));
             rootVisualElement.Q(className: "discordButton").RegisterCallback<ClickEvent>((ev) => Application.OpenURL("https://rivet.gg/discord"));
             rootVisualElement.Q(className: "feedbackButton").RegisterCallback<ClickEvent>((ev) => Application.OpenURL("https://hub.rivet.gg/?modal=feedback&utm=unity"));
 

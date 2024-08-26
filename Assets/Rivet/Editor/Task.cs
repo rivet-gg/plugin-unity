@@ -160,9 +160,29 @@ namespace Rivet.Editor
         // TODO: Remove this
         public static string GetRivetCLIPath()
         {
-            // TODO: Update this path as needed
-            // return "/Users/nathan/rivet/cli/target/debug/rivet-cli";
-            return "/Users/nathan/rivet/cli/target/debug/rivet";
+            if (Application.platform == RuntimePlatform.WindowsEditor)
+            {
+                return "Assets/Rivet/Editor/Native/cli/rivet-windows.exe";
+            }
+            else if (Application.platform == RuntimePlatform.OSXEditor)
+            {
+                if (SystemInfo.processorType.Contains("Apple"))
+                {
+                    return "Assets/Rivet/Editor/Native/cli/rivet-aarch64-apple";
+                }
+                else
+                {
+                    return "Assets/Rivet/Editor/Native/cli/rivet-x86-apple";
+                }
+            }
+            else if (Application.platform == RuntimePlatform.LinuxEditor)
+            {
+                return "Assets/Rivet/Editor/Native/cli/rivet-linux";
+            }
+            else
+            {
+                throw new Exception("Unsupported platform");
+            }
         }
 
         // private static Result<JObject> RunRivetCLI(params string[] args)

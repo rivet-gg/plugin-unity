@@ -168,12 +168,14 @@ namespace Rivet.UI.Tabs
 
         private void OnBackendGenerateSDK()
         {
-            TaskPopupWindow.RunTask("Generate SDK", "backend_sdk_gen", new JObject
-            {
-                ["cwd"] = Builder.ProjectRoot(),
-                ["fallback_sdk_path"] = "Assets/Backend",
-                ["target"] = "unity",
-            });
+            // TaskPopupWindow.RunTask("Generate SDK", "backend_sdk_gen", new JObject
+            // {
+            //     ["cwd"] = Builder.ProjectRoot(),
+            //     ["fallback_sdk_path"] = "Assets/Backend",
+            //     ["target"] = "unity",
+            // });
+
+            EditorUtility.DisplayDialog("Generate SDK Disabled", "Generate SDK temporarily disabled. Contact support for further questions.", "OK");
         }
 
         private void OnBackendEditConfig()
