@@ -3,6 +3,7 @@
 using UnityEngine;
 using UnityEditor;
 using Rivet.Editor.UI;
+using Rivet.UI.Screens;
 
 namespace Rivet.Editor
 {
@@ -71,6 +72,38 @@ namespace Rivet.Editor
 
         // MARK: Settings
         [SerializeField]
+        private EnvironmentType environmentType = EnvironmentType.Local;
+
+        public static EnvironmentType EnvironmentType
+        {
+            get { return Settings != null ? Settings.environmentType : EnvironmentType.Local; }
+            set
+            {
+                if (Settings != null)
+                {
+                    Settings.environmentType = value;
+                    SaveSettings();
+                }
+            }
+        }
+
+        [SerializeField]
+        private string? remoteEnvironmentId;
+
+        public static string? RemoteEnvironmentId
+        {
+            get { return Settings?.remoteEnvironmentId; }
+            set
+            {
+                if (Settings != null)
+                {
+                    Settings.remoteEnvironmentId = value;
+                    SaveSettings();
+                }
+            }
+        }
+
+        [SerializeField]
         private bool enableDebugLogs = false;
 
         public static bool EnableDebugLogs
@@ -78,7 +111,7 @@ namespace Rivet.Editor
             get { return Settings != null && Settings.enableDebugLogs; }
         }
 
-
+        // TODO: Remove this with cleaner impl
         [SerializeField]
         private int tempBackendLocalPort = 6420;
 

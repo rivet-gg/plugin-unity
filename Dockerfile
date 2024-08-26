@@ -5,6 +5,9 @@ WORKDIR /app
 ARG BUILD_PATH=./Builds/Release/DedicatedServer/Linux_x86_64/
 ARG BINARY_NAME=DedicatedServer
 
+# Pass BINARY_NAME to env so we can use it in the entrypoint
+ENV BINARY_NAME=${BINARY_NAME}
+
 # Install necessary libraries for Unity
 RUN apt-get update && apt-get install -y \
     ca-certificates \
@@ -17,4 +20,4 @@ COPY ${BUILD_PATH} /app
 RUN ls /app && chmod +x /app/${BINARY_NAME}
 
 USER rivet
-ENTRYPOINT ["/app/${BINARY_NAME}", "-server", "-batchmode", "-nographics"]
+ENTRYPOINT "/app/${BINARY_NAME}" "-server" "-batchmode" "-nographics"

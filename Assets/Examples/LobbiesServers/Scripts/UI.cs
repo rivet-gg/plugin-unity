@@ -33,11 +33,15 @@ public class UI : MonoBehaviour
         return new BackendClient(config.BackendEndpoint);
     }
 
+    private string TEMPRegion()
+    {
+        return "atl";
+    }
+
     private string TEMPGameVersion()
     {
-        // var config = new Configuration();
-        // return config.GameVersion;
-        return "default";
+        var config = new Configuration();
+        return config.GameVersion;
     }
 
     private void Start()
@@ -69,14 +73,14 @@ public class UI : MonoBehaviour
 
         var response = await TEMPBackendClient().Lobbies.FindOrCreate(new Backend.Model.Lobbies.FindOrCreateRequest(
             varVersion: TEMPGameVersion(),
-            regions: new List<string> { "local" },
+            regions: new List<string> { TEMPRegion() },
             tags: new Dictionary<string, string>
             {
                 // ["gameMode"] = gameMode,
             },
             players: new List<object> { new() },
             createConfig: new Backend.Model.Lobbies.FindOrCreateRequestCreateConfig(
-                region: "local",
+                region: TEMPRegion(),
                 tags: new Dictionary<string, string> { },
                 maxPlayers: 32,
                 maxPlayersDirect: 32

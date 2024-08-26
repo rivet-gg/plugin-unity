@@ -113,7 +113,7 @@ namespace Rivet.UI.Tabs
             // Run deploy with CLI using TaskPopupWindow
             var task = TaskPopupWindow.RunTask("Build & Deploy", "deploy", new JObject
             {
-                ["cwd"] = serverPath != null ? Path.GetDirectoryName(serverPath) : Builder.ProjectRoot(),
+                ["cwd"] = Builder.ProjectRoot(),
                 ["environment_id"] = environmentId,
                 ["game_server"] = deployGameServer,
                 ["backend"] = deployBackend,
@@ -124,10 +124,11 @@ namespace Rivet.UI.Tabs
             {
                 if (output is ResultOk<JObject> ok)
                 {
-                    var version = ok.Data["version"]?.ToString();
-                    if (!string.IsNullOrEmpty(version))
+                    var gameServerObj = ok.Data["game_server"];
+                    if (gameServerObj != null && gameServerObj.Type == JTokenType.Object)
                     {
-                        RivetPlugin.Singleton.GameVersion = ok.Data["version"].ToString();
+                        var version = gameServerObj["version_name"]?.ToString();
+                        RivetPlugin.Singleton.GameVersion = version;
                         SharedSettings.UpdateFromPlugin();
                         Debug.Log($"New game version: {RivetPlugin.Singleton.GameVersion}");
                     }

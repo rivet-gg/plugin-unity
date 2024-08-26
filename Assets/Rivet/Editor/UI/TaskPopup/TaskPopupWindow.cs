@@ -119,7 +119,7 @@ namespace Rivet.Editor.UI.TaskPopup
             try
             {
                 var output = await _task.RunAsync();
-                OnTaskCompleted(output);
+                EditorApplication.delayCall += () => OnTaskCompleted(output);
             }
             catch (Exception ex)
             {
@@ -136,7 +136,6 @@ namespace Rivet.Editor.UI.TaskPopup
 
         private void OnTaskCompleted(Result<JObject> output)
         {
-            OnTaskOutput.Invoke(output);
             switch (output)
             {
                 case ResultOk<JObject> ok:
@@ -146,6 +145,7 @@ namespace Rivet.Editor.UI.TaskPopup
                     AddLogLine(err.Message, LogType.STDERR);
                     break;
             }
+            OnTaskOutput.Invoke(output);
 
             UpdateUI();
         }

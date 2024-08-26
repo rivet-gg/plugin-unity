@@ -55,10 +55,6 @@ namespace Rivet.UI.Screens
                     {
                         _pluginWindow.SetScreen(Editor.UI.Screen.Main);
                     }
-                    else
-                    {
-                        SetLoginButtonEnabled(true);
-                    }
 
                     break;
             }
@@ -66,9 +62,6 @@ namespace Rivet.UI.Screens
 
         private async Task SignIn()
         {
-            // Disable the button sign in button
-            SetLoginButtonEnabled(false);
-
             // Get link token
             var getLinkResult = await new RivetTask(
                 "start_device_link",
@@ -92,7 +85,6 @@ namespace Rivet.UI.Screens
 
                     break;
                 case ResultErr<JObject> err:
-                    SetLoginButtonEnabled(true);
                     return;
                 default:
                     throw new System.Exception("unreachable");
@@ -114,12 +106,9 @@ namespace Rivet.UI.Screens
                     _pluginWindow.SetScreen(Editor.UI.Screen.Main);
                     break;
                 case ResultErr<JObject> err:
-                    SetLoginButtonEnabled(true);
                     return;
 
             }
         }
-
-        void SetLoginButtonEnabled(bool enabled) => _root.Q(name: "SignIn").SetEnabled(enabled);
     }
 }

@@ -55,19 +55,17 @@ namespace Rivet.UI.Screens
         private SettingsController _settingsController;
 
         // MARK: Environment
-        private EnvironmentType _environmentType = EnvironmentType.Local;
         public EnvironmentType EnvironmentType {
-            get { return _environmentType; }
+            get { return PluginSettings.EnvironmentType; }
             set {
-                _environmentType = value;
+                PluginSettings.EnvironmentType = value;
                 SharedSettings.UpdateFromPlugin();
             }
         }
-        private string? _remoteEnvironmentId;
         public string? RemoteEnvironmentId {
-            get { return _remoteEnvironmentId; }
+            get { return PluginSettings.RemoteEnvironmentId; }
             set {
-                _remoteEnvironmentId = value;
+                PluginSettings.RemoteEnvironmentId = value;
                 SharedSettings.UpdateFromPlugin();
             }
         }

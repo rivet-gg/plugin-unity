@@ -161,7 +161,8 @@ namespace Rivet.Editor
         public static string GetRivetCLIPath()
         {
             // TODO: Update this path as needed
-            return "/Users/nathan/rivet/cli/target/debug/rivet-cli";
+            // return "/Users/nathan/rivet/cli/target/debug/rivet-cli";
+            return "/Users/nathan/rivet/cli/target/debug/rivet";
         }
 
         // private static Result<JObject> RunRivetCLI(params string[] args)

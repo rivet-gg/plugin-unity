@@ -1,4 +1,11 @@
 {
+  "runtime": {
+		"cors": {
+			"origins": [
+				"http://localhost:8080"
+			]
+		}
+	},
 	"registries": {
 		"default": {
 			"local": {
@@ -27,12 +34,12 @@
 							"ports": {
 								"game": {
 									"protocol": "udp",
-									"serverPort": 7777
+									"internalPort": 7777
 								}
 							},
 							"resources": {
-								"cpu": 1000,
-								"memory": 1000
+								"cpu": 250,
+								"memory": 250
 							}
 						}
 					}
