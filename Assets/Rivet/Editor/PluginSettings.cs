@@ -141,7 +141,7 @@ namespace Rivet.Editor
                 BackendEndpoint = plugin.MainController.EnvironmentType switch
                 {
                     Rivet.UI.Screens.EnvironmentType.Local => $"http://localhost:{plugin.LocalBackendPort}",
-                    Rivet.UI.Screens.EnvironmentType.Remote => plugin.MainController.RemoteEnvironment?.Endpoint ?? "http://localhost:6420",
+                    Rivet.UI.Screens.EnvironmentType.Remote => plugin.MainController.RemoteEnvironmentBackend?.Endpoint ?? "http://localhost:6420",
                     _ => throw new System.NotImplementedException(),
                 };
 

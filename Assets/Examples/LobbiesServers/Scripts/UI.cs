@@ -33,9 +33,11 @@ public class UI : MonoBehaviour
         return new BackendClient(config.BackendEndpoint);
     }
 
-    private string TEMPGameVersion() {
-        var config = new Configuration();
-        return config.GameVersion;
+    private string TEMPGameVersion()
+    {
+        // var config = new Configuration();
+        // return config.GameVersion;
+        return "default";
     }
 
     private void Start()

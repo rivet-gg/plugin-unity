@@ -84,7 +84,7 @@ namespace Rivet.UI.Screens
             {
                 if (BootstrapData is { } data)
                 {
-                    var idx = data.Environments.FindIndex(x => x.EnvironmentId == RemoteEnvironmentId);
+                    var idx = data.Environments.FindIndex(x => x.Id == RemoteEnvironmentId);
                     return idx >= 0 ? idx : 0;
                 }
                 else
@@ -96,8 +96,17 @@ namespace Rivet.UI.Screens
             {
                 if (value != null && value >= 0 && value < BootstrapData?.Environments.Count)
                 {
-                    RemoteEnvironmentId = BootstrapData?.Environments[value.Value].EnvironmentId;
+                    RemoteEnvironmentId = BootstrapData?.Environments[value.Value].Id;
                 }
+            }
+        }
+
+        public EnvironmentBackend? RemoteEnvironmentBackend
+        {
+            get
+            {
+                var remoteEnv = RemoteEnvironment;
+                return remoteEnv != null ? BootstrapData?.Backends[remoteEnv.Value.Id] : null;
             }
         }
 
@@ -170,27 +179,10 @@ namespace Rivet.UI.Screens
             var data = result.Data.ToObject<BootstrapData>(); ;
             BootstrapData = data;
 
-<<<<<<< HEAD
-            try
-            {
-                var data = result.Data.ToObject<BootstrapData>();
-                BootstrapData = data;
-                ExtensionData.ApiEndpoint = data.ApiEndpoint;
-
-                _developController.OnBootstrap(data);
-                _deployController.OnBootstrap(data);
-            }
-            catch (Exception ex)
-            {
-                RivetLogger.Error($"Exception in GetBootstrapData: {ex.Message}");
-                RivetLogger.Error($"Stack trace: {ex.StackTrace}");
-            }
-=======
             _developController.OnBootstrap(data);
             _deployController.OnBootstrap(data);
 
             SharedSettings.UpdateFromPlugin();
->>>>>>> 3ace6b6 (chore: re-impl deploys)
         }
 
         /// <summary>

@@ -49,7 +49,6 @@ namespace Rivet.UI.Tabs
 
             _environmentDropdown.RegisterValueChangedCallback(ev =>
             {
-                _mainController.EnvironmentType = EnvironmentType.Remote;
                 _mainController.RemoteEnvironmentIndex = _environmentDropdown.index;
                 _mainController.OnSelectedEnvironmentChange();
             });
