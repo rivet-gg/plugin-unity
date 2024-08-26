@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
@@ -142,22 +143,24 @@ namespace Rivet.UI.Tabs
 
         private void OnLocalGameServerStart()
         {
-            var serverPath = Builder.BuildDevDedicatedServer();
-            if (serverPath != null)
-            {
-                _pluginWindow.LocalGameServerExecutablePath = serverPath;
-                // _ = _pluginWindow.LocalGameServerManager.StartTask();
-                _ = new RivetTask("show_term", new JObject
-                {
-                    ["command"] = _pluginWindow.LocalGameServerExecutablePath,
-                    // ["args"] = new JArray { "-batchmode", "-nographics", "-logFile", logPath, "-server" },
-                    ["args"] = new JArray { "-batchmode", "-nographics", "-server" },
-                }).RunAsync();
+            string serverPath;
+            try {
+                serverPath = Builder.BuildDevDedicatedServer();
+            } catch (Exception e) {
+                EditorUtility.DisplayDialog("Server Build Failed", e.Message, "Dismiss");
+                return;
             }
-            else
+
+            _pluginWindow.LocalGameServerExecutablePath = serverPath;
+
+            // _ = _pluginWindow.LocalGameServerManager.StartTask();
+
+            _ = new RivetTask("show_term", new JObject
             {
-                EditorUtility.DisplayDialog("Game Server Build Failed", "See Unity console for details.", "Dismiss");
-            }
+                ["command"] = _pluginWindow.LocalGameServerExecutablePath,
+                // ["args"] = new JArray { "-batchmode", "-nographics", "-logFile", logPath, "-server" },
+                ["args"] = new JArray { "-batchmode", "-nographics", "-server" },
+            }).RunAsync();
         }
 
         private void OnPlayerStart()

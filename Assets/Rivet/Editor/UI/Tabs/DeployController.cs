@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -102,11 +103,10 @@ namespace Rivet.UI.Tabs
             string? serverPath = null;
             if (deployGameServer)
             {
-                serverPath = Builder.BuildReleaseDedicatedServer();
-                if (serverPath == null)
-                {
-                    EditorUtility.DisplayDialog("Server Build Failed", "See Unity console for details.", "Dismiss");
-                    return;
+                try {
+                    serverPath = Builder.BuildReleaseDedicatedServer();
+                } catch (Exception e) {
+                    EditorUtility.DisplayDialog("Server Build Failed", e.Message, "Dismiss");
                 }
             }
 

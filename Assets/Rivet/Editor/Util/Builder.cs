@@ -24,10 +24,12 @@ namespace Rivet.Editor.Util
         }
 
         /// <summary>
-        /// Builds a development player for the host OS.
+        /// Build target for building for the current OS.
+        /// 
+        /// Used for player & dev server builds.
         /// </summary>
         /// <returns>Returns the path to the built player executable.</returns>
-        public static BuildTarget GetPlayerBuildTarget()
+        public static BuildTarget GetLocalBuildTarget()
         {
             switch (Application.platform)
             {
@@ -38,38 +40,33 @@ namespace Rivet.Editor.Util
                 case RuntimePlatform.LinuxEditor:
                     return BuildTarget.StandaloneLinux64;
                 default:
-                    Debug.LogError("Unsupported platform for player build");
+                    Debug.LogError("Unsupported platform for build");
                     return BuildTarget.StandaloneWindows64; // Default to Windows as fallback
             }
         }
 
-        public static string? BuildDevPlayer()
+        public static string BuildDevPlayer()
         {
             // Check if the target platform is supported
-            if (!BuildPipeline.IsBuildTargetSupported(BuildTargetGroup.Standalone, GetPlayerBuildTarget()))
+            if (!BuildPipeline.IsBuildTargetSupported(BuildTargetGroup.Standalone, GetLocalBuildTarget()))
             {
-                RivetLogger.Error($"{GetPlayerBuildTarget()} build support is not installed");
-                EditorUtility.DisplayDialog(
-                    $"{GetPlayerBuildTarget()} Build Support Missing",
-                    $"{GetPlayerBuildTarget()} build support is not installed. Please install it from the Unity Hub to proceed with the build process.",
-                    "Dismiss"
+                throw new Exception(
+                    $"{GetLocalBuildTarget()} build support is not installed. Please install it from the Unity Hub to proceed with the build process."
                 );
-                return null;
             }
 
             // Ensure a scene is included
             if (EditorBuildSettings.scenes.Length == 0)
             {
-                RivetLogger.Error("No scenes in build settings. Please add at least one scene.");
-                return null;
+                throw new Exception("No scenes in build settings. Please add a scene under File > Build Settings. The first build is the scene the server will run.");
             }
 
             // Configure build settings
             var buildPlayerOptions = new BuildPlayerOptions
             {
                 scenes = GetScenePaths(),
-                locationPathName = Path.Combine(ProjectRoot(), "Builds", "Development", "Player", GetPlatformArchFolder(GetPlayerBuildTarget()), GetBuildName("Player", GetPlayerBuildTarget())),
-                target = GetPlayerBuildTarget(),
+                locationPathName = Path.Combine(ProjectRoot(), "Builds", "Development", "Player", GetPlatformArchFolder(GetLocalBuildTarget()), GetBuildName("Player", GetLocalBuildTarget())),
+                target = GetLocalBuildTarget(),
                 options = BuildOptions.Development | BuildOptions.AllowDebugging
             };
 
@@ -85,8 +82,7 @@ namespace Rivet.Editor.Util
             }
             else
             {
-                Debug.LogError("Dev player build failed");
-                return null;
+                throw new Exception("Dev player build failed. Check console for errors.");
             }
         }
 
@@ -96,10 +92,11 @@ namespace Rivet.Editor.Util
         /// <param name="instanceCount">The number of player instances to run.</param>
         public static void BuildAndRunMultipleDevPlayers(int instanceCount)
         {
-            string? playerPath = BuildDevPlayer();
-            if (playerPath == null)
-            {
-                Debug.LogError("Failed to build dev player. Cannot run instances.");
+            string playerPath;
+            try {
+                playerPath = BuildDevPlayer();
+            } catch (Exception e) {
+                EditorUtility.DisplayDialog("Player Build Failed", e.Message, "Dismiss");
                 return;
             }
 
@@ -129,43 +126,30 @@ namespace Rivet.Editor.Util
         }
 
         // MARK: Run Game Server
-        public static BuildTarget GetGameServerBuildTarget()
-        {
-            // TODO:
-            return BuildTarget.StandaloneOSX;
-        }
-
         /// <summary>
         /// Builds a server used for local development.
         /// </summary>
         /// <returns>Returns the task config to run the server.</returns>
-        public static string? BuildDevDedicatedServer()
+        public static string BuildDevDedicatedServer()
         {
             // Check if the target platform is supported
-            if (!BuildPipeline.IsBuildTargetSupported(BuildTargetGroup.Standalone, GetGameServerBuildTarget()))
+            if (!BuildPipeline.IsBuildTargetSupported(BuildTargetGroup.Standalone, GetLocalBuildTarget()))
             {
-                RivetLogger.Error($"{GetGameServerBuildTarget()} build support is not installed");
-                EditorUtility.DisplayDialog(
-                    $"{GetGameServerBuildTarget()} Build Support Missing",
-                    $"{GetGameServerBuildTarget()} build support is not installed. Please install it from the Unity Hub to proceed with the build process.",
-                    "Dismiss"
-                );
-                return null;
+                throw new Exception($"{GetLocalBuildTarget()} build support is not installed. Please install it from the Unity Hub to proceed with the build process.");
             }
 
             // Ensure a scene is included
             if (EditorBuildSettings.scenes.Length == 0)
             {
-                RivetLogger.Error("No scenes in build settings. Please add at least one scene.");
-                return null;
+                throw new Exception("No scenes in build settings. Please add a scene under File > Build Settings. The first build is the scene the server will run.");
             }
 
             // Configure build settings
             var buildPlayerOptions = new BuildPlayerOptions
             {
                 scenes = GetScenePaths(),
-                locationPathName = Path.Combine(ProjectRoot(), "Builds", "Development", "DedicatedServer", GetPlatformArchFolder(GetGameServerBuildTarget()), GetBuildName("DedicatedServer", GetGameServerBuildTarget(), true)),
-                target = GetGameServerBuildTarget(),
+                locationPathName = Path.Combine(ProjectRoot(), "Builds", "Development", "DedicatedServer", GetPlatformArchFolder(GetLocalBuildTarget()), GetBuildName("DedicatedServer", GetLocalBuildTarget(), true)),
+                target = GetLocalBuildTarget(),
                 options = BuildOptions.Development | BuildOptions.CompressWithLz4 | BuildOptions.EnableHeadlessMode,
                 subtarget = (int)StandaloneBuildSubtarget.Server
             };
@@ -183,30 +167,27 @@ namespace Rivet.Editor.Util
             }
             else
             {
-                RivetLogger.Error("Dedicated server build failed.");
-                return null;
+                throw new Exception("Dedicated server build failed. Ensure the \"Dedicated Server\" Unity module is installed for your platform in the Unity Hub. Check the console for errors.");
             }
         }
 
-        public static string? BuildReleaseDedicatedServer()
+        public static string BuildReleaseDedicatedServer()
         {
             // Ensure a scene is included
             if (EditorBuildSettings.scenes.Length == 0)
             {
-                RivetLogger.Error("No scenes in build settings. Please add at least one scene.");
-                return null;
+                throw new Exception("No scenes in build settings. Please add a scene under File > Build Settings. The first build is the scene the server will run.");
             }
 
             // Check if Linux build support is installed
             if (!BuildPipeline.IsBuildTargetSupported(BuildTargetGroup.Standalone, BuildTarget.StandaloneLinux64))
             {
-                RivetLogger.Error("Linux build support is not installed");
                 EditorUtility.DisplayDialog(
                     "Linux Build Support Missing",
                     "Linux build support is not installed. Please install it from the Unity Hub to proceed with the build and deploy process.",
                     "Dismiss"
                 );
-                return null;
+                throw new Exception("Linux build support is not installed");
             }
 
             // Configure build settings
@@ -231,8 +212,7 @@ namespace Rivet.Editor.Util
             }
             else
             {
-                RivetLogger.Error("Production server build failed.");
-                return null;
+                throw new Exception("Production server build failed. Ensure the \"Dedicated Server\" Unity module is installed for Linux in the Unity Hub. Check console for errors.");
             }
         }
 
@@ -257,7 +237,7 @@ namespace Rivet.Editor.Util
                     break;
                 case BuildTarget.StandaloneWindows:
                 case BuildTarget.StandaloneWindows64:
-                    executableFile = Path.Combine(serverPath, $"{productName}.exe");
+                    executableFile = serverPath;
                     break;
                 default:
                     throw new ArgumentException($"Unsupported build target: {buildTarget}");
@@ -312,6 +292,8 @@ namespace Rivet.Editor.Util
             if (target == BuildTarget.StandaloneOSX && !isServer)
             {
                 return baseName + ".app";
+            } else if (target == BuildTarget.StandaloneWindows || target == BuildTarget.StandaloneWindows64) {
+                return baseName + ".exe";
             }
             return baseName;
         }
