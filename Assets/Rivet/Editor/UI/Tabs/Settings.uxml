@@ -11,8 +11,8 @@
     <ui:Instance template="Header" name="PluginHeader">
         <AttributeOverrides element-name="Title" text="Plugin" />
     </ui:Instance>
-    <ui:VisualElement style="flex-grow: 0; flex-shrink: 0;">
-        <ui:VisualElement style="flex-grow: 0; flex-shrink: 0; flex-direction: row;">
+    <ui:VisualElement name="PluginBody" style="flex-grow: 0; flex-shrink: 0;">
+        <ui:VisualElement name="ButtonRow" style="flex-grow: 0; flex-shrink: 0; flex-direction: row;">
             <ui:Button text="Edit User" parse-escape-sequences="true" display-tooltip-when-elided="true" name="EditUserButton" style="flex-shrink: 1; flex-grow: 1;" />
             <ui:Button text="Edit Project" parse-escape-sequences="true" display-tooltip-when-elided="true" name="EditProjectButton" style="flex-shrink: 1; flex-grow: 1;" />
         </ui:VisualElement>

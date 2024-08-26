@@ -1,7 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="VisualElement" style="flex-grow: 0; flex-shrink: 0; flex-direction: row;">
+    <ui:VisualElement name="VisualElement" style="flex-grow: 0; flex-shrink: 0; flex-direction: row; display: none; visibility: visible;">
         <ui:VisualElement style="flex-grow: 0; background-image: url(&quot;project://database/Assets/Rivet/Editor/Images/FontAwesome/wrench.svg?fileID=7388822144124034973&amp;guid=3b4edff0fd4a14f62be12a7aafc33fb2&amp;type=3#wrench&quot;); -unity-background-scale-mode: scale-to-fit; flex-shrink: 0; width: 16px; height: 16px;" />
         <ui:Label tabindex="-1" text="Step 1: Create Game &amp; Backend Configs" parse-escape-sequences="true" display-tooltip-when-elided="true" style="flex-grow: 1; flex-shrink: 1;" />
         <ui:Button text="Setup" parse-escape-sequences="true" display-tooltip-when-elided="true" />
     </ui:VisualElement>
+    <ui:Label tabindex="-1" text="WIP" parse-escape-sequences="true" display-tooltip-when-elided="true" />
 </ui:UXML>

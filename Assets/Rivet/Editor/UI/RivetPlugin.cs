@@ -48,6 +48,9 @@ namespace Rivet.Editor.UI
             }
         }
 
+        // MARK: Deployed
+        public string? GameVersion;
+
         // MARK: Tasks
         public TaskManager LocalGameServerManager;
         public TaskManager BackendManager;
@@ -94,6 +97,17 @@ namespace Rivet.Editor.UI
             _screen = screen;
             _screenLogin.style.display = screen == Screen.Login ? DisplayStyle.Flex : DisplayStyle.None;
             _screenMain.style.display = screen == Screen.Main ? DisplayStyle.Flex : DisplayStyle.None;
+
+            // Notify the appropriate controller
+            switch (screen)
+            {
+                case Screen.Login:
+                    LoginController.OnShow();
+                    break;
+                case Screen.Main:
+                    MainController.OnShow();
+                    break;
+            }
         }
 
         public void OnEnable()

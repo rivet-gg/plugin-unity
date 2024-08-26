@@ -35,11 +35,16 @@ namespace Rivet.Editor
 
         public void OnPostprocessBuild(BuildReport report)
         {
-            // Delete asset file
-            string filePath = Path.Combine(Application.streamingAssetsPath, "rivet_config.json");
-            if (File.Exists(filePath))
+            string jsonFilePath = Path.Combine(Application.streamingAssetsPath, "rivet_config.json");
+            if (File.Exists(jsonFilePath))
             {
-                File.Delete(filePath);
+                File.Delete(jsonFilePath);
+            }
+
+            string metaFilePath = jsonFilePath + ".meta";
+            if (File.Exists(metaFilePath))
+            {
+                File.Delete(metaFilePath);
             }
         }
     }

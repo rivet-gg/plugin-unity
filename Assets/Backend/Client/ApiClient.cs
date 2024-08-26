@@ -423,6 +423,9 @@ throw new ApiException((int)request.responseCode, request.error + " (" + jsonBod
                     await tsc.Task;
                 }
                 
+                // Log the path and response
+                Debug.Log($"Backend request {request.method} {path} ({request.responseCode}): {request.downloadHandler.text}");
+
                 if (request.result == UnityWebRequest.Result.ConnectionError ||
                     request.result == UnityWebRequest.Result.DataProcessingError)
                 {

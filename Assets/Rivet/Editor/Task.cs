@@ -23,6 +23,7 @@ namespace Rivet.Editor
 
         // State
         public bool IsRunning { get; private set; } = false;
+        public bool IsFinished { get; private set; } = false;
         private StateFiles _stateFiles;
         private CancellationTokenSource _cts;
         private FileStream _logFileStream;
@@ -74,6 +75,7 @@ namespace Rivet.Editor
                 var logPollingTask = StartLogPolling(_cts.Token);
                 var result = await Task.Run(() => RunTask(_name, _input, runConfig), _cts.Token);
                 IsRunning = false;
+                IsFinished = true;
 
                 // Read end of logs immediately. Log polling task will cancel
                 // itself.
@@ -84,6 +86,7 @@ namespace Rivet.Editor
             finally
             {
                 IsRunning = false;
+                IsFinished = true;
                 FinishLogs();
                 Dispose();  // Self-dispose after the task is complete
             }
@@ -244,6 +247,11 @@ namespace Rivet.Editor
             }
         }
 
+        private string StripAnsiCodes(string input)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(input, @"\x1b\[[0-9;]*m", string.Empty);
+        }
+
         private void ReadLogTail()
         {
             if (_logFileStream == null)
@@ -269,11 +277,11 @@ namespace Rivet.Editor
                         var parsed = JsonConvert.DeserializeObject<Dictionary<string, string>>(line);
                         if (parsed.ContainsKey("Stdout"))
                         {
-                            OnLog?.Invoke(parsed["Stdout"], LogType.STDOUT);
+                            OnLog?.Invoke(StripAnsiCodes(parsed["Stdout"]), LogType.STDOUT);
                         }
                         else if (parsed.ContainsKey("Stderr"))
                         {
-                            OnLog?.Invoke(parsed["Stderr"], LogType.STDERR);
+                            OnLog?.Invoke(StripAnsiCodes(parsed["Stderr"]), LogType.STDERR);
                         }
                     }
                     catch (JsonException)

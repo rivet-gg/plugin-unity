@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEditor;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -44,9 +45,9 @@ namespace Rivet.Editor.UI.TaskPopup
         private RivetTask _task;
 
         // Events
-        public event Action<object> TaskOutput;
+        public event Action<object> OnTaskOutput;
 
-        public static void RunTask(string title, string taskName, JObject taskInput)
+        public static TaskPopupWindow RunTask(string title, string taskName, JObject taskInput)
         {
             var window = CreateInstance<TaskPopupWindow>();
             window.TaskName = taskName;
@@ -66,6 +67,8 @@ namespace Rivet.Editor.UI.TaskPopup
             window.ShowUtility();
 
             window.InitializeAndStartTask();
+
+            return window;
         }
 
         public void CreateGUI()
@@ -111,7 +114,7 @@ namespace Rivet.Editor.UI.TaskPopup
             _task.OnLog += OnTaskLog;
 
             AddLogLine("Starting task...", LogType.META);
-            UpdateUI();
+            EditorApplication.delayCall += () => UpdateUI();
 
             try
             {
@@ -127,17 +130,17 @@ namespace Rivet.Editor.UI.TaskPopup
 
         private void UpdateUI()
         {
-            bool running = _task != null && _task.IsRunning;
+            bool running = _task != null && !_task.IsFinished;
             _doneButton.text = running ? "Cancel" : "Close";
         }
 
         private void OnTaskCompleted(Result<JObject> output)
         {
+            OnTaskOutput.Invoke(output);
             switch (output)
             {
                 case ResultOk<JObject> ok:
                     EditorApplication.delayCall += () => AddLogLine($"Exited with {ok.Data.ToString(Formatting.None)}", LogType.META);
-
                     break;
                 case ResultErr<JObject> err:
                     AddLogLine(err.Message, LogType.STDERR);

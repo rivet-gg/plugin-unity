@@ -119,7 +119,8 @@ namespace Rivet.Editor
             set => SetAndSave(ref gameVersion, value, "GameVersion");
         }
 
-        public static void LoadSettings() {
+        public static void LoadSettings()
+        {
             backendEndpoint = PlayerPrefs.GetString("BackendEndpoint");
             gameVersion = PlayerPrefs.GetString("GameVersion");
         }
@@ -144,10 +145,9 @@ namespace Rivet.Editor
                     _ => throw new System.NotImplementedException(),
                 };
 
-                // TODO:
-                GameVersion = "TODO";
+                GameVersion = plugin.GameVersion ?? "unknown";
 
-                RivetLogger.Log($"Update Shared Settings: BackendEndpoint={BackendEndpoint} GameVersion={GameVersion}");
+                RivetLogger.Log($"Update Shared Settings [BackendEndpoint={BackendEndpoint} GameVersion={GameVersion}]");
             }
         }
     }

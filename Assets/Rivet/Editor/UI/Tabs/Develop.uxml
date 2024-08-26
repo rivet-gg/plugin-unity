@@ -7,8 +7,8 @@
         <AttributeOverrides element-name="Title" text="Environment" />
     </ui:Instance>
     <ui:VisualElement name="EnvironmentBody" style="flex-grow: 0; flex-shrink: 0;">
-        <ui:Label tabindex="-1" text="Configure which backend to connect to." parse-escape-sequences="true" display-tooltip-when-elided="true" style="margin-top: 0; margin-bottom: 4px; opacity: 1; white-space: normal;" />
-        <ui:DropdownField choices="Local,Remote" index="0" name="TypeDropdown" label="Type" style="height: 19px; margin-bottom: 4px;" />
+        <ui:Label tabindex="-1" text="Specify which backend to connect to." parse-escape-sequences="true" display-tooltip-when-elided="true" style="margin-top: 0; margin-bottom: 4px; opacity: 1; white-space: normal;" />
+        <ui:DropdownField choices="Local (Development),Remote (Live Servers)" index="0" name="TypeDropdown" label="Type" style="height: 19px; margin-bottom: 4px;" />
         <ui:DropdownField name="EnvironmentDropdown" label="Environment" index="0" style="height: 19px;" />
     </ui:VisualElement>
     <ui:Instance template="Separator" name="Separator" />

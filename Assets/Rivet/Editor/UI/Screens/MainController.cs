@@ -75,10 +75,10 @@ namespace Rivet.UI.Screens
         {
             get
             {
-                return BootstrapData?.Environments[RemoteEnvironmentIndex];
+                return RemoteEnvironmentIndex != null ? BootstrapData?.Environments[RemoteEnvironmentIndex.Value] : null;
             }
         }
-        public int RemoteEnvironmentIndex
+        public int? RemoteEnvironmentIndex
         {
             get
             {
@@ -94,9 +94,9 @@ namespace Rivet.UI.Screens
             }
             set
             {
-                if (value >= 0 && value < BootstrapData?.Environments.Count)
+                if (value != null && value >= 0 && value < BootstrapData?.Environments.Count)
                 {
-                    RemoteEnvironmentId = BootstrapData?.Environments[value].Id;
+                    RemoteEnvironmentId = BootstrapData?.Environments[value.Value].EnvironmentId;
                 }
             }
         }
@@ -109,7 +109,9 @@ namespace Rivet.UI.Screens
             // UI
             InitUI();
             SetTab(MainTab.Setup);
+        }
 
+        public void OnShow() {
             // Fetch data
             _ = GetBootstrapData();
         }
@@ -157,7 +159,7 @@ namespace Rivet.UI.Screens
             _settingsTabBody.style.display = tab == MainTab.Settings ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
-        private async Task GetBootstrapData()
+        public async Task GetBootstrapData()
         {
             var result = await new RivetTask("get_bootstrap_data", new JObject()).RunAsync();
             if (result is ResultErr<JObject> err)
@@ -168,6 +170,7 @@ namespace Rivet.UI.Screens
             var data = result.Data.ToObject<BootstrapData>(); ;
             BootstrapData = data;
 
+<<<<<<< HEAD
             try
             {
                 var data = result.Data.ToObject<BootstrapData>();
@@ -182,6 +185,12 @@ namespace Rivet.UI.Screens
                 RivetLogger.Error($"Exception in GetBootstrapData: {ex.Message}");
                 RivetLogger.Error($"Stack trace: {ex.StackTrace}");
             }
+=======
+            _developController.OnBootstrap(data);
+            _deployController.OnBootstrap(data);
+
+            SharedSettings.UpdateFromPlugin();
+>>>>>>> 3ace6b6 (chore: re-impl deploys)
         }
 
         /// <summary>

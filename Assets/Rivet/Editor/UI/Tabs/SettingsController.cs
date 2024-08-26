@@ -25,6 +25,16 @@ namespace Rivet.UI.Tabs
         private Button _backendRestart;
         private VisualElement _backendShowLogs;
 
+        private Button _editUserButton;
+        private Button _editProjectButton;
+
+        // Add enum definition
+        private enum SettingsType
+        {
+            User,
+            Project
+        }
+
         public SettingsController(RivetPlugin window, MainController mainController, VisualElement root)
         {
             _pluginWindow = window;
@@ -42,6 +52,10 @@ namespace Rivet.UI.Tabs
             _backendRestart = _root.Q("BackendBody").Q("ButtonRow").Q<Button>("RestartButton");
             _backendShowLogs = _root.Q("BackendBody").Q("LogsButton");
 
+            // Query new buttons
+            _editUserButton = _root.Q("PluginBody").Q("ButtonRow").Q<Button>("EditUserButton");
+            _editProjectButton = _root.Q("PluginBody").Q("ButtonRow").Q<Button>("EditProjectButton");
+
             // Callbacks
             _pluginWindow.BackendManager.StateChange += OnBackendStateChange;
             OnBackendStateChange(false);
@@ -53,6 +67,10 @@ namespace Rivet.UI.Tabs
             // _backendRestart.RegisterCallback<ClickEvent>(ev => { _ = _pluginWindow.BackendManager.StartTask(); });
             _backendStart.RegisterCallback<ClickEvent>(ev => { _ = OnStartBackend(); });  // TODO: Remove
             _backendShowLogs.RegisterCallback<ClickEvent>(ev => BackendWindow.ShowBackend());
+
+            // Update callbacks
+            _editUserButton.RegisterCallback<ClickEvent>(ev => { _ = OnEditSettings(SettingsType.User); });
+            _editProjectButton.RegisterCallback<ClickEvent>(ev => { _ = OnEditSettings(SettingsType.Project); });
         }
 
         private async Task OnStartBackend()
@@ -96,6 +114,26 @@ namespace Rivet.UI.Tabs
             _backendStart.style.display = running ? DisplayStyle.None : DisplayStyle.Flex;
             _backendStop.style.display = running ? DisplayStyle.Flex : DisplayStyle.None;
             _backendRestart.style.display = running ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        private async Task OnEditSettings(SettingsType type)
+        {
+            var pathsResult = await new RivetTask("get_settings_path", new JObject()).RunAsync();
+            
+            string path;
+            switch (pathsResult)
+            {
+                case ResultOk<JObject> ok:
+                    path = type == SettingsType.Project ? (string)ok.Data["project_path"] : (string)ok.Data["user_path"];
+                    break;
+                case ResultErr<JObject> err:
+                    RivetLogger.Error($"Failed to get settings paths: {err}");
+                    return;
+                default:
+                    return;
+            }
+
+            await new RivetTask("open", new JObject { ["path"] = path }).RunAsync();
         }
     }
 }

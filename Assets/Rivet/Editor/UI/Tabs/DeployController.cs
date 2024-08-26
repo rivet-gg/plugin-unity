@@ -12,6 +12,7 @@ using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Rivet.Editor.UI.TaskPopup;
 
 namespace Rivet.UI.Tabs
 {
@@ -21,6 +22,7 @@ namespace Rivet.UI.Tabs
         private MainController _mainController;
         private readonly VisualElement _root;
 
+        private VisualElement _refreshButton;
         private DropdownField _environmentDropdown;
         private Button _buildDeployButton;
         private DropdownField _stepsDropdown;
@@ -37,11 +39,14 @@ namespace Rivet.UI.Tabs
         void InitUI()
         {
             // Query
+            _refreshButton = _root.Q("DeployHeader").Q("Header").Q("Action");
             _environmentDropdown = _root.Q<DropdownField>("EnvironmentDropdown");
             _buildDeployButton = _root.Q("BuildDeployButton").Q<Button>("Button");
             _stepsDropdown = _root.Q<DropdownField>("StepsDropdown");
 
             // Callbacks
+            _refreshButton.RegisterCallback<ClickEvent>(ev => { _ = _mainController.GetBootstrapData(); });
+
             _environmentDropdown.RegisterValueChangedCallback(ev =>
             {
                 _mainController.EnvironmentType = EnvironmentType.Remote;
@@ -74,7 +79,7 @@ namespace Rivet.UI.Tabs
 
         public void OnSelectedEnvironmentChange()
         {
-            _environmentDropdown.index = _mainController.RemoteEnvironmentIndex;
+            _environmentDropdown.index = _mainController.RemoteEnvironmentIndex ?? -1;
         }
 
         private void OnBuildAndDeploy()
@@ -83,33 +88,52 @@ namespace Rivet.UI.Tabs
             _mainController.EnvironmentType = EnvironmentType.Remote;
             _mainController.OnSelectedEnvironmentChange();
 
-            string? serverPath = Builder.BuildReleaseDedicatedServer();
-            if (serverPath == null)
-            {
-                EditorUtility.DisplayDialog("Server Build Failed", "See Unity console for details.", "Dismiss");
-                return;
-            }
-
             // Get the selected environment ID
-            string environmentId = _mainController.RemoteEnvironment?.NameId ?? "";
+            string environmentId = _mainController.RemoteEnvironmentId;
+            if (environmentId == null)
+            {
+                throw new System.Exception("Could not get ID for remote env");
+            }
 
             // Get the selected steps
             int stepsIndex = _stepsDropdown.index;
             bool deployGameServer = stepsIndex == 0 || stepsIndex == 1;
             bool deployBackend = stepsIndex == 0 || stepsIndex == 2;
 
-            // Run deploy with CLI
-            _ = new RivetTask(
-                "deploy",
-                new JObject
+            string? serverPath = null;
+            if (deployGameServer)
+            {
+                serverPath = Builder.BuildReleaseDedicatedServer();
+                if (serverPath == null)
                 {
-                    ["cwd"] = Path.GetDirectoryName(serverPath),
-                    ["environment_id"] = environmentId,
-                    ["game_server"] = deployGameServer,
-                    ["backend"] = deployBackend,
+                    EditorUtility.DisplayDialog("Server Build Failed", "See Unity console for details.", "Dismiss");
+                    return;
                 }
-            ).RunAsync();
-        }
+            }
 
+            // Run deploy with CLI using TaskPopupWindow
+            var task = TaskPopupWindow.RunTask("Build & Deploy", "deploy", new JObject
+            {
+                ["cwd"] = serverPath != null ? Path.GetDirectoryName(serverPath) : Builder.ProjectRoot(),
+                ["environment_id"] = environmentId,
+                ["game_server"] = deployGameServer,
+                ["backend"] = deployBackend,
+            });
+
+            // Save version
+            task.OnTaskOutput += output =>
+            {
+                if (output is ResultOk<JObject> ok)
+                {
+                    var version = ok.Data["version"]?.ToString();
+                    if (!string.IsNullOrEmpty(version))
+                    {
+                        RivetPlugin.Singleton.GameVersion = ok.Data["version"].ToString();
+                        SharedSettings.UpdateFromPlugin();
+                        Debug.Log($"New game version: {RivetPlugin.Singleton.GameVersion}");
+                    }
+                }
+            };
+        }
     }
 }

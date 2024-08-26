@@ -22,7 +22,10 @@ namespace Rivet.UI.Screens
             _root = root;
 
             InitUI();
+        }
 
+        public void OnShow()
+        {
             _ = CheckLoginState();
         }
 

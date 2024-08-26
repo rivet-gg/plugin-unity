@@ -33,6 +33,11 @@ public class UI : MonoBehaviour
         return new BackendClient(config.BackendEndpoint);
     }
 
+    private string TEMPGameVersion() {
+        var config = new Configuration();
+        return config.GameVersion;
+    }
+
     private void Start()
     {
         _networkManager = FindObjectOfType<NetworkManager>();
@@ -61,7 +66,7 @@ public class UI : MonoBehaviour
         joinMenuPanel.SetActive(false);
 
         var response = await TEMPBackendClient().Lobbies.FindOrCreate(new Backend.Model.Lobbies.FindOrCreateRequest(
-            varVersion: "default",
+            varVersion: TEMPGameVersion(),
             regions: new List<string> { "local" },
             tags: new Dictionary<string, string>
             {

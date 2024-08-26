@@ -27,6 +27,7 @@ namespace Rivet.UI.Tabs
         private readonly MainController _mainController;
         private readonly VisualElement _root;
 
+        private VisualElement _refreshButton;
         private DropdownField _environmentTypeDropdown;
         private DropdownField _remoteEnvironmentDropdown;
 
@@ -53,6 +54,7 @@ namespace Rivet.UI.Tabs
         void InitUI()
         {
             // Query
+            _refreshButton = _root.Q("EnvironmentHeader").Q("Header").Q("Action");
             _environmentTypeDropdown = _root.Q("EnvironmentBody").Q<DropdownField>("TypeDropdown");
             _remoteEnvironmentDropdown = _root.Q("EnvironmentBody").Q<DropdownField>("EnvironmentDropdown");
 
@@ -67,9 +69,12 @@ namespace Rivet.UI.Tabs
             _backendGenerateSdk = _root.Q("BackendBody").Q("GenerateSdkButton").Q<Button>("Button");
             _backendEditConfig = _root.Q("BackendBody").Q("EditConfigButton").Q<Button>("Button");
 
+
             // Callbacks
             _pluginWindow.LocalGameServerManager.StateChange += OnLocalGameServerStateChange;
             OnLocalGameServerStateChange(false);
+
+            _refreshButton.RegisterCallback<ClickEvent>(ev => { _ = _mainController.GetBootstrapData(); });
 
             _environmentTypeDropdown.RegisterValueChangedCallback(ev =>
             {
@@ -82,7 +87,7 @@ namespace Rivet.UI.Tabs
                 {
                     // Open URL and reset index
                     Application.OpenURL($"https://hub.rivet.gg/games/{bootstrapData.GameId}/backend?modal=create-environment");
-                    _remoteEnvironmentDropdown.index = _mainController.RemoteEnvironmentIndex;
+                    _remoteEnvironmentDropdown.index = _mainController.RemoteEnvironmentIndex ?? -1;
                 }
                 else
                 {
@@ -91,7 +96,6 @@ namespace Rivet.UI.Tabs
                     _mainController.OnSelectedEnvironmentChange();
                 }
             });
-
 
             _lgsStart.RegisterCallback<ClickEvent>(ev => { OnLocalGameServerStart(); });
             _lgsStop.RegisterCallback<ClickEvent>(ev => _pluginWindow.LocalGameServerManager.StopTask());
@@ -124,7 +128,7 @@ namespace Rivet.UI.Tabs
         public void OnSelectedEnvironmentChange()
         {
             _environmentTypeDropdown.index = (int)_mainController.EnvironmentType;
-            _remoteEnvironmentDropdown.index = _mainController.RemoteEnvironmentIndex;
+            _remoteEnvironmentDropdown.index = _mainController.RemoteEnvironmentIndex ?? -1;
             _remoteEnvironmentDropdown.style.display = _environmentTypeDropdown.index == (int)EnvironmentType.Local ? DisplayStyle.None : DisplayStyle.Flex;
         }
 

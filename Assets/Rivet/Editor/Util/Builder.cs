@@ -68,7 +68,7 @@ namespace Rivet.Editor.Util
             var buildPlayerOptions = new BuildPlayerOptions
             {
                 scenes = GetScenePaths(),
-                locationPathName = Path.Combine(ProjectRoot(), "Builds", "DevPlayer", GetBuildName("DevPlayer")),
+                locationPathName = Path.Combine(ProjectRoot(), "Builds", "Development", "Player", GetPlatformArchFolder(GetPlayerBuildTarget()), GetBuildName("Player", GetPlayerBuildTarget())),
                 target = GetPlayerBuildTarget(),
                 options = BuildOptions.Development | BuildOptions.AllowDebugging
             };
@@ -164,30 +164,11 @@ namespace Rivet.Editor.Util
             var buildPlayerOptions = new BuildPlayerOptions
             {
                 scenes = GetScenePaths(),
-                locationPathName = Path.Combine(ProjectRoot(), "Builds", "DevDedicatedServer", GetBuildName("DevDedicatedServer")),
+                locationPathName = Path.Combine(ProjectRoot(), "Builds", "Development", "DedicatedServer", GetPlatformArchFolder(GetGameServerBuildTarget()), GetBuildName("DedicatedServer", GetGameServerBuildTarget(), true)),
                 target = GetGameServerBuildTarget(),
-                options = BuildOptions.Development | BuildOptions.CompressWithLz4,
+                options = BuildOptions.Development | BuildOptions.CompressWithLz4 | BuildOptions.EnableHeadlessMode,
                 subtarget = (int)StandaloneBuildSubtarget.Server
             };
-
-            // // Speed up builds for development
-            // var devOptimizations = true;
-            // if (devOptimizations)
-            // {
-            //     buildPlayerOptions.options |= BuildOptions.Development;
-            //     buildPlayerOptions.options |= BuildOptions.CompressWithLz4;
-            //     EditorUserBuildSettings.compressFilesInPackage = false;
-
-            //     // TODO: Is this right?
-            //     buildPlayerOptions.options &= ~BuildOptions.StrictMode;
-
-            //     // buildPlayerOptions.options |= BuildOptions.BuildScriptsOnly;
-
-            //     // TODO: Is this right?
-            //     // Disable error checking for faster builds
-            //     buildPlayerOptions.extraScriptingDefines = new string[] { "DISABLE_IMPLICIT_CHECKS", "DISABLE_WARNINGS" };
-            // }
-
 
             // Build the server
             RivetLogger.Log("Building dedicated server...");
@@ -232,9 +213,9 @@ namespace Rivet.Editor.Util
             var buildPlayerOptions = new BuildPlayerOptions
             {
                 scenes = GetScenePaths(),
-                locationPathName = Path.Combine(ProjectRoot(), "Builds", "ReleaseDedicatedServer", GetBuildName("ReleaseDedicatedServer")),
+                locationPathName = Path.Combine(ProjectRoot(), "Builds", "Release", "DedicatedServer", GetPlatformArchFolder(BuildTarget.StandaloneLinux64), GetBuildName("DedicatedServer", BuildTarget.StandaloneLinux64, true)),
                 target = BuildTarget.StandaloneLinux64,
-                options = BuildOptions.CompressWithLz4HC,
+                options = BuildOptions.CompressWithLz4HC | BuildOptions.EnableHeadlessMode,
                 subtarget = (int)StandaloneBuildSubtarget.Server
             };
 
@@ -263,7 +244,13 @@ namespace Rivet.Editor.Util
             switch (buildTarget)
             {
                 case BuildTarget.StandaloneOSX:
-                    executableFile = Path.Combine(serverPath, productName, productName);
+                    // Check for .app bundle first
+                    executableFile = Path.Combine(serverPath, "Contents", "MacOS", productName);
+                    if (!File.Exists(executableFile))
+                    {
+                        // If .app bundle doesn't exist, check for standalone executable
+                        executableFile = Path.Combine(serverPath, productName);
+                    }
                     break;
                 case BuildTarget.StandaloneLinux64:
                     executableFile = serverPath;
@@ -291,13 +278,15 @@ namespace Rivet.Editor.Util
 
             if (buildTarget == BuildTarget.StandaloneOSX)
             {
-                string lastPathComponent = Path.GetFileName(buildPath);
-                executablePath = Path.Combine($"{buildPath}.app", "Contents", "MacOS", productName);
+                executablePath = Path.Combine(buildPath, "Contents", "MacOS", productName);
             }
             else
             {
-                // For other platforms, use the existing logic
                 executablePath = Path.Combine(buildPath, productName);
+                if (buildTarget == BuildTarget.StandaloneWindows || buildTarget == BuildTarget.StandaloneWindows64)
+                {
+                    executablePath += ".exe";
+                }
             }
 
             if (!File.Exists(executablePath))
@@ -318,23 +307,30 @@ namespace Rivet.Editor.Util
             return scenes;
         }
 
-        public static string GetBuildName(string baseName)
+        public static string GetBuildName(string baseName, BuildTarget target, bool isServer = false)
         {
-            // TODO: Check that we don't need .exe for Windows
-            var buildName = baseName;
-            return buildName;
-            // switch (GetGameServerBuildTarget())
-            // {
-            //     case BuildTarget.StandaloneWindows:
-            //     case BuildTarget.StandaloneWindows64:
-            //         return $"{buildName}.exe";
-            //     case BuildTarget.StandaloneOSX:
-            //         return $"{buildName}.app";
-            //     case BuildTarget.StandaloneLinux64:
-            //         return $"{buildName}";
-            //     default:
-            //         return buildName;
-            // }
+            if (target == BuildTarget.StandaloneOSX && !isServer)
+            {
+                return baseName + ".app";
+            }
+            return baseName;
+        }
+
+        private static string GetPlatformArchFolder(BuildTarget target)
+        {
+            switch (target)
+            {
+                case BuildTarget.StandaloneWindows:
+                    return "Windows_x86_32";
+                case BuildTarget.StandaloneWindows64:
+                    return "Windows_x86_64";
+                case BuildTarget.StandaloneOSX:
+                    return "macOS_Universal";
+                case BuildTarget.StandaloneLinux64:
+                    return "Linux_x86_64";
+                default:
+                    return "Unknown";
+            }
         }
 
         // MARK: Utils
