@@ -84,8 +84,8 @@ namespace Rivet.UI.Screens
             {
                 if (BootstrapData is { } data)
                 {
-                    var idx = data.Environments.FindIndex(x => x.Id == RemoteEnvironmentId);
-                    return idx >= 0 ? idx : -1;
+                    var idx = data.Environments.FindIndex(x => x.EnvironmentId == RemoteEnvironmentId);
+                    return idx >= 0 ? idx : 0;
                 }
                 else
                 {

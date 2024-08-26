@@ -35,6 +35,9 @@ namespace Rivet.UI.Tabs
         private Button _lgsRestart;
         private VisualElement _lgsShowLogs;
 
+        private SliderInt _playerCount;
+        private Button _playerStart;
+
         private VisualElement _backendGenerateSdk;
         private VisualElement _backendEditConfig;
 
@@ -57,6 +60,9 @@ namespace Rivet.UI.Tabs
             _lgsStop = _root.Q("LocalGameServerBody").Q("ButtonRow").Q("StopButton").Q<Button>("Button");
             _lgsRestart = _root.Q("LocalGameServerBody").Q("ButtonRow").Q("RestartButton").Q<Button>("Button");
             _lgsShowLogs = _root.Q("LocalGameServerBody").Q("LogsButton");
+
+            _playerCount = _root.Q("PlayerBody").Q<SliderInt>("PlayerCountSlider");
+            _playerStart = _root.Q("PlayerBody").Q("StartButton").Q<Button>("Button");
 
             _backendGenerateSdk = _root.Q("BackendBody").Q("GenerateSdkButton").Q<Button>("Button");
             _backendEditConfig = _root.Q("BackendBody").Q("EditConfigButton").Q<Button>("Button");
@@ -91,6 +97,8 @@ namespace Rivet.UI.Tabs
             _lgsStop.RegisterCallback<ClickEvent>(ev => _pluginWindow.LocalGameServerManager.StopTask());
             _lgsRestart.RegisterCallback<ClickEvent>(ev => { OnLocalGameServerStart(); });
             _lgsShowLogs.RegisterCallback<ClickEvent>(ev => GameServerWindow.ShowGameServer());
+
+            _playerStart.RegisterCallback<ClickEvent>(ev => OnPlayerStart());
 
             _backendGenerateSdk.RegisterCallback<ClickEvent>(ev => OnBackendGenerateSDK());
             _backendEditConfig.RegisterCallback<ClickEvent>(ev => OnBackendEditConfig());
@@ -130,7 +138,7 @@ namespace Rivet.UI.Tabs
 
         private void OnLocalGameServerStart()
         {
-            var serverPath = Builder.BuildDevServer();
+            var serverPath = Builder.BuildDevDedicatedServer();
             if (serverPath != null)
             {
                 _pluginWindow.LocalGameServerExecutablePath = serverPath;
@@ -146,6 +154,12 @@ namespace Rivet.UI.Tabs
             {
                 EditorUtility.DisplayDialog("Game Server Build Failed", "See Unity console for details.", "Dismiss");
             }
+        }
+
+        private void OnPlayerStart()
+        {
+            int instanceCount = (int)_playerCount.value;
+            Builder.BuildAndRunMultipleDevPlayers(instanceCount);
         }
 
         private void OnBackendGenerateSDK()

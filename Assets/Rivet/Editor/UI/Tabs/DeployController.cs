@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Rivet.Editor;
 using Rivet.Editor.Types;
 using Rivet.Editor.UI;
+using Rivet.Editor.Util;
 using Rivet.UI.Screens;
 using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEditor;
@@ -20,6 +22,8 @@ namespace Rivet.UI.Tabs
         private readonly VisualElement _root;
 
         private DropdownField _environmentDropdown;
+        private Button _buildDeployButton;
+        private DropdownField _stepsDropdown;
 
         public DeployController(RivetPlugin window, MainController mainController, VisualElement root)
         {
@@ -34,6 +38,8 @@ namespace Rivet.UI.Tabs
         {
             // Query
             _environmentDropdown = _root.Q<DropdownField>("EnvironmentDropdown");
+            _buildDeployButton = _root.Q("BuildDeployButton").Q<Button>("Button");
+            _stepsDropdown = _root.Q<DropdownField>("StepsDropdown");
 
             // Callbacks
             _environmentDropdown.RegisterValueChangedCallback(ev =>
@@ -42,6 +48,8 @@ namespace Rivet.UI.Tabs
                 _mainController.RemoteEnvironmentIndex = _environmentDropdown.index;
                 _mainController.OnSelectedEnvironmentChange();
             });
+
+            _buildDeployButton.RegisterCallback<ClickEvent>(ev => OnBuildAndDeploy());
         }
 
         public void OnBootstrap(BootstrapData data)
@@ -69,52 +77,38 @@ namespace Rivet.UI.Tabs
             _environmentDropdown.index = _mainController.RemoteEnvironmentIndex;
         }
 
-        private async Task OnBuildAndDeploy()
+        private void OnBuildAndDeploy()
         {
             // Force to remote env to update testing to correct env
             _mainController.EnvironmentType = EnvironmentType.Remote;
             _mainController.OnSelectedEnvironmentChange();
 
-            // // Check if Linux build support is installed
-            // if (!BuildPipeline.IsBuildTargetSupported(BuildTargetGroup.Standalone, BuildTarget.StandaloneLinux64))
-            // {
-            //     RivetLogger.Error("Linux build support is not installed");
-            //     return;
-            // }
+            string? serverPath = Builder.BuildReleaseDedicatedServer();
+            if (serverPath == null)
+            {
+                EditorUtility.DisplayDialog("Server Build Failed", "See Unity console for details.", "Dismiss");
+                return;
+            }
 
-            // // Set the build settings
-            // BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions
-            // {
-            //     scenes = EditorBuildSettings.scenes.Select(scene => scene.path).ToArray(),
-            //     locationPathName = "builds/LinuxServer/LinuxServer.x86_64", // Output path
-            //     target = BuildTarget.StandaloneLinux64, // Target platform
-            //     subtarget = (int)StandaloneBuildSubtarget.Server // Headless mode for server build
-            // };
+            // Get the selected environment ID
+            string environmentId = _mainController.RemoteEnvironment?.NameId ?? "";
 
-            // // Build the player
-            // var result = BuildPipeline.BuildPlayer(buildPlayerOptions);
+            // Get the selected steps
+            int stepsIndex = _stepsDropdown.index;
+            bool deployGameServer = stepsIndex == 0 || stepsIndex == 1;
+            bool deployBackend = stepsIndex == 0 || stepsIndex == 2;
 
-            // // If the build failed, log an error, and don't continue
-            // if (result.summary.result != UnityEditor.Build.Reporting.BuildResult.Succeeded)
-            // {
-            //     RivetLogger.Error("Build failed: " + result.summary.result);
-            //     return;
-            // }
-
-            // // Run deploy with CLI
-            // new System.Threading.Thread(async () =>
-            // {
-            //     var result = await new ToolchainTask(
-            //         "deploy",
-            //         new JObject
-            //         {
-            //             ["cwd"] = "TODO",
-            //             ["environment_id"] = _gameData.namespaces[_selectedEnvironment].Item1.name_id,
-            //             ["game_server"] = true,
-            //             ["backend"] = true,
-            //         }
-            //     ).RunAsync();
-            // }).Start();
+            // Run deploy with CLI
+            _ = new RivetTask(
+                "deploy",
+                new JObject
+                {
+                    ["cwd"] = Path.GetDirectoryName(serverPath),
+                    ["environment_id"] = environmentId,
+                    ["game_server"] = deployGameServer,
+                    ["backend"] = deployBackend,
+                }
+            ).RunAsync();
         }
 
     }

@@ -21,15 +21,12 @@ namespace Backend
             get
             {
                 string env = Environment.GetEnvironmentVariable("BACKEND_ENDPOINT");
-                Debug.Log($"Env {env}");
                 if (!string.IsNullOrEmpty(env)) return env;
 
                 var prefs = PlayerPrefs.GetString("BackendEndpoint");
-                Debug.Log($"Prefs {prefs}");
                 if (!string.IsNullOrEmpty(prefs)) return prefs;
 
                 var config = LoadRivetConfig();
-                Debug.Log($"Config {config?.BackendEndpoint}");
                 if (config != null) return config.BackendEndpoint;
 
                 Debug.LogWarning("Could not find BackendEndpoint");

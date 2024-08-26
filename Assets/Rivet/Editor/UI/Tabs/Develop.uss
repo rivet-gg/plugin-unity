@@ -32,3 +32,8 @@
 #EditConfigButton .icon {
     background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/square-sliders.svg?fileID=7388822144124034973&guid=071bfd08c297a4f43886df844a2cb2d7&type=3#square-sliders");
 }
+
+#PlayerHeader .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/desktop.svg?fileID=7388822144124034973&guid=81aa27a3f3dde4e7698c22bfcd3120c4&type=3#desktop");
+    display: flex;
+}

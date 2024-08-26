@@ -7,15 +7,16 @@
         <AttributeOverrides element-name="Title" text="Environment" />
     </ui:Instance>
     <ui:VisualElement name="EnvironmentBody" style="flex-grow: 0; flex-shrink: 0;">
-        <ui:Label tabindex="-1" text="Configure which backend to connect to. &lt;a href=&quot;https://rivet.gg/docs&quot;&gt;Learn More&lt;/a&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" style="margin-top: 0; margin-bottom: 12px; opacity: 1; display: none; white-space: normal;" />
+        <ui:Label tabindex="-1" text="Configure which backend to connect to." parse-escape-sequences="true" display-tooltip-when-elided="true" style="margin-top: 0; margin-bottom: 4px; opacity: 1; white-space: normal;" />
         <ui:DropdownField choices="Local,Remote" index="0" name="TypeDropdown" label="Type" style="height: 19px; margin-bottom: 4px;" />
         <ui:DropdownField name="EnvironmentDropdown" label="Environment" index="0" style="height: 19px;" />
     </ui:VisualElement>
     <ui:Instance template="Separator" name="Separator" />
-    <ui:Instance template="Header" name="LocalGameServerHeader">
+    <ui:Instance template="Header" name="LocalGameServerHeader" style="height: 24px;">
         <AttributeOverrides element-name="Title" text="Local Game Server" />
     </ui:Instance>
     <ui:VisualElement name="LocalGameServerBody" style="flex-grow: 0; flex-shrink: 0;">
+        <ui:Label tabindex="-1" text="Requires restart when game edited." parse-escape-sequences="true" display-tooltip-when-elided="true" style="overflow: hidden; white-space: normal; margin-bottom: 6px;" />
         <ui:VisualElement name="ButtonRow" style="flex-grow: 1; flex-direction: row; margin-bottom: 4px;">
             <ui:Instance template="IconButton" name="StartButton" style="flex-grow: 1; display: flex;">
                 <AttributeOverrides element-name="Label" text="Start" />
@@ -30,6 +31,17 @@
         <ui:Label tabindex="-1" text="&lt;u&gt;Show Logs&lt;/u&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LogsButton" style="-unity-text-align: upper-center;" />
     </ui:VisualElement>
     <ui:Instance template="Separator" name="Separator" />
+    <ui:Instance template="Header" name="PlayerHeader">
+        <AttributeOverrides element-name="Title" text="Players" />
+    </ui:Instance>
+    <ui:VisualElement name="PlayerBody" style="flex-grow: 0; flex-shrink: 0;">
+        <ui:Label tabindex="-1" text="Spawn multiple players to test multiplayer. Can be used alongside Play in Editor." parse-escape-sequences="true" display-tooltip-when-elided="true" style="overflow: hidden; white-space: normal; margin-bottom: 6px;" />
+        <ui:SliderInt label="Player Count" high-value="8" low-value="1" direction="Horizontal" show-input-field="true" name="PlayerCountSlider" />
+        <ui:Instance template="IconButton" name="StartButton" style="flex-grow: 1; display: flex;">
+            <AttributeOverrides element-name="Label" text="Start" />
+        </ui:Instance>
+    </ui:VisualElement>
+    <ui:Instance template="Separator" name="Separator" style="justify-content: center;" />
     <ui:Instance template="Header" name="BackendHeader">
         <AttributeOverrides element-name="Title" text="Backend" />
     </ui:Instance>

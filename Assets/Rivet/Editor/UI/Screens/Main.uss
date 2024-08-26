@@ -22,7 +22,6 @@
 
 #TabBody {
     flex-grow: 1;
-    background-color: var(--unity-colors-popup-background);
 }
 
 Button {
@@ -37,4 +36,8 @@ DropdownField {
     margin-right: 0;
     margin-bottom: 2px;
     margin-left: 0;
+}
+
+#TabBodyScrollView {
+    background-color: var(--unity-colors-popup-background);
 }

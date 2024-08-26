@@ -19,10 +19,12 @@
             <AttributeOverrides element-name="Label" text="Settings" />
         </ui:Instance>
     </ui:VisualElement>
-    <ui:VisualElement name="TabBody" style="padding-top: 12px; padding-right: 12px; padding-bottom: 12px; padding-left: 12px;">
-        <ui:Instance template="Setup" name="Setup" />
-        <ui:Instance template="Develop" name="Develop" style="display: none;" />
-        <ui:Instance template="Deploy" name="Deploy" style="display: none;" />
-        <ui:Instance template="Settings" name="Settings" style="display: none;" />
-    </ui:VisualElement>
+    <ui:ScrollView name="TabBodyScrollView" style="flex-grow: 1;">
+        <ui:VisualElement name="TabBody" style="padding-top: 12px; padding-right: 12px; padding-bottom: 12px; padding-left: 12px;">
+            <ui:Instance template="Setup" name="Setup" />
+            <ui:Instance template="Develop" name="Develop" style="display: none;" />
+            <ui:Instance template="Deploy" name="Deploy" style="display: none;" />
+            <ui:Instance template="Settings" name="Settings" style="display: none;" />
+        </ui:VisualElement>
+    </ui:ScrollView>
 </ui:UXML>
