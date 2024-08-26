@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
@@ -59,11 +60,11 @@ namespace Rivet.UI.Screens
         // MARK: Environment
         public EnvironmentType EnvironmentType = EnvironmentType.Local;
         public string? RemoteEnvironmentId;
-        public BackendEnvironment? RemoteEnvironment
+        public RivetEnvironment? RemoteEnvironment
         {
             get
             {
-                return BootstrapData?.BackendEnvironments[RemoteEnvironmentIndex];
+                return BootstrapData?.Environments[RemoteEnvironmentIndex];
             }
         }
         public int RemoteEnvironmentIndex
@@ -72,7 +73,7 @@ namespace Rivet.UI.Screens
             {
                 if (BootstrapData is { } data)
                 {
-                    var idx = data.BackendEnvironments.FindIndex(x => x.EnvironmentId == RemoteEnvironmentId);
+                    var idx = data.Environments.FindIndex(x => x.Id == RemoteEnvironmentId);
                     return idx >= 0 ? idx : -1;
                 }
                 else
@@ -82,9 +83,9 @@ namespace Rivet.UI.Screens
             }
             set
             {
-                if (value >= 0 && value < BootstrapData?.BackendEnvironments.Count)
+                if (value >= 0 && value < BootstrapData?.Environments.Count)
                 {
-                    RemoteEnvironmentId = BootstrapData?.BackendEnvironments[value].EnvironmentId;
+                    RemoteEnvironmentId = BootstrapData?.Environments[value].Id;
                 }
             }
         }
@@ -215,14 +216,30 @@ namespace Rivet.UI.Screens
         private async Task GetBootstrapData()
         {
             var result = await new RivetTask("get_bootstrap_data", new JObject()).RunAsync();
-            if (result is ResultErr<JObject>) return;
+            if (result is ResultErr<JObject> err)
+            {
+                return;
+            }
 
-            var data = result.Data.ToObject<BootstrapData>(); ;
-            BootstrapData = data;
-            ExtensionData.ApiEndpoint = data.ApiEndpoint;
+            if (result.Data == null)
+            {
+                return;
+            }
 
-            _developController.OnBootstrap(data);
-            _deployController.OnBootstrap(data);
+            try
+            {
+                var data = result.Data.ToObject<BootstrapData>();
+                BootstrapData = data;
+                ExtensionData.ApiEndpoint = data.ApiEndpoint;
+
+                _developController.OnBootstrap(data);
+                _deployController.OnBootstrap(data);
+            }
+            catch (Exception ex)
+            {
+                RivetLogger.Error($"Exception in GetBootstrapData: {ex.Message}");
+                RivetLogger.Error($"Stack trace: {ex.StackTrace}");
+            }
         }
 
         /// <summary>

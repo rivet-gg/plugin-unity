@@ -8,21 +8,25 @@ namespace Rivet.Editor.Types
         [JsonProperty("token")] public string Token;
         [JsonProperty("api_endpoint")] public string ApiEndpoint;
         [JsonProperty("game_id")] public string GameId;
-        [JsonProperty("backend_project")] public BackendProject BackendProject;
-        [JsonProperty("backend_environments")] public List<BackendEnvironment> BackendEnvironments;
+        [JsonProperty("envs")] public List<RivetEnvironment> Environments;
+        [JsonProperty("backends")] public Dictionary<string, EnvironmentBackend> Backends;
     }
 
-    public struct BackendProject
+    public struct EnvironmentBackend
     {
-        [JsonProperty("project_id")] public string ProjectId;
-    }
-
-    public struct BackendEnvironment
-    {
-        [JsonProperty("display_name")] public string DisplayName;
+        [JsonProperty("created_at")] public string CreatedAt;
         [JsonProperty("endpoint")] public string Endpoint;
-        [JsonProperty("environment_id")] public string EnvironmentId;
-        [JsonProperty("name_id")] public string NameId;
+        [JsonProperty("id")] public string Id;
+        [JsonProperty("slug")] public string Slug;
+        [JsonProperty("tier")] public string Tier;
+    }
+
+    public struct RivetEnvironment
+    {
+        [JsonProperty("id")] public string Id;
+        [JsonProperty("created_at")] public string CreatedAt;
+        [JsonProperty("slug")] public string Slug;
+        [JsonProperty("name")] public string Name;
     }
 
 }

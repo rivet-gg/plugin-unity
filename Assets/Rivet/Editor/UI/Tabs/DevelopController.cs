@@ -100,9 +100,9 @@ namespace Rivet.UI.Tabs
         {
             // Add environments
             List<string> environments = new();
-            foreach (var env in data.BackendEnvironments)
+            foreach (var env in data.Environments)
             {
-                environments.Add(env.DisplayName);
+                environments.Add(env.Name);
             }
             environments.Add("+ New Environment");
             _remoteEnvironmentDropdown.choices = environments;
