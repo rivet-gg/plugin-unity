@@ -147,9 +147,10 @@ public class UI : MonoBehaviour
         var lobbyCreate = "?";
         if (_lobby is { } lobby)
         {
+            Debug.Log($"created at {lobby.CreatedAt}");
             connConfig = BackendMultiplayerManager.Instance.GetConnectionConfig(lobby, _player);
             lobbyTags = string.Join(", ", lobby.Tags.Select(kv => $"{kv.Key}: {kv.Value}"));
-            lobbyCreate = DateTimeOffset.FromUnixTimeSeconds((int)lobby.CreatedAt).ToString("yyyy-MM-dd HH:mm:ss");
+            lobbyCreate = DateTimeOffset.FromUnixTimeMilliseconds((long)lobby.CreatedAt).ToString("yyyy-MM-dd HH:mm:ss");
         }
         connectionInfoText.text =
             $"Lobby ID: {_lobby?.Id ?? "?"}\n" +

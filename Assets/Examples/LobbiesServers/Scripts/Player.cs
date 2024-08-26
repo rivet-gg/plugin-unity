@@ -9,13 +9,14 @@ namespace Examples.LobbiesServers
     public class Player : NetworkBehaviour
     {
         private CharacterController _cc;
-        // private LobbyConfig _lc;
+        private GameManager _gm;
 
         void Start()
         {
             _cc = GetComponent<CharacterController>();
-            // _lc = FindObjectOfType<LobbyConfig>();
+            _gm = FindObjectOfType<GameManager>();
         }
+
         void Update()
         {
             Move();
@@ -24,12 +25,9 @@ namespace Examples.LobbiesServers
         [Client(Logging = LoggingType.Off, RequireOwnership = true)]
         void Move()
         {
-            // TODO:
-            var moveSpeed = 10;
             var horizontalInput = Input.GetAxisRaw("Horizontal");
             var verticalInput = Input.GetAxisRaw("Vertical");
-            // var offset = new Vector3(horizontalInput, Physics.gravity.y, verticalInput) * _lc.moveSpeed * Time.deltaTime;
-            var offset = new Vector3(horizontalInput, Physics.gravity.y, verticalInput) * moveSpeed * Time.deltaTime;
+            var offset = new Vector3(horizontalInput, Physics.gravity.y, verticalInput) * _gm.MoveSpeed * Time.deltaTime;
             _cc.Move(offset);
         }
     }

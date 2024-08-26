@@ -32,11 +32,18 @@ namespace Rivet.Editor.UI
         public string? LocalGameServerExecutablePath;
 
         // MARK: Backend
-        private int _localBackendPort = 6420;
+        // private int _localBackendPort = 6420;
+        // public int LocalBackendPort {
+        //     get { return _localBackendPort; }
+        //     set {
+        //         _localBackendPort = value;
+        //         SharedSettings.UpdateFromPlugin();
+        //     }
+        // }
         public int LocalBackendPort {
-            get { return _localBackendPort; }
+            get { return PluginSettings.TEMPBackendLocalPort; }
             set {
-                _localBackendPort = value;
+                PluginSettings.TEMPBackendLocalPort = value;
                 SharedSettings.UpdateFromPlugin();
             }
         }
@@ -63,10 +70,6 @@ namespace Rivet.Editor.UI
 
         public void CreateGUI()
         {
-            Singleton = this;
-
-            PluginSettings.LoadSettings();
-
             m_VisualTreeAsset.CloneTree(rootVisualElement);
 
             var screens = rootVisualElement.Q(name: "Screens");
@@ -96,6 +99,11 @@ namespace Rivet.Editor.UI
         public void OnEnable()
         {
             RivetLogger.Log("On Enable");
+
+            Singleton = this;
+
+            PluginSettings.LoadSettings();
+            SharedSettings.LoadSettings();
 
             // Task managers
             LocalGameServerManager = new(

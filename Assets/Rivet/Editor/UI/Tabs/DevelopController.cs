@@ -130,8 +130,22 @@ namespace Rivet.UI.Tabs
 
         private void OnLocalGameServerStart()
         {
-            _pluginWindow.LocalGameServerExecutablePath = Builder.BuildDevServer();
-            _ = _pluginWindow.LocalGameServerManager.StartTask();
+            var serverPath = Builder.BuildDevServer();
+            if (serverPath != null)
+            {
+                _pluginWindow.LocalGameServerExecutablePath = serverPath;
+                // _ = _pluginWindow.LocalGameServerManager.StartTask();
+                _ = new RivetTask("show_term", new JObject
+                {
+                    ["command"] = _pluginWindow.LocalGameServerExecutablePath,
+                    // ["args"] = new JArray { "-batchmode", "-nographics", "-logFile", logPath, "-server" },
+                    ["args"] = new JArray { "-batchmode", "-nographics", "-server" },
+                }).RunAsync();
+            }
+            else
+            {
+                EditorUtility.DisplayDialog("Game Server Build Failed", "See Unity console for details.", "Dismiss");
+            }
         }
 
         private void OnBackendGenerateSDK()

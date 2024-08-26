@@ -60,6 +60,15 @@ namespace Rivet.Editor
             return new SerializedObject(GetOrCreateSettings());
         }
 
+        private static void SaveSettings()
+        {
+            if (Settings != null)
+            {
+                EditorUtility.SetDirty(Settings);
+                AssetDatabase.SaveAssets();
+            }
+        }
+
         // MARK: Settings
         [SerializeField]
         private bool enableDebugLogs = false;
@@ -67,6 +76,24 @@ namespace Rivet.Editor
         public static bool EnableDebugLogs
         {
             get { return Settings != null && Settings.enableDebugLogs; }
+        }
+
+
+        [SerializeField]
+        private int tempBackendLocalPort = 6420;
+
+        public static int TEMPBackendLocalPort
+        {
+            get { return Settings?.tempBackendLocalPort ?? 6420; }
+            set
+            {
+                if (Settings != null)
+                {
+                    Settings.tempBackendLocalPort = value;
+                    SaveSettings();
+                }
+            }
+
         }
     }
 
@@ -90,6 +117,11 @@ namespace Rivet.Editor
         {
             get => gameVersion;
             set => SetAndSave(ref gameVersion, value, "GameVersion");
+        }
+
+        public static void LoadSettings() {
+            backendEndpoint = PlayerPrefs.GetString("BackendEndpoint");
+            gameVersion = PlayerPrefs.GetString("GameVersion");
         }
 
         private static void SetAndSave(ref string field, string value, string prefKey)
