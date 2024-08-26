@@ -13,13 +13,22 @@ using Backend;
 using Backend.Model.Lobbies;
 using FishNet.Connection;
 using FishNet.Managing.Server;
+using System.Reflection.Emit;
 
 namespace Backend.Modules.Lobbies
 {
     public enum TransportKind { Tugboat }
 
+
     public class BackendMultiplayerManager : MonoBehaviour
     {
+        public struct ConnectionConfig
+        {
+            public string Hostname;
+            public ushort Port;
+            public bool IsTls;
+        }
+
         public static BackendMultiplayerManager Instance { get; private set; }
 
         // User Settings
@@ -49,10 +58,11 @@ namespace Backend.Modules.Lobbies
         // Client-only variables
         private string _playerToken;
 
-        private BackendClient _backendClient = new BackendClient();
+        private BackendClient _backendClient;
 
         private void Awake()
         {
+
             // Setup singleton
             if (Instance != null && Instance != this)
             {
@@ -63,6 +73,11 @@ namespace Backend.Modules.Lobbies
             Instance = this;
 
             DontDestroyOnLoad(gameObject);
+
+            // Create client
+            var config = new Configuration();
+            Debug.Log($"Backend endpoint: {config.BackendEndpoint}");
+            _backendClient = new BackendClient(config.BackendEndpoint);
 
             // Setup FishNet
             _networkManager = InstanceFinder.NetworkManager;
@@ -160,6 +175,61 @@ namespace Backend.Modules.Lobbies
             }
         }
 
+        public ConnectionConfig? GetConnectionConfig(Model.Lobbies.CreateResponseLobby lobbyResponse, Model.Lobbies.CreateResponsePlayersInner player)
+        {
+            // TODO: Validate compatibility with transport
+
+            if (lobbyResponse.Backend != null)
+            {
+                if (lobbyResponse.Backend.Server != null)
+                {
+                    // Server backend
+                    if (lobbyResponse.Backend.Server.Ports.TryGetValue(portName, out var serverPort))
+                    {
+                        return new ConnectionConfig
+                        {
+                            Hostname = serverPort.PublicHostname,
+                            Port = (ushort)serverPort.PublicPort,
+                            IsTls = serverPort.Protocol == CreateResponseLobbyBackendServerPortsValue.ProtocolEnum.Https || serverPort.Protocol == CreateResponseLobbyBackendServerPortsValue.ProtocolEnum.TcpTls,
+                        };
+                    }
+                    else
+                    {
+                        Debug.LogError($"No port with name {portName}");
+                        return null;
+                    }
+                }
+                else if (lobbyResponse.Backend.LocalDevelopment != null)
+                {
+                    // Local development backend
+                    if (lobbyResponse.Backend.LocalDevelopment.Ports.TryGetValue(portName, out var localPort))
+                    {
+                        return new ConnectionConfig
+                        {
+                            Hostname = localPort.Hostname,
+                            Port = (ushort)localPort.Port,
+                            IsTls = false,
+                        };
+                    }
+                    else
+                    {
+                        Debug.LogError($"No port with name {portName}");
+                        return null;
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Unsupported lobby backend type");
+                    return null;
+                }
+            }
+            else
+            {
+                Debug.LogError("No backend information found in lobby response");
+                return null;
+            }
+        }
+
         public void ConnectToLobby(Model.Lobbies.CreateResponseLobby lobbyResponse, Model.Lobbies.CreateResponsePlayersInner player)
         {
             if (!_multiplayerSetup)
@@ -177,57 +247,18 @@ namespace Backend.Modules.Lobbies
 
             _playerToken = player.Token;
 
-            string hostname = "";
-            ushort port = 0;
-            bool isTls = false;
-
-            // Handle different backend types
-            // if (lobbyResponse.Backend != null)
-            // {
-            //     if (lobbyResponse.Backend.Server != null)
-            //     {
-            //         Debug.LogError($"UNIMPLEMENTED: {lobbyResponse.Backend.Server}");
-            //         return;
-            //         // TODO:
-            //         // Server backend
-            //         // if (lobbyResponse.Backend.Server.Ports.TryGetValue(portName, out var serverPort))
-            //         // {
-            //         //     hostname = serverPort.PublicHostname;
-            //         //     port = serverPort.PublicPort;
-            //         //     isTls = serverPort.Protocol == "https" || serverPort.Protocol == "tcp_tls";
-            //         // }
-            //     }
-            //     else if (lobbyResponse.Backend.LocalDevelopment != null)
-            //     {
-            //         // Local development backend
-            //         if (lobbyResponse.Backend.LocalDevelopment.Ports.TryGetValue(portName, out var localPort))
-            //         {
-            //             hostname = localPort.Hostname;
-            //             port = (ushort)localPort.Port;
-            //         }
-            //     }
-            //     else
-            //     {
-            //         Debug.LogError("Unsupported lobby backend type");
-            //         return;
-            //     }
-            // }
-            // else
-            // {
-            //     Debug.LogError("No backend information found in lobby response");
-            //     return;
-            // }
-
-            if (string.IsNullOrEmpty(hostname) || port == 0)
+            var connConfigOpt = GetConnectionConfig(lobbyResponse, player);
+            if (connConfigOpt == null)
             {
-                Debug.LogError($"Port {portName} not found in lobby response or invalid port information");
+                Debug.LogError("Could not get connection config");
                 return;
             }
+            var connConfig = connConfigOpt.Value;
 
-            Debug.Log($"Connecting to {hostname}:{port} (TLS: {isTls})");
+            Debug.Log($"Connecting to {connConfig.Hostname}:{connConfig.Port} (TLS: {connConfig.IsTls})");
 
-            _transport.SetClientAddress(hostname);
-            _transport.SetPort(port);
+            _transport.SetClientAddress(connConfig.Hostname);
+            _transport.SetPort(connConfig.Port);
 
             // TODO: Enable TLS for WS
 

@@ -43,14 +43,14 @@ namespace Rivet.UI.Tabs
             _backendShowLogs = _root.Q("BackendBody").Q("LogsButton");
 
             // Callbacks
-            _mainController.BackendManager.StateChange += OnBackendStateChange;
+            _pluginWindow.BackendManager.StateChange += OnBackendStateChange;
             OnBackendStateChange(false);
 
             _root.Q("AccountBody").Q("SignOutButton").RegisterCallback<ClickEvent>(ev => { _ = OnUnlinkGame(); });
 
-            _backendStart.RegisterCallback<ClickEvent>(ev => { _ = _mainController.BackendManager.StartTask(); });
-            _backendStop.RegisterCallback<ClickEvent>(ev => _mainController.BackendManager.StopTask());
-            _backendRestart.RegisterCallback<ClickEvent>(ev => { _ = _mainController.BackendManager.StartTask(); });
+            _backendStart.RegisterCallback<ClickEvent>(ev => { _ = _pluginWindow.BackendManager.StartTask(); });
+            _backendStop.RegisterCallback<ClickEvent>(ev => _pluginWindow.BackendManager.StopTask());
+            _backendRestart.RegisterCallback<ClickEvent>(ev => { _ = _pluginWindow.BackendManager.StartTask(); });
             _backendShowLogs.RegisterCallback<ClickEvent>(ev => BackendWindow.ShowBackend());
         }
 

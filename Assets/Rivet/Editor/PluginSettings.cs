@@ -1,5 +1,8 @@
+#nullable enable
+
 using UnityEngine;
 using UnityEditor;
+using Rivet.Editor.UI;
 
 namespace Rivet.Editor
 {
@@ -24,19 +27,22 @@ namespace Rivet.Editor
         }
     }
 
+    /// <summary>
+    /// Settings specific to the plugin.
+    /// </summary>
     public class PluginSettings : ScriptableObject
     {
         public const string SettingsPath = "Project/Rivet";
 
         public static PluginSettings? Settings;
 
-        [SerializeField]
-        private bool enableDebugLogs = false;
 
-        public static void LoadSettings() {
+        public static void LoadSettings()
+        {
             Settings = GetOrCreateSettings();
         }
 
+        // MARK: Ser/de
         internal static PluginSettings GetOrCreateSettings()
         {
             var settings = AssetDatabase.LoadAssetAtPath<PluginSettings>("Assets/Rivet/Editor/PluginSettings.asset");
@@ -54,9 +60,63 @@ namespace Rivet.Editor
             return new SerializedObject(GetOrCreateSettings());
         }
 
+        // MARK: Settings
+        [SerializeField]
+        private bool enableDebugLogs = false;
+
         public static bool EnableDebugLogs
         {
             get { return Settings != null && Settings.enableDebugLogs; }
+        }
+    }
+
+    /// <summary>
+    /// Shared settings that can be used by the PIE game instance.
+    /// 
+    /// See ExportConfig for more context.
+    /// </summary>
+    public static class SharedSettings
+    {
+        private static string backendEndpoint;
+        private static string gameVersion;
+
+        public static string BackendEndpoint
+        {
+            get => backendEndpoint;
+            set => SetAndSave(ref backendEndpoint, value, "BackendEndpoint");
+        }
+
+        public static string GameVersion
+        {
+            get => gameVersion;
+            set => SetAndSave(ref gameVersion, value, "GameVersion");
+        }
+
+        private static void SetAndSave(ref string field, string value, string prefKey)
+        {
+            field = value;
+            EditorApplication.delayCall += () => PlayerPrefs.SetString(prefKey, value);
+        }
+
+        /// <summary>
+        /// Updates relevant shared settings from the plugin.
+        /// </summary>
+        public static void UpdateFromPlugin()
+        {
+            if (RivetPlugin.Singleton is { } plugin)
+            {
+                BackendEndpoint = plugin.MainController.EnvironmentType switch
+                {
+                    Rivet.UI.Screens.EnvironmentType.Local => $"http://localhost:{plugin.LocalBackendPort}",
+                    Rivet.UI.Screens.EnvironmentType.Remote => plugin.MainController.RemoteEnvironment?.Endpoint ?? "http://localhost:6420",
+                    _ => throw new System.NotImplementedException(),
+                };
+
+                // TODO:
+                GameVersion = "TODO";
+
+                RivetLogger.Log($"Update Shared Settings: BackendEndpoint={BackendEndpoint} GameVersion={GameVersion}");
+            }
         }
     }
 }

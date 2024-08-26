@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using Rivet.UI.Screens;
 using Rivet.Editor.UI.TaskPanel;
+using Rivet.Editor.Util;
 
 namespace Rivet.Editor.UI
 {
@@ -27,11 +28,31 @@ namespace Rivet.Editor.UI
 
         public string ApiEndpoint = "https://api.rivet.gg";
 
+        // MARK: Local Game Server
+        public string? LocalGameServerExecutablePath;
+
+        // MARK: Backend
+        private int _localBackendPort = 6420;
+        public int LocalBackendPort {
+            get { return _localBackendPort; }
+            set {
+                _localBackendPort = value;
+                SharedSettings.UpdateFromPlugin();
+            }
+        }
+
+        // MARK: Tasks
+        public TaskManager LocalGameServerManager;
+        public TaskManager BackendManager;
+
+        // MARK: Controllers
+        public LoginController LoginController;
+        public MainController MainController;
+
+        // MARK: UI
         private VisualElement _screenLogin;
         private VisualElement _screenMain;
 
-        public LoginController LoginController;
-        public MainController MainController;
 
         [MenuItem("Window/Rivet/Rivet", false, 20)]
         public static void ShowPlugin()
@@ -70,6 +91,101 @@ namespace Rivet.Editor.UI
             _screen = screen;
             _screenLogin.style.display = screen == Screen.Login ? DisplayStyle.Flex : DisplayStyle.None;
             _screenMain.style.display = screen == Screen.Main ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        public void OnEnable()
+        {
+            RivetLogger.Log("On Enable");
+
+            // Task managers
+            LocalGameServerManager = new(
+                initMessage: "Open \"Develop\" and press \"Start\" to start game server.",
+                getTaskConfig: async () =>
+                {
+                    if (LocalGameServerExecutablePath != null)
+                    {
+                        return new TaskConfig
+                        {
+                            Name = "exec_command",
+                            Input = new JObject
+                            {
+                                ["cwd"] = Builder.ProjectRoot(),
+                                ["cmd"] = LocalGameServerExecutablePath,
+                                ["args"] = new JArray { "-batchmode", "-nographics", "-server" },
+                            }
+                        };
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                },
+                getTaskPanel: () => GameServerWindow.GetWindowIfExists()
+            );
+
+            BackendManager = new(
+                initMessage: "Auto-started by Rivet plugin.",
+                getTaskConfig: async () =>
+                {
+                    // Choose port to run on. This is to avoid potential conflicts with
+                    // multiple projects running at the same time.
+                    var chooseRes = await new RivetTask("backend_choose_local_port", new JObject()).RunAsync();
+                    int port;
+                    switch (chooseRes)
+                    {
+                        case ResultOk<JObject> ok:
+                            port = (int)ok.Data["port"];
+                            LocalBackendPort = port;
+                            break;
+                        case ResultErr<JObject> err:
+                            RivetLogger.Error($"Failed to choose port: {err}");
+                            return null;
+                        default:
+                            return null;
+                    }
+
+
+                    return new TaskConfig
+                    {
+                        Name = "backend_dev",
+                        Input = new JObject
+                        {
+                            ["port"] = port,
+                            ["cwd"] = Builder.ProjectRoot(),
+                        }
+                    };
+                },
+                getTaskPanel: () => BackendWindow.GetWindowIfExists(),
+                autoRestart: true
+            );
+
+            // Shut down on reload
+            AssemblyReloadEvents.beforeAssemblyReload += () => {
+                RivetLogger.Log("Before Assembly Reload");
+                ShutdownPlugin();
+            };
+
+            // // Start backend
+            // _ = BackendManager.StartTask();
+
+
+        }
+
+        public void OnDisable()
+        {
+            RivetLogger.Log("On Disable");
+            ShutdownPlugin();
+        }
+
+        /// <summary>
+        /// Shuts down any tasks that might be running in the plugin.
+        /// </summary>
+        private void ShutdownPlugin()
+        {
+
+            RivetLogger.Log("Shutdown Plugin");
+            LocalGameServerManager.StopTask();
+            BackendManager.StopTask();
         }
     }
 }

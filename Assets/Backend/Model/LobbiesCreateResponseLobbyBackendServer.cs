@@ -40,7 +40,7 @@ namespace Backend.Model.Lobbies
         /// </summary>
         /// <param name="serverId">serverId (required).</param>
         /// <param name="ports">ports.</param>
-        public CreateResponseLobbyBackendServer(string serverId = default(string), Object ports = default(Object))
+        public CreateResponseLobbyBackendServer(string serverId = default(string), Dictionary<string, CreateResponseLobbyBackendServerPortsValue> ports = default)
         {
             // to ensure "serverId" is required (not null)
             if (serverId == null)
@@ -61,7 +61,7 @@ namespace Backend.Model.Lobbies
         /// Gets or Sets Ports
         /// </summary>
         [DataMember(Name = "ports", EmitDefaultValue = false)]
-        public Object Ports { get; set; }
+        public Dictionary<string, CreateResponseLobbyBackendServerPortsValue> Ports { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object

@@ -62,7 +62,7 @@ namespace Rivet.UI.Tabs
             _backendEditConfig = _root.Q("BackendBody").Q("EditConfigButton").Q<Button>("Button");
 
             // Callbacks
-            _mainController.LocalGameServerManager.StateChange += OnLocalGameServerStateChange;
+            _pluginWindow.LocalGameServerManager.StateChange += OnLocalGameServerStateChange;
             OnLocalGameServerStateChange(false);
 
             _environmentTypeDropdown.RegisterValueChangedCallback(ev =>
@@ -88,7 +88,7 @@ namespace Rivet.UI.Tabs
 
 
             _lgsStart.RegisterCallback<ClickEvent>(ev => { OnLocalGameServerStart(); });
-            _lgsStop.RegisterCallback<ClickEvent>(ev => _mainController.LocalGameServerManager.StopTask());
+            _lgsStop.RegisterCallback<ClickEvent>(ev => _pluginWindow.LocalGameServerManager.StopTask());
             _lgsRestart.RegisterCallback<ClickEvent>(ev => { OnLocalGameServerStart(); });
             _lgsShowLogs.RegisterCallback<ClickEvent>(ev => GameServerWindow.ShowGameServer());
 
@@ -130,8 +130,8 @@ namespace Rivet.UI.Tabs
 
         private void OnLocalGameServerStart()
         {
-            _mainController.LocalGameServerExecutablePath = Builder.BuildDevServer();
-            _ = _mainController.LocalGameServerManager.StartTask();
+            _pluginWindow.LocalGameServerExecutablePath = Builder.BuildDevServer();
+            _ = _pluginWindow.LocalGameServerManager.StartTask();
         }
 
         private void OnBackendGenerateSDK()

@@ -31,9 +31,6 @@ namespace Rivet.UI.Screens
         private readonly RivetPlugin _pluginWindow;
         private readonly VisualElement _root;
 
-        // MARK: Tasks
-        public TaskManager LocalGameServerManager;
-        public TaskManager BackendManager;
 
         // MARK: Bootstrap
         public BootstrapData? BootstrapData;
@@ -58,8 +55,22 @@ namespace Rivet.UI.Screens
         private SettingsController _settingsController;
 
         // MARK: Environment
-        public EnvironmentType EnvironmentType = EnvironmentType.Local;
-        public string? RemoteEnvironmentId;
+        private EnvironmentType _environmentType = EnvironmentType.Local;
+        public EnvironmentType EnvironmentType {
+            get { return _environmentType; }
+            set {
+                _environmentType = value;
+                SharedSettings.UpdateFromPlugin();
+            }
+        }
+        private string? _remoteEnvironmentId;
+        public string? RemoteEnvironmentId {
+            get { return _remoteEnvironmentId; }
+            set {
+                _remoteEnvironmentId = value;
+                SharedSettings.UpdateFromPlugin();
+            }
+        }
         public RivetEnvironment? RemoteEnvironment
         {
             get
@@ -90,74 +101,10 @@ namespace Rivet.UI.Screens
             }
         }
 
-        // MARK: Local Game Server
-        public string? LocalGameServerExecutablePath;
-
         public MainController(RivetPlugin window, VisualElement root)
         {
             _pluginWindow = window;
             _root = root;
-
-            // Task managers
-            LocalGameServerManager = new(
-                initMessage: "Open \"Develop\" and press \"Start\" to start game server.",
-                getTaskConfig: async () =>
-                {
-                    if (LocalGameServerExecutablePath != null)
-                    {
-                        return new TaskConfig
-                        {
-                            Name = "exec_command",
-                            Input = new JObject
-                            {
-                                ["cwd"] = Builder.ProjectRoot(),
-                                ["cmd"] = LocalGameServerExecutablePath,
-                                ["args"] = new JArray { "-batchmode", "-nographics", "-server" },
-                            }
-                        };
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                },
-                getTaskPanel: () => GameServerWindow.GetWindowIfExists()
-            );
-
-            BackendManager = new(
-                initMessage: "Auto-started by Rivet plugin.",
-                getTaskConfig: async () =>
-                {
-                    // Choose port to run on. This is to avoid potential conflicts with
-                    // multiple projects running at the same time.
-                    var chooseRes = await new RivetTask("backend_choose_local_port", new JObject()).RunAsync();
-                    int port;
-                    switch (chooseRes)
-                    {
-                        case ResultOk<JObject> ok:
-                            port = (int)ok.Data["port"];
-                            break;
-                        case ResultErr<JObject> err:
-                            RivetLogger.Error($"Failed to choose port: {err}");
-                            return null;
-                        default:
-                            return null;
-                    }
-
-
-                    return new TaskConfig
-                    {
-                        Name = "backend_dev",
-                        Input = new JObject
-                        {
-                            ["port"] = port,
-                            ["cwd"] = Builder.ProjectRoot(),
-                        }
-                    };
-                },
-                getTaskPanel: () => BackendWindow.GetWindowIfExists(),
-                autoRestart: true
-            );
 
             // UI
             InitUI();
@@ -165,9 +112,6 @@ namespace Rivet.UI.Screens
 
             // Fetch data
             _ = GetBootstrapData();
-
-            // Start backend
-            _ = BackendManager.StartTask();
         }
 
         void InitUI()
@@ -221,10 +165,8 @@ namespace Rivet.UI.Screens
                 return;
             }
 
-            if (result.Data == null)
-            {
-                return;
-            }
+            var data = result.Data.ToObject<BootstrapData>(); ;
+            BootstrapData = data;
 
             try
             {
