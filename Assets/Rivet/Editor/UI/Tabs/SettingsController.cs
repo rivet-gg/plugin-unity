@@ -92,15 +92,15 @@ namespace Rivet.UI.Tabs
                     return;
             }
 
-            var input = new JObject {
-                ["port"] = port,
-                ["cwd"] = Builder.ProjectRoot()
-            };
-            await new RivetTask("show_term", new JObject
-            {
-                ["command"] = RivetTask.GetRivetCLIPath(),
-                ["args"] = new JArray { "task", "run", "--run-config", "{}", "--name", "backend_dev", "--input", input.ToString(Formatting.None) },
-            }).RunAsync();
+            // var input = new JObject {
+            //     ["port"] = port,
+            //     ["cwd"] = Builder.ProjectRoot()
+            // };
+            // await new RivetTask("show_term", new JObject
+            // {
+            //     ["command"] = RivetTask.GetRivetCLIPath(),
+            //     ["args"] = new JArray { "task", "run", "--run-config", "{}", "--name", "backend_dev", "--input", input.ToString(Formatting.None) },
+            // }).RunAsync();
         }
 
         private async Task OnUnlinkGame()

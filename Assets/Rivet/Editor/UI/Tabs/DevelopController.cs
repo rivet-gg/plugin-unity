@@ -155,12 +155,12 @@ namespace Rivet.UI.Tabs
 
             // _ = _pluginWindow.LocalGameServerManager.StartTask();
 
-            _ = new RivetTask("show_term", new JObject
-            {
-                ["command"] = _pluginWindow.LocalGameServerExecutablePath,
-                // ["args"] = new JArray { "-batchmode", "-nographics", "-logFile", logPath, "-server" },
-                ["args"] = new JArray { "-batchmode", "-nographics", "-server" },
-            }).RunAsync();
+            // _ = new RivetTask("show_term", new JObject
+            // {
+            //     ["command"] = _pluginWindow.LocalGameServerExecutablePath,
+            //     // ["args"] = new JArray { "-batchmode", "-nographics", "-logFile", logPath, "-server" },
+            //     ["args"] = new JArray { "-batchmode", "-nographics", "-server" },
+            // }).RunAsync();
         }
 
         private void OnPlayerStart()
