@@ -31,4 +31,14 @@
         </ui:VisualElement>
         <ui:Label tabindex="-1" text="&lt;u&gt;Show Logs&lt;/u&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LogsButton" style="-unity-text-align: upper-center; display: none;" />
     </ui:VisualElement>
+    <ui:Instance template="Separator" name="Separator" />
+    <ui:Instance template="Header" name="SourceHeader">
+        <AttributeOverrides element-name="Title" text="Source Code" />
+    </ui:Instance>
+    <ui:Label tabindex="-1" text="&lt;a href=&quot;https://github.com/rivet-gg/plugin-unity.git&quot;&gt;rivet-gg/plugin-unity&lt;/a&gt;&#10;&lt;a href=&quot;https://github.com/rivet-gg/rivet.git&quot;&gt;rivet-gg/rivet&lt;/a&gt;&#10;&lt;a href=&quot;https://github.com/rivet-gg/modules.git&quot;&gt;rivet-gg/modules&lt;/a&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SourceBody" style="white-space: normal;" />
+    <ui:Instance template="Separator" name="Separator" />
+    <ui:Instance template="Header" name="SupportHeader">
+        <AttributeOverrides element-name="Title" text="Support" />
+    </ui:Instance>
+    <ui:Label tabindex="-1" text="&lt;a href=&quot;https://rivet.gg/discord&quot;&gt;Discord&lt;/a&gt;&#10;&lt;a href=&quot;https://rivet.gg/docs/unity&quot;&gt;Documentation&lt;/a&gt;&#10;&lt;a href=&quot;https://rivet.gg/support&quot;&gt;Enterprise Support&lt;/a&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SupportBody" style="white-space: normal;" />
 </ui:UXML>

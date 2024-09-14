@@ -5,6 +5,7 @@
     <ui:Instance template="Header" name="DeployHeader" class="action">
         <AttributeOverrides element-name="Title" text="Deploy" />
     </ui:Instance>
+    <ui:Label tabindex="-1" text="Game servers will be started &amp; stopped automatically as players join." parse-escape-sequences="true" display-tooltip-when-elided="true" style="overflow: hidden; white-space: normal; margin-bottom: 6px;" />
     <ui:DropdownField index="0" label="Environment" name="EnvironmentDropdown" />
     <ui:DropdownField choices="Game Server &amp; Backend,Only Game Server, Only Backend" index="0" label="Steps" name="StepsDropdown" style="margin-bottom: 8px;" />
     <ui:Instance template="IconButton" name="BuildDeployButton">

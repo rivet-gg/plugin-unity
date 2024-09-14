@@ -10,14 +10,11 @@
             <ui:Instance template="IconButton" name="DashboardButton" class="dashboardButton">
                 <AttributeOverrides element-name="Label" text="Dashboard" />
             </ui:Instance>
-            <ui:Instance template="IconButton" name="DocsButton" class="docsButton">
-                <AttributeOverrides element-name="Label" text="Docs" />
-            </ui:Instance>
-            <ui:Instance template="IconButton" name="DiscordButton" class="discordButton">
-                <AttributeOverrides element-name="Label" text="Discord" />
-            </ui:Instance>
             <ui:Instance template="IconButton" name="FeedbackButton" class="feedbackButton">
                 <AttributeOverrides element-name="Label" text="Feedback" />
+            </ui:Instance>
+            <ui:Instance template="IconButton" name="SettingsButton" class="settingsButton">
+                <AttributeOverrides element-name="Label" text="Settings" />
             </ui:Instance>
         </ui:VisualElement>
     </ui:VisualElement>

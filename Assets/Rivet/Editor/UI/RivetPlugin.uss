@@ -23,19 +23,15 @@
 }
 
 #DashboardButton .icon {
-    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/browser.svg?fileID=7388822144124034973&guid=d5b6438060c4b4e59a8c5bf1dd267d0f&type=3#browser");
-}
-
-#DocsButton .icon {
-    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/book.svg?fileID=7388822144124034973&guid=6e8f178e0ec88464f9ad9f45ad22d210&type=3#book");
-}
-
-#DiscordButton .icon {
-    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/discord.svg?fileID=7388822144124034973&guid=0a164d5f5d70b46e1a709a15ca016836&type=3#discord");
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/house.svg?fileID=7388822144124034973&guid=3b1a5b5822799496da64c559e533a1a8&type=3#house");
 }
 
 #FeedbackButton .icon {
     background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/bug.svg?fileID=7388822144124034973&guid=b156156de32b04827b7eb6b334ccaf0d&type=3#bug");
+}
+
+#SettingsButton .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/gear.svg?fileID=7388822144124034973&guid=4395aa38d356747bc8b01eb63a802209&type=3#gear");
 }
 
 #Logo {

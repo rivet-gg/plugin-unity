@@ -3,16 +3,6 @@
     display: flex;
 }
 
-#LocalGameServerHeader .icon {
-    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/server.svg?fileID=7388822144124034973&guid=7bcd10cbcf44540858a99dc18ebb77c3&type=3#server");
-    display: flex;
-}
-
-#BackendHeader .icon {
-    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/gear-code.svg?fileID=7388822144124034973&guid=e9347091e532b4c26b3832355cb4812a&type=3#gear-code");
-    display: flex;
-}
-
 #StartButton .icon {
     background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/play.svg?fileID=7388822144124034973&guid=9c12e8ede8d8142448922406ab7718f3&type=3#play");
 }
@@ -33,7 +23,7 @@
     background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/square-sliders.svg?fileID=7388822144124034973&guid=071bfd08c297a4f43886df844a2cb2d7&type=3#square-sliders");
 }
 
-#PlayerHeader .icon {
-    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/desktop.svg?fileID=7388822144124034973&guid=81aa27a3f3dde4e7698c22bfcd3120c4&type=3#desktop");
+#PlayHeader .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/joystick%201.svg?fileID=7388822144124034973&guid=e2339b8045892476da1e39eceaabfbd4&type=3#joystick 1");
     display: flex;
 }
