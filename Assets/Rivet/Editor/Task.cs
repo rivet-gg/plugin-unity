@@ -39,26 +39,23 @@ namespace Rivet.Editor
 
             var inputJson = _input.ToString(Newtonsoft.Json.Formatting.None);
 
-            RivetLogger.Log($"[{_name}] Request: {inputJson}");
+            RivetLogger.Log($"[{name}] Request: {inputJson}");
             Task.Run(() => Run(name, inputJson));
         }
 
         private void Run(string name, string inputJson)
         {
             _taskId = RivetToolchain.RunTask(name, inputJson, OnOutputEvent);
-            RivetLogger.Log($"task id {_taskId}");
         }
 
         private void OnOutputEvent(ulong taskId, IntPtr eventJsonPtr)
         {
             string eventJson = RivetToolchain.PtrToString(eventJsonPtr);
-            RivetLogger.Log($"received event {eventJson}");
             EditorApplication.delayCall += () => HandleOnOutputEvent(eventJson);
         }
 
         private void HandleOnOutputEvent(string eventJson)
         {
-            RivetLogger.Log($"output event {_taskId}");
             var eventObj = JObject.Parse(eventJson);
             if (eventObj.ContainsKey("log"))
             {
@@ -69,14 +66,20 @@ namespace Rivet.Editor
                 _logResult = eventObj["result"] as JObject;
                 OnFinish();
             }
-            else if (eventObj.ContainsKey("set_backend_port"))
+            else if (eventObj.ContainsKey("port_update"))
             {
-                var port = eventObj["set_backend_port"]["port"].Value<int>();
+                var backendPort = eventObj["port_update"]["backend_port"].Value<int>();
+                var editorPort = eventObj["port_update"]["editor_port"].Value<int>();
                 // TODO:
                 // Assuming you have a similar configuration saving mechanism
                 // RivetPluginBridge.Instance.LocalBackendPort = port;
                 // RivetPluginBridge.Instance.SaveConfiguration();
-                RivetLogger.Log($"Set backend port {port}");
+                RivetLogger.Log($"Set backend port {backendPort} {editorPort}");
+            }
+            else if (eventObj.ContainsKey("backend_config_update"))
+            {
+                var updateEvent = eventObj["backend_config_update"].Value<JObject>();
+                // TODO:
             }
             else
             {

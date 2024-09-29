@@ -149,14 +149,7 @@ namespace Rivet.Editor.UI.Dock.Tabs
 
             _dock.LocalGameServerExecutablePath = serverPath;
 
-            // _ = _dock.LocalGameServerManager.StartTask();
-
-            // _ = new RivetTask("show_term", new JObject
-            // {
-            //     ["command"] = _dock.LocalGameServerExecutablePath,
-            //     // ["args"] = new JArray { "-batchmode", "-nographics", "-logFile", logPath, "-server" },
-            //     ["args"] = new JArray { "-batchmode", "-nographics", "-server" },
-            // }).RunAsync();
+            _ = _dock.LocalGameServerManager.StartTask();
         }
 
         private void OnPlayerStart()

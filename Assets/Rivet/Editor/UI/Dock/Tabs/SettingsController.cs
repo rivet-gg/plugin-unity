@@ -59,45 +59,14 @@ namespace Rivet.Editor.UI.Dock.Tabs
 
             _root.Q("AccountBody").Q("SignOutButton").RegisterCallback<ClickEvent>(ev => { _ = OnUnlinkGame(); });
 
-            // _backendStart.RegisterCallback<ClickEvent>(ev => { _ = _dock.BackendManager.StartTask(); });
-            // _backendStop.RegisterCallback<ClickEvent>(ev => _dock.BackendManager.StopTask());
-            // _backendRestart.RegisterCallback<ClickEvent>(ev => { _ = _dock.BackendManager.StartTask(); });
-            _backendStart.RegisterCallback<ClickEvent>(ev => { _ = OnStartBackend(); });  // TODO: Remove
+            _backendStart.RegisterCallback<ClickEvent>(ev => { _ = _dock.BackendManager.StartTask(); });
+            _backendStop.RegisterCallback<ClickEvent>(ev => _dock.BackendManager.StopTask());
+            _backendRestart.RegisterCallback<ClickEvent>(ev => { _ = _dock.BackendManager.StartTask(); });
             _backendShowLogs.RegisterCallback<ClickEvent>(ev => BackendWindow.ShowBackend());
 
             // Update callbacks
             _editUserButton.RegisterCallback<ClickEvent>(ev => { _ = OnEditSettings(SettingsType.User); });
             _editProjectButton.RegisterCallback<ClickEvent>(ev => { _ = OnEditSettings(SettingsType.Project); });
-        }
-
-        private async Task OnStartBackend()
-        {
-            // Choose port to run on. This is to avoid potential conflicts with
-            // multiple projects running at the same time.
-            var chooseRes = await new RivetTask("backend_choose_local_port", new JObject()).RunAsync();
-            int port;
-            switch (chooseRes)
-            {
-                case ResultOk<JObject> ok:
-                    port = (int)ok.Data["port"];
-                    Dock.Singleton.LocalBackendPort = port;
-                    break;
-                case ResultErr<JObject> err:
-                    RivetLogger.Error($"Failed to choose port: {err}");
-                    return;
-                default:
-                    return;
-            }
-
-            // var input = new JObject {
-            //     ["port"] = port,
-            //     ["cwd"] = Builder.ProjectRoot()
-            // };
-            // await new RivetTask("show_term", new JObject
-            // {
-            //     ["command"] = RivetTask.GetRivetCLIPath(),
-            //     ["args"] = new JArray { "task", "run", "--run-config", "{}", "--name", "backend_dev", "--input", input.ToString(Formatting.None) },
-            // }).RunAsync();
         }
 
         private async Task OnUnlinkGame()
