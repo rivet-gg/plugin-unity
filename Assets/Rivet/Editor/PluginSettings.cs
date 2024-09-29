@@ -3,7 +3,7 @@
 using UnityEngine;
 using UnityEditor;
 using Rivet.Editor.UI;
-using Rivet.UI.Screens;
+using Rivet.Editor.UI.Dock;
 
 namespace Rivet.Editor
 {
@@ -169,12 +169,12 @@ namespace Rivet.Editor
         /// </summary>
         public static void UpdateFromPlugin()
         {
-            if (RivetPlugin.Singleton is { } plugin)
+            if (Dock.Singleton is { } plugin)
             {
-                BackendEndpoint = plugin.MainController.EnvironmentType switch
+                BackendEndpoint = plugin.EnvironmentType switch
                 {
-                    Rivet.UI.Screens.EnvironmentType.Local => $"http://localhost:{plugin.LocalBackendPort}",
-                    Rivet.UI.Screens.EnvironmentType.Remote => plugin.MainController.RemoteEnvironmentBackend?.Endpoint ?? "http://localhost:6420",
+                    EnvironmentType.Local => $"http://localhost:{plugin.LocalBackendPort}",
+                    EnvironmentType.Remote => plugin.RemoteEnvironmentBackend?.Endpoint ?? "http://localhost:6420",
                     _ => throw new System.NotImplementedException(),
                 };
 

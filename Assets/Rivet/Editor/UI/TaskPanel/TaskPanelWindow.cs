@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Rivet.Editor.UI.Dock;
 
 namespace Rivet.Editor.UI.TaskPanel
 {
@@ -70,7 +71,7 @@ namespace Rivet.Editor.UI.TaskPanel
 
     public class GameServerWindow : TaskPanelWindow
     {
-        internal override TaskManager? TaskManager => RivetPlugin.Singleton?.LocalGameServerManager;
+        internal override TaskManager? TaskManager => Rivet.Editor.UI.Dock.Dock.Singleton?.LocalGameServerManager;
 
         [MenuItem("Window/Rivet/Game Server Logs", false, 20)]
         public static void ShowGameServer()
@@ -94,7 +95,7 @@ namespace Rivet.Editor.UI.TaskPanel
 
     public class BackendWindow : TaskPanelWindow
     {
-        internal override TaskManager? TaskManager => RivetPlugin.Singleton?.BackendManager;
+        internal override TaskManager? TaskManager => Rivet.Editor.UI.Dock.Dock.Singleton?.BackendManager;
 
         [MenuItem("Window/Rivet/Backend Logs", false, 10)]
         public static void ShowBackend()

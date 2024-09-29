@@ -1,0 +1,38 @@
+#EnvironmentHeader .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/folder.svg?fileID=7388822144124034973&guid=45951cf4237d34148b2a4b91f4d66a37&type=3#folder");
+    display: flex;
+}
+
+#StartButton .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/play.svg?fileID=7388822144124034973&guid=9c12e8ede8d8142448922406ab7718f3&type=3#play");
+}
+
+#StopButton .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/stop.svg?fileID=7388822144124034973&guid=c99591954a9734dd5874f07bbdbf144f&type=3#stop");
+}
+
+#RestartButton .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/rotate-right.svg?fileID=7388822144124034973&guid=d0b6bdf11bfe747fca0d95a859c28bee&type=3#rotate-right");
+}
+
+#GenerateSdkButton .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/toolbox.svg?fileID=7388822144124034973&guid=88a989d11336a4755a134a81e2d28080&type=3#toolbox");
+}
+
+#EditConfigButton .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/square-sliders.svg?fileID=7388822144124034973&guid=071bfd08c297a4f43886df844a2cb2d7&type=3#square-sliders");
+}
+
+#RunHeader .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/joystick.svg?fileID=7388822144124034973&guid=28a593339ccd245d1b638ff8b6dc58eb&type=3#joystick");
+    display: flex;
+}
+
+#DeployHeader .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/cloud-arrow-up.svg?fileID=7388822144124034973&guid=44dad88c1451c446d807e891e2bad2d8&type=3#cloud-arrow-up");
+    display: flex;
+}
+
+#BuildDeployButton .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/hammer.svg?fileID=7388822144124034973&guid=57861a0f5a3f5403995884fd2bd0639b&type=3#hammer");
+}

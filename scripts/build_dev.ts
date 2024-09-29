@@ -38,7 +38,7 @@ async function copyFile(src: string, dest: string): Promise<void> {
 }
 
 // Build client
-await runCommand(["cargo", "build", "--release"], toolchainRepoPath);
+await runCommand(["cargo", "build", "--package", "rivet-toolchain-ffi"], toolchainRepoPath);
 
 // Copy FFI library
 const ffiSrc = join(
