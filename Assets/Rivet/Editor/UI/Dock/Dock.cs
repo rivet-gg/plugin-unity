@@ -17,12 +17,6 @@ namespace Rivet.Editor.UI.Dock
         Setup, Develop, Modules, Settings,
     }
 
-    public enum EnvironmentType
-    {
-        Local = 0, Remote = 1,
-    }
-
-
     public class Dock : EditorWindow
     {
         public static Dock? Singleton;
@@ -37,36 +31,6 @@ namespace Rivet.Editor.UI.Dock
                 return rootVisualElement;
             }
         }
-
-        public string ApiEndpoint = "https://api.rivet.gg";
-
-        // MARK: Local Game Server
-        public string? LocalGameServerExecutablePath;
-
-        // MARK: Backend
-        // private int _localBackendPort = 6420;
-        // public int LocalBackendPort {
-        //     get { return _localBackendPort; }
-        //     set {
-        //         _localBackendPort = value;
-        //         SharedSettings.UpdateFromPlugin();
-        //     }
-        // }
-        public int LocalBackendPort
-        {
-            get { return PluginSettings.TEMPBackendLocalPort; }
-            set
-            {
-                PluginSettings.TEMPBackendLocalPort = value;
-                SharedSettings.UpdateFromPlugin();
-            }
-        }
-
-        // MARK: Deployed Game Version
-        public string? GameVersion;
-
-        // MARK: Bootstrap
-        public BootstrapData? BootstrapData;
 
         // MARK: Tabs
         private MainTab _tab = MainTab.Setup;
@@ -87,63 +51,6 @@ namespace Rivet.Editor.UI.Dock
         private VisualElement _settingsTabBody;
         private SettingsController _settingsController;
 
-        // MARK: Environment
-        public EnvironmentType EnvironmentType
-        {
-            get { return PluginSettings.EnvironmentType; }
-            set
-            {
-                PluginSettings.EnvironmentType = value;
-                SharedSettings.UpdateFromPlugin();
-            }
-        }
-        public string? RemoteEnvironmentId
-        {
-            get { return PluginSettings.RemoteEnvironmentId; }
-            set
-            {
-                PluginSettings.RemoteEnvironmentId = value;
-                SharedSettings.UpdateFromPlugin();
-            }
-        }
-        public RivetEnvironment? RemoteEnvironment
-        {
-            get
-            {
-                return RemoteEnvironmentIndex != null ? BootstrapData?.Environments[RemoteEnvironmentIndex.Value] : null;
-            }
-        }
-        public int? RemoteEnvironmentIndex
-        {
-            get
-            {
-                if (BootstrapData is { } data)
-                {
-                    var idx = data.Environments.FindIndex(x => x.Id == RemoteEnvironmentId);
-                    return idx >= 0 ? idx : 0;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-            set
-            {
-                if (value != null && value >= 0 && value < BootstrapData?.Environments.Count)
-                {
-                    RemoteEnvironmentId = BootstrapData?.Environments[value.Value].Id;
-                }
-            }
-        }
-
-        public EnvironmentBackend? RemoteEnvironmentBackend
-        {
-            get
-            {
-                var remoteEnv = RemoteEnvironment;
-                return remoteEnv != null ? BootstrapData?.Backends[remoteEnv.Value.Id] : null;
-            }
-        }
 
         // MARK: Tasks
         public TaskManager LocalGameServerManager;
@@ -198,17 +105,23 @@ namespace Rivet.Editor.UI.Dock
         {
             RivetLogger.Log("On Enable");
 
+            // Create dock
             Singleton = this;
 
+            // Create global
+            RivetGlobal.Singleton = new();
+
+            // Load settings
             PluginSettings.LoadSettings();
             SharedSettings.LoadSettings();
 
             // Task managers
+            var plugin = RivetGlobal.Singleton;
             LocalGameServerManager = new(
                 initMessage: "Open \"Develop\" and press \"Start\" to start game server.",
                 getStartConfig: async () =>
                 {
-                    if (LocalGameServerExecutablePath != null)
+                    if (plugin.LocalGameServerExecutablePath != null)
                     {
                         return new TaskConfig
                         {
@@ -216,13 +129,14 @@ namespace Rivet.Editor.UI.Dock
                             Input = new JObject
                             {
                                 ["cwd"] = Builder.ProjectRoot(),
-                                ["cmd"] = LocalGameServerExecutablePath,
+                                ["cmd"] = plugin.LocalGameServerExecutablePath,
                                 ["args"] = new JArray { "-batchmode", "-nographics", "-server" },
                             }
                         };
                     }
                     else
                     {
+                        RivetLogger.Warning("LocalGameServerManager.Start: no local game server executable path");
                         return null;
                     }
                 },
@@ -270,7 +184,7 @@ namespace Rivet.Editor.UI.Dock
             };
 
             // Bootstrap
-            _ = GetBootstrapData();
+            _ = RivetGlobal.Singleton.Bootstrap();
 
             // Start backend
             // _ = BackendManager.StartTask();
@@ -310,20 +224,9 @@ namespace Rivet.Editor.UI.Dock
             _settingsTabBody.style.display = tab == MainTab.Settings ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
-        public async Task GetBootstrapData()
+        public void OnBootstrap()
         {
-            var result = await new RivetTask("get_bootstrap_data", new JObject()).RunAsync();
-            if (result is ResultErr<JObject> err)
-            {
-                return;
-            }
-
-            var data = result.Data.ToObject<BootstrapData>(); ;
-            BootstrapData = data;
-
-            _developController.OnBootstrap(data);
-
-            SharedSettings.UpdateFromPlugin();
+            _developController.OnBootstrap();
         }
 
         /// <summary>

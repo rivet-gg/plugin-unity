@@ -11,20 +11,20 @@ namespace Rivet.Editor
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void EventCallback(ulong taskId, IntPtr eventJson);
 
-        [DllImport(RustLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "run_task")]
+        [DllImport(RustLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "rivet_run_task")]
         private static extern ulong run_task(
             [MarshalAs(UnmanagedType.LPStr)] string name,
             [MarshalAs(UnmanagedType.LPStr)] string inputJson,
             EventCallback callback
         );
 
-        [DllImport(RustLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "abort_task")]
+        [DllImport(RustLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "rivet_abort_task")]
         private static extern bool abort_task(ulong taskId);
 
-        [DllImport(RustLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "shutdown")]
+        [DllImport(RustLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "rivet_shutdown")]
         private static extern void shutdown();
 
-        [DllImport(RustLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_rust_string")]
+        [DllImport(RustLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "rivet_free_rust_string")]
         private static extern void free_rust_string(IntPtr str);
 
         public static ulong RunTask(string name, string inputJson, EventCallback callback)

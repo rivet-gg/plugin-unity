@@ -44,7 +44,7 @@ await runCommand(["cargo", "build", "--package", "rivet-toolchain-ffi"], toolcha
 const ffiSrc = join(
     toolchainRepoPath,
     "target",
-    "release",
+    "debug",
     `librivet_toolchain_ffi.${target.ext}`,
 );
 const ffiDest = join(
@@ -53,4 +53,4 @@ const ffiDest = join(
 );
 await copyFile(ffiSrc, ffiDest);
 
-console.log("Library copied successfully.");
+console.log(`Copied ${ffiSrc} -> ${ffiDest}`);
