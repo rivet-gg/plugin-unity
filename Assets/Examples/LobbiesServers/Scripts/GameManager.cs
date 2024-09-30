@@ -16,7 +16,6 @@ namespace Examples.LobbiesServers
 
         [SerializeField] private Vector3 cameraOffset = new Vector3(0, 5, -5);
         [SerializeField] private float cameraSmoothTime = 0.25f;
-        [SerializeField] private float cameraAngle = 45f; // Angle of the camera from horizontal
 
         public Player LocalPlayer;
         private Vector3 cameraVelocity;

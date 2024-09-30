@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rivet.Editor.Types;
 using Rivet.Editor.UI.Dock;
+using System.Linq;
 
 namespace Rivet.Editor
 {
@@ -44,7 +45,18 @@ namespace Rivet.Editor
         // MARK: Environment
         public EnvironmentType EnvironmentType
         {
-            get { return PluginSettings.EnvironmentType; }
+            get
+            {
+                if (IsAuthenticated)
+                {
+                    // Only allow remote env type if authenticated
+                    return PluginSettings.EnvironmentType;
+                }
+                else
+                {
+                    return EnvironmentType.Local;
+                }
+            }
             set
             {
                 PluginSettings.EnvironmentType = value;
@@ -53,7 +65,18 @@ namespace Rivet.Editor
         }
         public string? RemoteEnvironmentId
         {
-            get { return PluginSettings.RemoteEnvironmentId; }
+            get {
+                var remoteEnvId = PluginSettings.RemoteEnvironmentId;
+
+                // Validate plugin is authenticated & the env belongs to this
+                // game. This prevents returning an env ID from a game that
+                // isn't linked.
+                if (CloudData is { } cloudData && cloudData.Environments.Any(x => x.Id == remoteEnvId)) {
+                    return remoteEnvId;
+                } else {
+                    return null;
+                }
+            }
             set
             {
                 PluginSettings.RemoteEnvironmentId = value;
@@ -123,7 +146,15 @@ namespace Rivet.Editor
                     case EnvironmentType.Remote:
                         if (CloudData is { } cloudData && RemoteEnvironmentId is { } remoteEnvId)
                         {
-                            return cloudData.Backends[remoteEnvId].Endpoint;
+                            if (cloudData.Backends.TryGetValue(remoteEnvId, out var backend))
+                            {
+                                return backend.Endpoint;
+                            }
+                            else
+                            {
+                                RivetLogger.Error("BackendEndpoint: no backend for environment");
+                                return "";
+                            }
                         }
                         else
                         {
@@ -158,13 +189,13 @@ namespace Rivet.Editor
                             }
                             else
                             {
-                                RivetLogger.Error("CurrentBuildSlug: no current build or version in build");
+                                RivetLogger.Log("CurrentBuildSlug: no current build or version in build");
                                 return "";
                             }
                         }
                         else
                         {
-                            RivetLogger.Error("CurrentBuildSlug: not authenticated");
+                            RivetLogger.Warning("CurrentBuildSlug: not authenticated");
                             return "";
                         }
                     default:
@@ -194,7 +225,14 @@ namespace Rivet.Editor
             SharedSettings.UpdateFromPlugin();
 
             // Emit event
-            Dock.Singleton?.OnBootstrap();
+            if (Dock.Singleton is { } dock)
+            {
+                dock.OnBootstrap();
+            }
+            else
+            {
+                RivetLogger.Warning("Dock singleton is null");
+            }
         }
     }
 }

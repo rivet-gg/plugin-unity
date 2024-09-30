@@ -209,15 +209,6 @@ namespace Rivet.Editor.UI.Dock.Tabs
                 ["game_server"] = deployGameServer,
                 ["modules"] = deployModules,
             });
-
-            // Save version
-            task.OnTaskOutput += output =>
-            {
-                if (output is ResultOk<JObject> ok)
-                {
-                    // TODO:
-                }
-            };
         }
     }
 }

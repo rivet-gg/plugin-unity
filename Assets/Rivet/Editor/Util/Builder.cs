@@ -40,7 +40,7 @@ namespace Rivet.Editor.Util
                 case RuntimePlatform.LinuxEditor:
                     return BuildTarget.StandaloneLinux64;
                 default:
-                    Debug.LogError("Unsupported platform for build");
+                    RivetLogger.Log("Unsupported platform for build");
                     return BuildTarget.StandaloneWindows64; // Default to Windows as fallback
             }
         }
@@ -77,7 +77,7 @@ namespace Rivet.Editor.Util
             if (result == BuildResult.Succeeded)
             {
                 string executablePath = FindPlayerExecutablePath(buildPlayerOptions.locationPathName, buildPlayerOptions.target);
-                Debug.Log("Dev player build succeeded: " + executablePath);
+                RivetLogger.Log("Dev player build succeeded: " + executablePath);
                 return executablePath;
             }
             else
@@ -116,11 +116,11 @@ namespace Rivet.Editor.Util
                     };
 
                     System.Diagnostics.Process.Start(startInfo);
-                    Debug.Log($"Started dev player instance {i + 1} with log file: {logFilePath}");
+                    RivetLogger.Log($"Started dev player instance {i + 1} with log file: {logFilePath}");
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError($"Failed to start dev player instance {i + 1}: {e.Message}");
+                    RivetLogger.Error($"Failed to start dev player instance {i + 1}: {e.Message}");
                 }
             }
         }
