@@ -77,7 +77,7 @@ namespace Rivet.Editor
             }
 
             // Kill old task
-            StopTask();
+            _ = StopTask();
 
             // Start new task
             var config = await _getStartConfig();

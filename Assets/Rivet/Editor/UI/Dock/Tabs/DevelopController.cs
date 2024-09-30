@@ -30,13 +30,13 @@ namespace Rivet.Editor.UI.Dock.Tabs
         private DropdownField _environmentTypeDropdown;
         private DropdownField _remoteEnvironmentDropdown;
 
+        private DropdownField _playTypeDropdown;
+        private SliderInt _playerCount;
         private Button _lgsStart;
         private Button _lgsStop;
         private Button _lgsRestart;
         private VisualElement _lgsShowLogs;
 
-        private SliderInt _playerCount;
-        private Button _playerStart;
 
         private Button _buildDeployButton;
         private DropdownField _stepsDropdown;
@@ -58,13 +58,13 @@ namespace Rivet.Editor.UI.Dock.Tabs
             _environmentTypeDropdown = _root.Q("EnvironmentBody").Q<DropdownField>("TypeDropdown");
             _remoteEnvironmentDropdown = _root.Q("EnvironmentBody").Q<DropdownField>("EnvironmentDropdown");
 
+            _playTypeDropdown = _root.Q("PlayBody").Q<DropdownField>("TypeDropdown");
+            _playerCount = _root.Q("PlayBody").Q<SliderInt>("PlayerCountSlider");
+
             _lgsStart = _root.Q("PlayBody").Q("ButtonRow").Q("StartButton").Q<Button>("Button");
             _lgsStop = _root.Q("PlayBody").Q("ButtonRow").Q("StopButton").Q<Button>("Button");
             _lgsRestart = _root.Q("PlayBody").Q("ButtonRow").Q("RestartButton").Q<Button>("Button");
             _lgsShowLogs = _root.Q("PlayBody").Q("ServerLogsButton");
-
-            _playerCount = _root.Q("PlayBody").Q<SliderInt>("PlayerCountSlider");
-            _playerStart = _root.Q("PlayBody").Q("StartButton").Q<Button>("Button");
 
             _buildDeployButton = _root.Q("BuildDeployButton").Q<Button>("Button");
             _stepsDropdown = _root.Q<DropdownField>("StepsDropdown");
@@ -97,11 +97,9 @@ namespace Rivet.Editor.UI.Dock.Tabs
             });
 
             _lgsStart.RegisterCallback<ClickEvent>(ev => { OnLocalGameServerStart(); });
-            _lgsStop.RegisterCallback<ClickEvent>(ev => _dock.LocalGameServerManager.StopTask());
+            _lgsStop.RegisterCallback<ClickEvent>(ev => { _ = _dock.LocalGameServerManager.StopTask(); });
             _lgsRestart.RegisterCallback<ClickEvent>(ev => { OnLocalGameServerStart(); });
             _lgsShowLogs.RegisterCallback<ClickEvent>(ev => GameServerWindow.ShowGameServer());
-
-            _playerStart.RegisterCallback<ClickEvent>(ev => OnPlayerStart());
 
             _buildDeployButton.RegisterCallback<ClickEvent>(ev => OnBuildAndDeploy());
         }
@@ -146,26 +144,33 @@ namespace Rivet.Editor.UI.Dock.Tabs
 
         private void OnLocalGameServerStart()
         {
-            string serverPath;
-            try
+            var canPlayClient = _playTypeDropdown.index == 0 || _playTypeDropdown.index == 1;
+            var canPlayServer = _playTypeDropdown.index == 0 || _playTypeDropdown.index == 2;
+
+            // Server
+            if (canPlayServer)
             {
-                serverPath = Builder.BuildDevDedicatedServer();
+                string serverPath;
+                try
+                {
+                    serverPath = Builder.BuildDevDedicatedServer();
+                }
+                catch (Exception e)
+                {
+                    EditorUtility.DisplayDialog("Server Build Failed", e.Message, "Dismiss");
+                    return;
+                }
+
+                RivetGlobal.Singleton.LocalGameServerExecutablePath = serverPath;
+
+                _ = _dock.LocalGameServerManager.StartTask();
             }
-            catch (Exception e)
+
+            // Client
+            if (canPlayClient)
             {
-                EditorUtility.DisplayDialog("Server Build Failed", e.Message, "Dismiss");
-                return;
+                Builder.BuildAndRunMultipleDevPlayers(_playerCount.value);
             }
-
-            RivetGlobal.Singleton.LocalGameServerExecutablePath = serverPath;
-
-            _ = _dock.LocalGameServerManager.StartTask();
-        }
-
-        private void OnPlayerStart()
-        {
-            int instanceCount = (int)_playerCount.value;
-            Builder.BuildAndRunMultipleDevPlayers(instanceCount);
         }
 
         private void OnBuildAndDeploy()

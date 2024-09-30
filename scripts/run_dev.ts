@@ -63,3 +63,5 @@ if (!status.success) {
     console.error("Failed to open Unity project");
     Deno.exit(status.code);
 }
+
+// lldb -o 'process launch -- -projectPath /Users/nathan/rivet/plugin-unity -logfile -' /Applications/Unity/Hub/Editor/2022.3.38f1/Unity.app/Contents/MacOS/Unity
