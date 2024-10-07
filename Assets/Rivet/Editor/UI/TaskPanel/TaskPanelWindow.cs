@@ -76,7 +76,7 @@ namespace Rivet.Editor.UI.TaskPanel
         [MenuItem("Window/Rivet/Game Server Logs", false, 20)]
         public static void ShowGameServer()
         {
-            var panel = GetWindow<GameServerWindow>();
+            var panel = GetWindow<GameServerWindow>(utility: false, null, focus: true);
             panel.titleContent = new GUIContent("Game Server Logs");
         }
 
@@ -84,7 +84,7 @@ namespace Rivet.Editor.UI.TaskPanel
         {
             if (HasOpenInstances<GameServerWindow>())
             {
-                return GetWindow<GameServerWindow>();
+                return GetWindow<GameServerWindow>(utility: false, null, focus: false);
             }
             else
             {
@@ -100,7 +100,7 @@ namespace Rivet.Editor.UI.TaskPanel
         [MenuItem("Window/Rivet/Backend Logs", false, 10)]
         public static void ShowBackend()
         {
-            var panel = GetWindow<BackendWindow>();
+            var panel = GetWindow<BackendWindow>(utility: false, null, focus: true);
             panel.titleContent = new GUIContent("Backend Logs");
         }
 
@@ -108,7 +108,7 @@ namespace Rivet.Editor.UI.TaskPanel
         {
             if (HasOpenInstances<BackendWindow>())
             {
-                return GetWindow<BackendWindow>();
+                return GetWindow<BackendWindow>(utility: false, null, focus: false);
             }
             else
             {
