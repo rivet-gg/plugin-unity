@@ -17,13 +17,13 @@
     </ui:VisualElement>
     <ui:VisualElement name="Screens" style="flex-grow: 1;">
         <ui:VisualElement name="TabBar" style="flex-grow: 0; flex-direction: row; flex-shrink: 0; justify-content: center; padding-top: 0; padding-bottom: 0; border-bottom-width: 1px; border-bottom-color: rgba(0, 0, 0, 0.25); padding-right: 0; padding-left: 0; height: 34px;">
-            <ui:Instance template="TabBarButton" name="Setup" class="active" style="flex-grow: 1;">
+            <ui:Instance template="TabBarButton" name="Setup" class="active" style="flex-grow: 1; display: none;">
                 <AttributeOverrides element-name="Label" text="Setup" />
             </ui:Instance>
             <ui:Instance template="TabBarButton" name="Develop" style="flex-grow: 1;">
                 <AttributeOverrides element-name="Label" text="Develop" />
             </ui:Instance>
-            <ui:Instance template="TabBarButton" name="Modules" style="flex-grow: 1;">
+            <ui:Instance template="TabBarButton" name="Modules" style="flex-grow: 1; display: none;">
                 <AttributeOverrides element-name="Label" text="Modules" />
             </ui:Instance>
             <ui:Instance template="TabBarButton" name="Settings" style="flex-grow: 1;">
