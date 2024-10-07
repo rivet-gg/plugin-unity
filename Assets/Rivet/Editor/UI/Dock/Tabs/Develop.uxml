@@ -8,7 +8,7 @@
     </ui:Instance>
     <ui:VisualElement name="EnvironmentBody" style="flex-grow: 0; flex-shrink: 0;">
         <ui:Label tabindex="-1" text="Configure which Rivet environment to connect to." parse-escape-sequences="true" display-tooltip-when-elided="true" style="margin-top: 0; margin-bottom: 4px; opacity: 1; white-space: normal;" />
-        <ui:DropdownField choices="Local (Development),Remote (Live Servers)" index="0" name="TypeDropdown" label="Type" style="height: 19px; margin-bottom: 4px;" />
+        <ui:DropdownField choices="Local,Remote" index="0" name="TypeDropdown" label="Type" style="height: 19px; margin-bottom: 4px;" />
         <ui:DropdownField name="EnvironmentDropdown" label="Environment" index="0" style="height: 19px;" />
     </ui:VisualElement>
     <ui:Instance template="Separator" name="Separator" />
@@ -38,7 +38,7 @@
         <AttributeOverrides element-name="Title" text="Deploy" />
     </ui:Instance>
     <ui:Label tabindex="-1" text="Build &amp; deploy to live Rivet servers." parse-escape-sequences="true" display-tooltip-when-elided="true" style="overflow: hidden; white-space: normal; margin-bottom: 6px;" />
-    <ui:DropdownField choices="Game Server &amp; Modules,Only Game Server,Only Modules" index="0" label="Steps" name="StepsDropdown" style="margin-bottom: 8px;" />
+    <ui:DropdownField choices="Game Server &amp; Modules,Only Game Server,Only Modules" index="0" label="Steps" name="BuildStepsDropdown" style="margin-bottom: 8px;" />
     <ui:Instance template="IconButton" name="BuildDeployButton">
         <AttributeOverrides element-name="Label" text="Build &amp; Deploy" />
     </ui:Instance>
