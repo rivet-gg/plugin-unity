@@ -256,11 +256,7 @@ namespace Rivet.Editor.Util
             }
             else
             {
-                executablePath = Path.Combine(buildPath, productName);
-                if (buildTarget == BuildTarget.StandaloneWindows || buildTarget == BuildTarget.StandaloneWindows64)
-                {
-                    executablePath += ".exe";
-                }
+                executablePath = buildPath;
             }
 
             if (!File.Exists(executablePath))
@@ -286,7 +282,9 @@ namespace Rivet.Editor.Util
             if (target == BuildTarget.StandaloneOSX && !isServer)
             {
                 return baseName + ".app";
-            } else if (target == BuildTarget.StandaloneWindows || target == BuildTarget.StandaloneWindows64) {
+            }
+            if (target == BuildTarget.StandaloneWindows || target == BuildTarget.StandaloneWindows64)
+            {
                 return baseName + ".exe";
             }
             return baseName;
