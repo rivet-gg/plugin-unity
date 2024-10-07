@@ -135,7 +135,12 @@ namespace Rivet.Editor.UI.Dock.Tabs
                 List<string> environments = new();
                 foreach (var env in cloudData.Environments)
                 {
-                    environments.Add(env.Name);
+                    string buildName = env.Name;
+                    if (cloudData.CurrentBuilds.TryGetValue(env.Id, out var build) && build.Tags.TryGetValue("version", out var versionTag))
+                    {
+                        buildName = $" ({versionTag})";
+                    }
+                    environments.Add(buildName);
                 }
                 environments.Add("+ New Environment");
                 _remoteEnvironmentDropdown.choices = environments;
