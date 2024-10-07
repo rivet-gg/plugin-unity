@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using UnityEditor;
+using Unity.VisualScripting.YamlDotNet.Serialization.ObjectGraphVisitors;
 
 namespace Rivet.Editor
 {
@@ -11,10 +12,10 @@ namespace Rivet.Editor
         public enum LogType { STDOUT, STDERR }
 
         // Events
-        public event Action<string, LogType> TaskLog;
-        public event Action<JObject> TaskOk;
-        public event Action<string> TaskError;
-        public event Action<JObject> TaskOutput;
+        public event Action<string, LogType>? TaskLog;
+        public event Action<JObject>? TaskOk;
+        public event Action<string>? TaskError;
+        public event Action<JObject>? TaskOutput;
 
         // Config
         private string _name;
@@ -90,6 +91,7 @@ namespace Rivet.Editor
 
         private void OnLogEvent(string log)
         {
+            RivetLogger.Log($"TaskLog is null: {TaskLog == null}");
             TaskLog?.Invoke(log, LogType.STDOUT);
         }
 

@@ -21,24 +21,30 @@ const target = {
     }`,
 };
 
-async function runCommand(cmd: string[], cwd?: string): Promise<void> {
-    const command = new Deno.Command(cmd[0], {
-        args: cmd.slice(1),
-        cwd,
-        stdout: "inherit",
-        stderr: "inherit",
-    });
-    const { code } = await command.output();
-    if (code !== 0) throw new Error(`Command failed: ${cmd.join(" ")}`);
-}
-
 async function copyFile(src: string, dest: string): Promise<void> {
     await ensureDir(dirname(dest));
     await Deno.copyFile(src, dest);
 }
 
 // Build client
-await runCommand(["cargo", "build", "--package", "rivet-toolchain-ffi"], toolchainRepoPath);
+// const buildCommand = new Deno.Command("cargo", {
+//     args: ["+nightly", "build", "--package", "rivet-toolchain-ffi"],
+//     env: {
+//       "DYLD_INSERT_LIBRARIES": "/Users/nathan/.rustup/toolchains/nightly-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/librustc-nightly_rt.asan.dylib",
+//       "RUSTFLAGS": "-Zsanitizer=address"
+//     },
+//     cwd: toolchainRepoPath,
+//     stdout: "inherit",
+//     stderr: "inherit",
+// });
+const buildCommand = new Deno.Command("cargo", {
+    args: ["build", "--package", "rivet-toolchain-ffi"],
+    cwd: toolchainRepoPath,
+    stdout: "inherit",
+    stderr: "inherit",
+});
+const { code } = await buildCommand.output();
+if (code !== 0) throw new Error("Command failed: cargo build --package rivet-toolchain-ffi");
 
 // Copy FFI library
 const ffiSrc = join(

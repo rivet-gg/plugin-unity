@@ -101,7 +101,13 @@ namespace Rivet.Editor.UI.Dock.Tabs
             _lgsRestart.RegisterCallback<ClickEvent>(ev => { OnLocalGameServerStart(); });
             _lgsShowLogs.RegisterCallback<ClickEvent>(ev => GameServerWindow.ShowGameServer());
 
+            _playTypeDropdown.RegisterValueChangedCallback(ev => UpdatePlayerCountVisibility());
+
             _buildDeployButton.RegisterCallback<ClickEvent>(ev => OnBuildAndDeploy());
+
+
+            // Initial visibility update
+            UpdatePlayerCountVisibility();
         }
 
         public void OnBootstrap()
@@ -171,6 +177,13 @@ namespace Rivet.Editor.UI.Dock.Tabs
             {
                 Builder.BuildAndRunMultipleDevPlayers(_playerCount.value);
             }
+
+            // Open game server logs if needed
+            if (canPlayServer) {
+                if (!EditorWindow.HasOpenInstances<GameServerWindow>()) {
+                    GameServerWindow.ShowGameServer();
+                }
+            }
         }
 
         private void OnBuildAndDeploy()
@@ -214,6 +227,12 @@ namespace Rivet.Editor.UI.Dock.Tabs
                 ["game_server"] = deployGameServer,
                 ["modules"] = deployModules,
             });
+        }
+
+        private void UpdatePlayerCountVisibility()
+        {
+            bool showPlayerCount = _playTypeDropdown.index == 0 || _playTypeDropdown.index == 1;
+            _playerCount.style.display = showPlayerCount ? DisplayStyle.Flex : DisplayStyle.None;
         }
     }
 }

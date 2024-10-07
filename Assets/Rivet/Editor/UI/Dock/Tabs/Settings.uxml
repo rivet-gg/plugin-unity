@@ -5,7 +5,7 @@
         <AttributeOverrides element-name="Title" text="Account" />
     </ui:Instance>
     <ui:VisualElement name="AccountBody" style="flex-grow: 0; flex-shrink: 0;">
-        <ui:Label tabindex="-1" text="Sign in to Rivet to deploy game servers &amp; moduless. If self-hosting Rivet, update the API endpoint accordingly." parse-escape-sequences="true" display-tooltip-when-elided="true" style="white-space: normal; margin-bottom: 8px;" />
+        <ui:Label tabindex="-1" text="Sign in to Rivet to deploy game servers &amp; modules. If self-hosting Rivet, update the API endpoint accordingly." parse-escape-sequences="true" display-tooltip-when-elided="true" style="white-space: normal; margin-bottom: 8px;" />
         <ui:TextField picking-mode="Ignore" label="API Endpoint" value="https://api.rivet.gg" name="ApiEndpointField" />
         <ui:Button text="Sign In to Rivet" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SignInButton" />
         <ui:Button text="Sign Out" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SignOutButton" />
