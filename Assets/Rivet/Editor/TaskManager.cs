@@ -38,12 +38,14 @@ namespace Rivet.Editor
         }
 
         public delegate Task<TaskConfig?> GetStartConfigDelegate();
+        public delegate Task<TaskConfig?> GetHookConfigDelegate();
         public delegate Task<TaskConfig?> GetStopConfigDelegate();
         public delegate TaskPanelWindow? GetTaskPanelDelegate();
         public delegate void StateChangeHandler(bool running);
 
         // Config
         private GetStartConfigDelegate _getStartConfig;
+        private GetHookConfigDelegate? _getHookConfig;
         private GetStopConfigDelegate _getStopConfig;
         private GetTaskPanelDelegate _getTaskPanel;
         private bool _autoRestart = false;
@@ -57,9 +59,16 @@ namespace Rivet.Editor
         private RivetTask? _stopTask;
         public List<LogEntry> LogEntries = new();
 
-        public TaskManager(string initMessage, GetStartConfigDelegate getStartConfig, GetStopConfigDelegate getStopConfig, GetTaskPanelDelegate getTaskPanel, bool autoRestart = false)
+        public bool IsRunning {
+            get {
+                return _task != null || _stopTask != null;
+            }
+        }
+
+        public TaskManager(string initMessage, GetStartConfigDelegate getStartConfig, GetHookConfigDelegate? getHookConfig, GetStopConfigDelegate getStopConfig, GetTaskPanelDelegate getTaskPanel, bool autoRestart = false)
         {
             _getStartConfig = getStartConfig;
+            _getHookConfig = getHookConfig;
             _getStopConfig = getStopConfig;
             _getTaskPanel = getTaskPanel;
             _autoRestart = autoRestart;
@@ -67,7 +76,7 @@ namespace Rivet.Editor
             LogEntries.Add(new LogEntry(initMessage, LogType.META));
         }
 
-        public async Task StartTask()
+        public async Task StartTask(bool hook = false)
         {
             lock (_taskLock)
             {
@@ -77,10 +86,12 @@ namespace Rivet.Editor
             }
 
             // Kill old task
-            _ = StopTask();
+            if (!hook) {
+                _ = StopTask();
+            }
 
             // Start new task
-            var config = await _getStartConfig();
+            var config = hook ? await _getHookConfig() : await _getStartConfig();
             if (config == null)
             {
                 RivetLogger.Log("No task config provided.");
@@ -90,14 +101,17 @@ namespace Rivet.Editor
             {
                 _task = new RivetTask(config.Value.Name, config.Value.Input);
                 _task.TaskLog += OnTaskLog;
+                RivetLogger.Log($"Running {config.Value.Name}");
                 OnStateChange();
+                RivetLogger.Log($"After state change {config.Value.Name}");
             }
 
-            AddLogLine("Start", LogType.META);
+            AddLogLine(hook ? "Hook" : "Start", LogType.META);
 
             // Run task
             var output = await _task.RunAsync();
 
+            RivetLogger.Log($"Finished {config.Value.Name}");
             await OnTaskOutput(output, _task);
         }
 
@@ -236,7 +250,9 @@ namespace Rivet.Editor
             // event right after the task is started (where IsRunning is set to
             // true). To fix this, we need to be able to hook in to state change
             // events on RivetTask.
-            StateChange.Invoke(_task != null);
+            var isRunning = IsRunning;
+            EditorApplication.delayCall += () => StateChange.Invoke(isRunning);
+            RivetLogger.Log($"State change: {IsRunning} ({_task != null} {_stopTask != null})");
         }
     }
 }

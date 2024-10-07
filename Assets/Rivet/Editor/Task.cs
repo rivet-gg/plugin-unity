@@ -84,7 +84,6 @@ namespace Rivet.Editor
 
         private void OnLogEvent(string log)
         {
-            RivetLogger.Log($"TaskLog is null: {TaskLog == null}");
             TaskLog?.Invoke(log, LogType.STDOUT);
         }
 

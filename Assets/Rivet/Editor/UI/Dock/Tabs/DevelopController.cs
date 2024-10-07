@@ -73,7 +73,7 @@ namespace Rivet.Editor.UI.Dock.Tabs
 
             // Callbacks
             _dock.LocalGameServerManager.StateChange += OnLocalGameServerStateChange;
-            OnLocalGameServerStateChange(false);
+            OnLocalGameServerStateChange(_dock.LocalGameServerManager.IsRunning);
 
             _refreshButton.RegisterCallback<ClickEvent>(ev => { _ = plugin.Bootstrap(); });
 

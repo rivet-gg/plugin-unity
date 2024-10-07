@@ -72,7 +72,7 @@ namespace Rivet.Editor.UI.Dock.Tabs
 
             // Callbacks
             _dock.BackendManager.StateChange += OnBackendStateChange;
-            OnBackendStateChange(false);
+            OnBackendStateChange(_dock.BackendManager.IsRunning);
 
             _signInButton.RegisterCallback<ClickEvent>(ev => { _ = _dock.StartSignIn(); });
             _signOutButton.RegisterCallback<ClickEvent>(ev => { _ = _dock.SignOut(); });
