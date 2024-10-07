@@ -130,24 +130,20 @@ namespace Rivet.Editor.UI.Dock
                 initMessage: "Open \"Develop\" and press \"Start\" to start game server.",
                 getStartConfig: () =>
                 {
-                    if (plugin.LocalGameServerExecutablePath != null)
+                    return Task.FromResult<TaskConfig?>(new TaskConfig
                     {
-                        return Task.FromResult<TaskConfig?>(new TaskConfig
+                        Name = "game_server.start",
+                        Input = new JObject
                         {
-                            Name = "game_server.start",
-                            Input = new JObject
-                            {
-                                ["cwd"] = Builder.ProjectRoot(),
-                                ["cmd"] = plugin.LocalGameServerExecutablePath,
-                                ["args"] = new JArray { "-batchmode", "-nographics", "-server" },
+                            ["cwd"] = Builder.ProjectRoot(),
+                            ["cmd"] = Builder.GetDevDedicatedServerExecutablePath(),
+                            ["args"] = new JArray { "-batchmode", "-nographics", "-server" },
+                            ["envs"] = new JObject {
+                                ["BACKEND_ENDPOINT"] = SharedSettings.BackendEndpoint,
+                                ["GAME_VERSION"] = SharedSettings.GameVersion,
                             }
-                        });
-                    }
-                    else
-                    {
-                        RivetLogger.Warning("LocalGameServerManager.Start: no local game server executable path");
-                        return null;
-                    }
+                        }
+                    });
                 },
                 getStopConfig: () =>
                 {

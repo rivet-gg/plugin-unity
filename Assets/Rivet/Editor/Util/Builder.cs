@@ -45,6 +45,11 @@ namespace Rivet.Editor.Util
             }
         }
 
+
+        /// <summary>
+        /// Builds and runs multiple instances of the development player, each with its own log file.
+        /// </summary>
+        /// <param name="instanceCount">The number of player instances to run.</param>
         public static string BuildDevPlayer()
         {
             // Check if the target platform is supported
@@ -65,7 +70,7 @@ namespace Rivet.Editor.Util
             var buildPlayerOptions = new BuildPlayerOptions
             {
                 scenes = GetScenePaths(),
-                locationPathName = Path.Combine(ProjectRoot(), "Builds", "Development", "Player", GetPlatformArchFolder(GetLocalBuildTarget()), GetBuildName("Player", GetLocalBuildTarget())),
+                locationPathName = GetDevPlayerBuildPath(),
                 target = GetLocalBuildTarget(),
                 options = BuildOptions.Development | BuildOptions.AllowDebugging
             };
@@ -87,19 +92,11 @@ namespace Rivet.Editor.Util
         }
 
         /// <summary>
-        /// Builds and runs multiple instances of the development player, each with its own log file.
+        /// Runs multiple instances of the development player, each with its own log file.
         /// </summary>
         /// <param name="instanceCount">The number of player instances to run.</param>
-        public static void BuildAndRunMultipleDevPlayers(int instanceCount)
+        public static void RunMultipleDevPlayers( int instanceCount)
         {
-            string playerPath;
-            try {
-                playerPath = BuildDevPlayer();
-            } catch (Exception e) {
-                EditorUtility.DisplayDialog("Player Build Failed", e.Message, "Dismiss");
-                return;
-            }
-
             string logDirectory = Path.Combine(ProjectRoot(), "Logs", "DevPlayers");
             Directory.CreateDirectory(logDirectory);
 
@@ -109,7 +106,7 @@ namespace Rivet.Editor.Util
                 {
                     string logFilePath = Path.Combine(logDirectory, $"DevPlayer_{i + 1}.log");
                     var arguments = $"-screen-fullscreen 0 -logFile \"{logFilePath}\"";
-                    var startInfo = new System.Diagnostics.ProcessStartInfo(playerPath)
+                    var startInfo = new System.Diagnostics.ProcessStartInfo(GetDevPlayerBuildPath())
                     {
                         Arguments = arguments,
                         UseShellExecute = false
@@ -126,10 +123,7 @@ namespace Rivet.Editor.Util
         }
 
         // MARK: Run Game Server
-        /// <summary>
-        /// Builds a server used for local development.
-        /// </summary>
-        /// <returns>Returns the task config to run the server.</returns>
+
         public static string BuildDevDedicatedServer()
         {
             // Check if the target platform is supported
@@ -148,7 +142,7 @@ namespace Rivet.Editor.Util
             var buildPlayerOptions = new BuildPlayerOptions
             {
                 scenes = GetScenePaths(),
-                locationPathName = Path.Combine(ProjectRoot(), "Builds", "Development", "DedicatedServer", GetPlatformArchFolder(GetLocalBuildTarget()), GetBuildName("DedicatedServer", GetLocalBuildTarget(), true)),
+                locationPathName = GetDevDedicatedServerBuildPath(),
                 target = GetLocalBuildTarget(),
                 options = BuildOptions.Development | BuildOptions.CompressWithLz4 | BuildOptions.EnableHeadlessMode,
                 subtarget = (int)StandaloneBuildSubtarget.Server
@@ -196,7 +190,7 @@ namespace Rivet.Editor.Util
             var buildPlayerOptions = new BuildPlayerOptions
             {
                 scenes = GetScenePaths(),
-                locationPathName = Path.Combine(ProjectRoot(), "Builds", "Release", "DedicatedServer", GetPlatformArchFolder(BuildTarget.StandaloneLinux64), GetBuildName("DedicatedServer", BuildTarget.StandaloneLinux64, true)),
+                locationPathName = GetReleaseDedicatedServerBuildPath(),
                 target = BuildTarget.StandaloneLinux64,
                 options = BuildOptions.CompressWithLz4HC | BuildOptions.EnableHeadlessMode,
                 subtarget = (int)StandaloneBuildSubtarget.Server
@@ -218,7 +212,7 @@ namespace Rivet.Editor.Util
             }
         }
 
-        public static string FindServerExecutablePath(string serverPath, BuildTarget buildTarget)
+        private static string FindServerExecutablePath(string serverPath, BuildTarget buildTarget)
         {
             string productName = Application.productName;
             string executableFile;
@@ -253,7 +247,7 @@ namespace Rivet.Editor.Util
             return executableFile;
         }
 
-        public static string FindPlayerExecutablePath(string buildPath, BuildTarget buildTarget)
+        private static string FindPlayerExecutablePath(string buildPath, BuildTarget buildTarget)
         {
             string productName = Application.productName;
             string executablePath;
@@ -323,6 +317,36 @@ namespace Rivet.Editor.Util
         {
             var dataPath = Application.dataPath;
             return Directory.GetParent(dataPath).FullName;
+        }
+
+        public static string GetDevPlayerExecutablePath()
+        {
+            return FindPlayerExecutablePath(GetDevPlayerBuildPath(), GetLocalBuildTarget());
+        }
+
+        public static string GetDevDedicatedServerExecutablePath()
+        {
+            return FindServerExecutablePath(GetDevDedicatedServerBuildPath(), GetLocalBuildTarget());
+        }
+
+        public static string GetReleaseDedicatedServerExecutablePath()
+        {
+            return FindServerExecutablePath(GetReleaseDedicatedServerBuildPath(), BuildTarget.StandaloneLinux64);
+        }
+
+        private static string GetDevPlayerBuildPath()
+        {
+            return Path.Combine(ProjectRoot(), "Builds", "Development", "Player", GetPlatformArchFolder(GetLocalBuildTarget()), GetBuildName("Player", GetLocalBuildTarget()));
+        }
+
+        private static string GetDevDedicatedServerBuildPath()
+        {
+            return Path.Combine(ProjectRoot(), "Builds", "Development", "DedicatedServer", GetPlatformArchFolder(GetLocalBuildTarget()), GetBuildName("DedicatedServer", GetLocalBuildTarget(), true));
+        }
+
+        private static string GetReleaseDedicatedServerBuildPath()
+        {
+            return Path.Combine(ProjectRoot(), "Builds", "Release", "DedicatedServer", GetPlatformArchFolder(BuildTarget.StandaloneLinux64), GetBuildName("DedicatedServer", BuildTarget.StandaloneLinux64, true));
         }
     }
 }
