@@ -42,5 +42,5 @@
     <ui:Instance template="IconButton" name="BuildDeployButton">
         <AttributeOverrides element-name="Label" text="Build &amp; Deploy" />
     </ui:Instance>
-    <ui:Label tabindex="-1" text="&lt;u&gt;Server Logs&lt;/u&gt; &lt;u&gt;Build List&lt;/u&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ServerLogsButton" style="-unity-text-align: upper-center; display: flex;" />
+    <ui:Label tabindex="-1" text="&lt;u&gt;Server Logs&lt;/u&gt; &lt;u&gt;Build List&lt;/u&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ServerLogsButton" style="-unity-text-align: upper-center; display: none;" />
 </ui:UXML>

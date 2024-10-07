@@ -1,9 +1,9 @@
 {
     "name": "com.rivet.rivet",
     "displayName": "Rivet",
-    "version": "2.0.0-rc.1",
-    "unity": "2021.3",
-    "description": "Description of the Rivet package",
+    "version": "{{VERSION}}",
+    "unity": "2022.0",
+    "description": "Open-Source Multiplayer Tooling",
     "keywords": [
         "rivet",
         "unity",
