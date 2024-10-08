@@ -181,6 +181,9 @@ namespace Rivet.Editor.UI.Dock
                 autoRestart: true
             );
 
+            // Add update callback
+            EditorApplication.update += OnEditorUpdate;
+
             // Shut down on reload
             AssemblyReloadEvents.beforeAssemblyReload += () =>
             {
@@ -199,6 +202,9 @@ namespace Rivet.Editor.UI.Dock
         public void OnDisable()
         {
             RivetLogger.Log("On Disable");
+
+            EditorApplication.update -= OnEditorUpdate;
+
             ShutdownPlugin();
         }
 
@@ -304,6 +310,11 @@ namespace Rivet.Editor.UI.Dock
             {
                 Application.OpenURL($"https://hub.rivet.gg");
             }
+        }
+
+        private void OnEditorUpdate()
+        {
+            RivetToolchain.PollTaskEvents();
         }
     }
 }

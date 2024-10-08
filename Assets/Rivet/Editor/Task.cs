@@ -49,15 +49,8 @@ namespace Rivet.Editor
             _taskId = RivetToolchain.RunTask(name, inputJson, OnOutputEvent);
         }
 
-        private void OnOutputEvent(ulong taskId, IntPtr eventJsonPtr)
+        private void OnOutputEvent(JObject eventObj)
         {
-            string eventJson = RivetToolchain.PtrToString(eventJsonPtr);
-            EditorApplication.delayCall += () => HandleOnOutputEvent(eventJson);
-        }
-
-        private void HandleOnOutputEvent(string eventJson)
-        {
-            var eventObj = JObject.Parse(eventJson);
             if (eventObj.ContainsKey("log"))
             {
                 OnLogEvent((string)eventObj["log"]);
@@ -85,7 +78,7 @@ namespace Rivet.Editor
             }
             else
             {
-                RivetLogger.Warning($"Unknown event {eventJson}");
+                RivetLogger.Warning($"Unknown event {eventObj.ToString(Newtonsoft.Json.Formatting.None)}");
             }
         }
 
