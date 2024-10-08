@@ -205,9 +205,6 @@ namespace Rivet.Editor
             }
         }
 
-        // MARK: Local Game Server
-        public string? LocalGameServerExecutablePath;
-
         // MARK: Bootstrap
         public async Task Bootstrap()
         {

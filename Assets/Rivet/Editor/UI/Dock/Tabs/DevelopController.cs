@@ -31,6 +31,7 @@ namespace Rivet.Editor.UI.Dock.Tabs
         private DropdownField _remoteEnvironmentDropdown;
 
         private DropdownField _playTypeDropdown;
+        private DropdownField _playStepsDropdown;
         private SliderInt _playerCount;
         private Button _lgsStart;
         private Button _lgsStop;
@@ -59,6 +60,7 @@ namespace Rivet.Editor.UI.Dock.Tabs
             _remoteEnvironmentDropdown = _root.Q("EnvironmentBody").Q<DropdownField>("EnvironmentDropdown");
 
             _playTypeDropdown = _root.Q("PlayBody").Q<DropdownField>("TypeDropdown");
+            _playStepsDropdown = _root.Q("PlayBody").Q<DropdownField>("StepsDropdown");
             _playerCount = _root.Q("PlayBody").Q<SliderInt>("PlayerCountSlider");
 
             _lgsStart = _root.Q("PlayBody").Q("ButtonRow").Q("StartButton").Q<Button>("Button");
@@ -152,35 +154,71 @@ namespace Rivet.Editor.UI.Dock.Tabs
         {
             var canPlayClient = _playTypeDropdown.index == 0 || _playTypeDropdown.index == 1;
             var canPlayServer = _playTypeDropdown.index == 0 || _playTypeDropdown.index == 2;
+            var shouldBuild = _playStepsDropdown.index == 0;
 
             // Server
             if (canPlayServer)
             {
-                string serverPath;
-                try
+                if (shouldBuild)
                 {
-                    serverPath = Builder.BuildDevDedicatedServer();
+                    try
+                    {
+                        Builder.BuildDevDedicatedServer();
+                    }
+                    catch (Exception e)
+                    {
+                        EditorUtility.DisplayDialog("Server Build Failed", e.Message, "Dismiss");
+                        return;
+                    }
                 }
-                catch (Exception e)
+                else
                 {
-                    EditorUtility.DisplayDialog("Server Build Failed", e.Message, "Dismiss");
-                    return;
+                    string serverPath = Builder.GetDevDedicatedServerExecutablePath();
+                    if (!File.Exists(serverPath))
+                    {
+                        EditorUtility.DisplayDialog("Missing Server Build", $"The server needs to be built before running without the build step.\n\nExpected path: {serverPath}", "OK");
+                        return;
+                    }
                 }
 
-                RivetGlobal.Singleton.LocalGameServerExecutablePath = serverPath;
-
+                // Start server
                 _ = _dock.LocalGameServerManager.StartTask();
             }
 
             // Client
             if (canPlayClient)
             {
-                Builder.BuildAndRunMultipleDevPlayers(_playerCount.value);
+                if (shouldBuild)
+                {
+                    try
+                    {
+                        Builder.BuildDevPlayer();
+                    }
+                    catch (Exception e)
+                    {
+                        EditorUtility.DisplayDialog("Player Build Failed", e.Message, "Dismiss");
+                        return;
+                    }
+                }
+                else
+                {
+                    string playerPath = Builder.GetDevPlayerExecutablePath();
+                    if (!File.Exists(playerPath))
+                    {
+                        EditorUtility.DisplayDialog("Missing Player Build", $"The player needs to be built before running without the build step.\n\nExpected path: {playerPath}", "OK");
+                        return;
+                    }
+                }
+
+                // Start players
+                Builder.RunMultipleDevPlayers(_playerCount.value);
             }
 
             // Open game server logs if needed
-            if (canPlayServer) {
-                if (!EditorWindow.HasOpenInstances<GameServerWindow>()) {
+            if (canPlayServer)
+            {
+                if (!EditorWindow.HasOpenInstances<GameServerWindow>())
+                {
                     GameServerWindow.ShowGameServer();
                 }
             }

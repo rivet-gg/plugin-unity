@@ -62,6 +62,16 @@ namespace Backend.Modules.Lobbies
 
         private void Awake()
         {
+            IsServer = Array.IndexOf(Environment.GetCommandLineArgs(), "-server") != -1;
+
+            if (IsServer)
+            {
+                // Disable verbose log stack traces
+                Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.ScriptOnly);
+                Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.ScriptOnly);
+                // Application.SetStackTraceLogType(LogType.Exception, StackTraceLogType.None);
+                // Application.SetStackTraceLogType(LogType.Assert, StackTraceLogType.None);
+            }
 
             // Setup singleton
             if (Instance != null && Instance != this)
@@ -119,8 +129,6 @@ namespace Backend.Modules.Lobbies
                 return;
             }
             _multiplayerSetup = true;
-
-            IsServer = Array.IndexOf(Environment.GetCommandLineArgs(), "-server") != -1;
 
             // Setup events
             _networkManager.ClientManager.OnClientConnectionState += OnClientConnectionState;
