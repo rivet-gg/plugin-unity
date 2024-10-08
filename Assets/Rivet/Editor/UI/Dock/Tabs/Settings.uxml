@@ -26,7 +26,7 @@
         <AttributeOverrides element-name="Title" text="Modules Backend" />
     </ui:Instance>
     <ui:VisualElement name="BackendBody" style="flex-grow: 0; flex-shrink: 0; flex-direction: column;">
-        <ui:Label tabindex="-1" text="Locally running backend for your module logic, Rivet Editor, and SDK generation. Parts of the plugin will not work if stopped." parse-escape-sequences="true" display-tooltip-when-elided="true" style="white-space: normal;" />
+        <ui:Label tabindex="-1" text="Locally running backend for your module logic, Rivet Editor, and SDK generation. Parts of the plugin will not work if stopped." parse-escape-sequences="true" display-tooltip-when-elided="true" style="white-space: normal; margin-bottom: 8px;" />
         <ui:VisualElement name="ButtonRow" style="flex-grow: 0; flex-shrink: 0; flex-direction: row;">
             <ui:Button text="Start" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StartButton" style="flex-grow: 1;" />
             <ui:Button text="Stop" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StopButton" style="flex-shrink: 1; flex-grow: 1;" />

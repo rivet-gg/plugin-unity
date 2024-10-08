@@ -39,7 +39,7 @@ namespace Rivet.Editor
 
         public static void Shutdown()
         {
-            shutdown();
+            // shutdown();
         }
 
         public static string PtrToString(IntPtr ptr)

@@ -195,6 +195,7 @@ namespace Rivet.Editor.UI.Dock
             // Bootstrap
             _ = RivetGlobal.Singleton.Bootstrap();
 
+            // TODO:
             // Start backend
             // _ = BackendManager.StartTask();
         }
@@ -212,8 +213,8 @@ namespace Rivet.Editor.UI.Dock
         {
 
             RivetLogger.Log("Shutdown Plugin");
-            _ = LocalGameServerManager.StopTask();
-            _ = BackendManager.StopTask();
+            // _ = LocalGameServerManager.StopTask();
+            // _ = BackendManager.StopTask();
         }
 
         void SetTab(MainTab tab)
