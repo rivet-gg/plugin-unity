@@ -1,0 +1,42 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:Template name="TabBarButton" src="project://database/Assets/Rivet/Editor/UI/Elements/TabBarButton.uxml?fileID=9197481963319205126&amp;guid=a9cdea76e28674968ae97c2ea93addfc&amp;type=3#TabBarButton" />
+    <ui:Template name="Setup" src="project://database/Assets/Rivet/Editor/UI/Dock/Tabs/Setup.uxml?fileID=9197481963319205126&amp;guid=e85449efc05a9423db8e31757355e8ae&amp;type=3#Setup" />
+    <ui:Template name="Develop" src="project://database/Assets/Rivet/Editor/UI/Dock/Tabs/Develop.uxml?fileID=9197481963319205126&amp;guid=b7760120da11b433cbf74e2f194f8323&amp;type=3#Develop" />
+    <ui:Template name="Modules" src="project://database/Assets/Rivet/Editor/UI/Dock/Tabs/Modules.uxml?fileID=9197481963319205126&amp;guid=745c02b176bc8439baa3011f2dba61be&amp;type=3#Modules" />
+    <ui:Template name="Settings" src="project://database/Assets/Rivet/Editor/UI/Dock/Tabs/Settings.uxml?fileID=9197481963319205126&amp;guid=cdac965702def4e6cacf5bd2ea5c18b3&amp;type=3#Settings" />
+    <Style src="project://database/Assets/Rivet/Editor/UI/Dock/Dock.uss?fileID=7433441132597879392&amp;guid=129430489c0d04fbc9872e0d6ec0afd9&amp;type=3#Dock" />
+    <ui:VisualElement name="Header" style="flex-grow: 0; flex-direction: row; align-self: auto; background-color: rgba(41, 41, 41, 0); visibility: visible; align-items: center; flex-shrink: 0; border-bottom-width: 1px; border-bottom-color: rgba(0, 0, 0, 0.25); padding-top: 8px; padding-bottom: 8px; padding-left: 8px; padding-right: 8px; display: flex; border-left-color: rgba(0, 0, 0, 0.25); border-right-color: rgba(0, 0, 0, 0.25); border-top-color: rgba(0, 0, 0, 0.25);">
+        <ui:VisualElement name="Logo" style="flex-grow: 0; background-image: url(&quot;project://database/Assets/Rivet/Editor/Images/icon-text.svg?fileID=7388822144124034973&amp;guid=a479d38aa7a054ac89ad1f120d299577&amp;type=3#icon-text&quot;); flex-shrink: 0; width: 60px; -unity-background-scale-mode: scale-to-fit; height: 18px;" />
+        <ui:VisualElement style="flex-grow: 1;" />
+        <ui:VisualElement name="Links" style="flex-grow: 0; flex-direction: row; flex-shrink: 1;">
+            <ui:Button text="Sign In" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SignInButton" />
+            <ui:Button text="Hub" parse-escape-sequences="true" display-tooltip-when-elided="true" name="HubButton" />
+            <ui:Button text="Documentation" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DocsButton" />
+            <ui:Button text="Feedback" parse-escape-sequences="true" display-tooltip-when-elided="true" name="FeedbackButton" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="Screens" style="flex-grow: 1;">
+        <ui:VisualElement name="TabBar" style="flex-grow: 0; flex-direction: row; flex-shrink: 0; justify-content: center; padding-top: 0; padding-bottom: 0; border-bottom-width: 1px; border-bottom-color: rgba(0, 0, 0, 0.25); padding-right: 0; padding-left: 0; height: 34px;">
+            <ui:Instance template="TabBarButton" name="Setup" class="active" style="flex-grow: 1;">
+                <AttributeOverrides element-name="Label" text="Setup" />
+            </ui:Instance>
+            <ui:Instance template="TabBarButton" name="Develop" style="flex-grow: 1;">
+                <AttributeOverrides element-name="Label" text="Develop" />
+            </ui:Instance>
+            <ui:Instance template="TabBarButton" name="Modules" style="flex-grow: 1;">
+                <AttributeOverrides element-name="Label" text="Modules" />
+            </ui:Instance>
+            <ui:Instance template="TabBarButton" name="Settings" style="flex-grow: 1;">
+                <AttributeOverrides element-name="Label" text="Settings" />
+            </ui:Instance>
+        </ui:VisualElement>
+        <ui:ScrollView name="TabBodyScrollView" style="flex-grow: 1;">
+            <ui:VisualElement name="TabBody" style="padding-top: 12px; padding-right: 12px; padding-bottom: 12px; padding-left: 12px;">
+                <ui:Instance template="Setup" name="Setup" />
+                <ui:Instance template="Develop" name="Develop" style="display: none;" />
+                <ui:Instance template="Modules" name="Modules" style="display: none;" />
+                <ui:Instance template="Settings" name="Settings" style="display: none;" />
+            </ui:VisualElement>
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

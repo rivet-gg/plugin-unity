@@ -1,0 +1,37 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="Separator" src="project://database/Assets/Rivet/Editor/UI/Elements/Separator.uxml?fileID=9197481963319205126&amp;guid=c2ac5cf9dac42448aaf41436ee2b5a41&amp;type=3#Separator" />
+    <Style src="project://database/Assets/Rivet/Editor/UI/Dock/Tabs/Setup.uss?fileID=7433441132597879392&amp;guid=1d2d525cecfe346b584a2aceb43ea539&amp;type=3#Setup" />
+    <ui:VisualElement name="VisualElement" class="setup-step">
+        <ui:VisualElement class="step-icon" style="background-image: url(&quot;project://database/Assets/Rivet/Editor/Images/FontAwesome/circle-1.svg?fileID=7388822144124034973&amp;guid=dade10c615d554a2c8425dca4c1a4356&amp;type=3#circle-1&quot;); width: 16px;" />
+        <ui:Label tabindex="-1" text="&lt;b&gt;Setup Rivet Modules&lt;/b&gt;&#10;Creates configs &amp; generates the Rivet SDK." parse-escape-sequences="true" display-tooltip-when-elided="true" class="description" />
+        <ui:Button text="Setup" parse-escape-sequences="true" display-tooltip-when-elided="true" class="action-button" />
+    </ui:VisualElement>
+    <ui:Instance template="Separator" name="Separator" />
+    <ui:VisualElement name="VisualElement" class="setup-step">
+        <ui:VisualElement class="step-icon" style="background-image: url(&quot;project://database/Assets/Rivet/Editor/Images/FontAwesome/circle-2.svg?fileID=7388822144124034973&amp;guid=955a5cb55b73b48c58232eef577778fa&amp;type=3#circle-2&quot;);" />
+        <ui:Label tabindex="-1" text="&lt;b&gt;Setup Multiplayer &amp; Game Server&lt;/b&gt;&#10;Builds a fully functional multiplayer scene." parse-escape-sequences="true" display-tooltip-when-elided="true" class="description" />
+        <ui:Button text="Setup" parse-escape-sequences="true" display-tooltip-when-elided="true" class="action-button" />
+    </ui:VisualElement>
+    <ui:Instance template="Separator" name="Separator" />
+    <ui:VisualElement name="VisualElement" class="setup-step">
+        <ui:VisualElement class="step-icon" style="background-image: url(&quot;project://database/Assets/Rivet/Editor/Images/FontAwesome/circle-3.svg?fileID=7388822144124034973&amp;guid=f624928e5e5d74e03be39e8324c0732e&amp;type=3#circle-3&quot;);" />
+        <ui:Label tabindex="-1" text="&lt;b&gt;Test Locally&lt;/b&gt;&#10;Run &amp; test your game server locally." parse-escape-sequences="true" display-tooltip-when-elided="true" class="description" />
+        <ui:Button text="Open Run" parse-escape-sequences="true" display-tooltip-when-elided="true" class="action-button" />
+    </ui:VisualElement>
+    <ui:Instance template="Separator" name="Separator" />
+    <ui:VisualElement name="VisualElement" class="setup-step">
+        <ui:VisualElement class="step-icon" style="background-image: url(&quot;project://database/Assets/Rivet/Editor/Images/FontAwesome/circle-4.svg?fileID=7388822144124034973&amp;guid=e5862bb3ef67046278cbb86f01d89f43&amp;type=3#circle-4&quot;);" />
+        <ui:Label tabindex="-1" text="&lt;b&gt;Sign In &amp; Deploy To Servers&lt;/b&gt;&#10;Deploy your game to real servers &amp; test with others." parse-escape-sequences="true" display-tooltip-when-elided="true" class="description" />
+        <ui:Button text="Open Deploy" parse-escape-sequences="true" display-tooltip-when-elided="true" class="action-button" />
+    </ui:VisualElement>
+    <ui:Instance template="Separator" name="Separator" style="height: 18px;" />
+    <ui:Label tabindex="-1" text="&lt;b&gt;Next Steps&lt;/b&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" class="description" style="flex-shrink: 0; flex-grow: 0; margin-bottom: 4px; margin-top: 4px;" />
+    <ui:VisualElement style="flex-grow: 0;">
+        <ui:Button text="Add &amp; Configure Modules" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Button" />
+        <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+            <ui:Button text="Documentation" parse-escape-sequences="true" display-tooltip-when-elided="true" style="flex-grow: 1; flex-shrink: 1;" />
+            <ui:Button text="Join Discord" parse-escape-sequences="true" display-tooltip-when-elided="true" style="flex-shrink: 1; flex-grow: 1;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:Label tabindex="-1" text="&lt;a href=&quot;https://github.com/rivet-gg/rivet&quot;&gt;Star Rivet on GitHub&lt;/a&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" class="description" style="flex-shrink: 0; flex-grow: 0; -unity-text-align: upper-center; margin-top: 4px; margin-bottom: 4px;" />
+</ui:UXML>

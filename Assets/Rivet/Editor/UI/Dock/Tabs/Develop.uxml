@@ -1,0 +1,45 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:Template name="Header" src="project://database/Assets/Rivet/Editor/UI/Elements/Header.uxml?fileID=9197481963319205126&amp;guid=1a49362105f714ca8b863d543d7fde91&amp;type=3#Header" />
+    <ui:Template name="Separator" src="project://database/Assets/Rivet/Editor/UI/Elements/Separator.uxml?fileID=9197481963319205126&amp;guid=c2ac5cf9dac42448aaf41436ee2b5a41&amp;type=3#Separator" />
+    <ui:Template name="IconButton" src="project://database/Assets/Rivet/Editor/UI/Elements/IconButton.uxml?fileID=9197481963319205126&amp;guid=32b758e0c3c244a2ab439452a6b5a3a0&amp;type=3#IconButton" />
+    <Style src="project://database/Assets/Rivet/Editor/UI/Dock/Tabs/Develop.uss?fileID=7433441132597879392&amp;guid=e18d51f97e3ac4f8fa83088c3f8d863d&amp;type=3#Develop" />
+    <ui:Instance template="Header" name="EnvironmentHeader" class="action">
+        <AttributeOverrides element-name="Title" text="Environment" />
+    </ui:Instance>
+    <ui:VisualElement name="EnvironmentBody" style="flex-grow: 0; flex-shrink: 0;">
+        <ui:Label tabindex="-1" text="Configure which Rivet environment to connect to." parse-escape-sequences="true" display-tooltip-when-elided="true" style="margin-top: 0; margin-bottom: 4px; opacity: 1; white-space: normal;" />
+        <ui:DropdownField choices="Local (Development),Remote (Live Servers)" index="0" name="TypeDropdown" label="Type" style="height: 19px; margin-bottom: 4px;" />
+        <ui:DropdownField name="EnvironmentDropdown" label="Environment" index="0" style="height: 19px;" />
+    </ui:VisualElement>
+    <ui:Instance template="Separator" name="Separator" />
+    <ui:Instance template="Header" name="RunHeader">
+        <AttributeOverrides element-name="Title" text="Run Locally" />
+    </ui:Instance>
+    <ui:VisualElement name="PlayBody" style="flex-grow: 0; flex-shrink: 0;">
+        <ui:Label tabindex="-1" text="Test your game on this machine." parse-escape-sequences="true" display-tooltip-when-elided="true" style="overflow: hidden; white-space: normal; margin-bottom: 6px;" />
+        <ui:DropdownField choices="Run Client &amp; Server,Run Client Only,Run Server Only" index="0" name="TypeDropdown" label="Type" style="height: 19px; margin-bottom: 4px;" />
+        <ui:SliderInt label="Client Count" high-value="8" low-value="1" direction="Horizontal" show-input-field="true" name="PlayerCountSlider" />
+        <ui:VisualElement name="ButtonRow" style="flex-grow: 1; flex-direction: row; margin-bottom: 4px;">
+            <ui:Instance template="IconButton" name="StartButton" style="flex-grow: 1; display: flex;">
+                <AttributeOverrides element-name="Label" text="Start" />
+            </ui:Instance>
+            <ui:Instance template="IconButton" name="StopButton" style="flex-grow: 1;">
+                <AttributeOverrides element-name="Label" text="Stop" />
+            </ui:Instance>
+            <ui:Instance template="IconButton" name="RestartButton" style="flex-grow: 1;">
+                <AttributeOverrides element-name="Label" text="Restart" />
+            </ui:Instance>
+        </ui:VisualElement>
+        <ui:Label tabindex="-1" text="&lt;u&gt;Server Logs&lt;/u&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ServerLogsButton" style="-unity-text-align: upper-center; display: flex;" />
+    </ui:VisualElement>
+    <ui:Instance template="Separator" name="Separator" />
+    <ui:Instance template="Header" name="DeployHeader">
+        <AttributeOverrides element-name="Title" text="Deploy" />
+    </ui:Instance>
+    <ui:Label tabindex="-1" text="Build &amp; deploy to live Rivet servers." parse-escape-sequences="true" display-tooltip-when-elided="true" style="overflow: hidden; white-space: normal; margin-bottom: 6px;" />
+    <ui:DropdownField choices="Game Server &amp; Modules,Only Game Server,Only Modules" index="0" label="Steps" name="StepsDropdown" style="margin-bottom: 8px;" />
+    <ui:Instance template="IconButton" name="BuildDeployButton">
+        <AttributeOverrides element-name="Label" text="Build &amp; Deploy" />
+    </ui:Instance>
+    <ui:Label tabindex="-1" text="&lt;u&gt;Server Logs&lt;/u&gt; &lt;u&gt;Build List&lt;/u&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ServerLogsButton" style="-unity-text-align: upper-center; display: flex;" />
+</ui:UXML>

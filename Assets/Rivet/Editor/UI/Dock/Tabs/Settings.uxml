@@ -1,0 +1,45 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:Template name="Header" src="project://database/Assets/Rivet/Editor/UI/Elements/Header.uxml?fileID=9197481963319205126&amp;guid=1a49362105f714ca8b863d543d7fde91&amp;type=3#Header" />
+    <ui:Template name="Separator" src="project://database/Assets/Rivet/Editor/UI/Elements/Separator.uxml?fileID=9197481963319205126&amp;guid=c2ac5cf9dac42448aaf41436ee2b5a41&amp;type=3#Separator" />
+    <ui:Instance template="Header" name="AccountHeader">
+        <AttributeOverrides element-name="Title" text="Rivet" />
+    </ui:Instance>
+    <ui:VisualElement name="AccountBody" style="flex-grow: 0; flex-shrink: 0;">
+        <ui:Button text="Sign In to Rivet" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SignInButton" />
+        <ui:Button text="Sign Out" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SignOutButton" />
+    </ui:VisualElement>
+    <ui:Instance template="Separator" name="Separator" />
+    <ui:Instance template="Header" name="PluginHeader">
+        <AttributeOverrides element-name="Title" text="Plugin" />
+    </ui:Instance>
+    <ui:VisualElement name="PluginBody" style="flex-grow: 0; flex-shrink: 0;">
+        <ui:VisualElement name="ButtonRow" style="flex-grow: 0; flex-shrink: 0; flex-direction: row;">
+            <ui:Button text="Edit User" parse-escape-sequences="true" display-tooltip-when-elided="true" name="EditUserButton" style="flex-shrink: 1; flex-grow: 1;" />
+            <ui:Button text="Edit Project" parse-escape-sequences="true" display-tooltip-when-elided="true" name="EditProjectButton" style="flex-shrink: 1; flex-grow: 1;" />
+        </ui:VisualElement>
+        <ui:Label tabindex="-1" text="&lt;u&gt;Documentation&lt;/u&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; display: none;" />
+    </ui:VisualElement>
+    <ui:Instance template="Separator" name="Separator" />
+    <ui:Instance template="Header" name="BackendHeader">
+        <AttributeOverrides element-name="Title" text="Modules Backend" />
+    </ui:Instance>
+    <ui:VisualElement name="BackendBody" style="flex-grow: 0; flex-shrink: 0; flex-direction: column;">
+        <ui:Label tabindex="-1" text="Locally running backend for your module logic, Rivet Editor, and SDK generation. Parts of the plugin will not work if stopped." parse-escape-sequences="true" display-tooltip-when-elided="true" style="white-space: normal;" />
+        <ui:VisualElement name="ButtonRow" style="flex-grow: 0; flex-shrink: 0; flex-direction: row;">
+            <ui:Button text="Start" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StartButton" style="flex-grow: 1;" />
+            <ui:Button text="Stop" parse-escape-sequences="true" display-tooltip-when-elided="true" name="StopButton" style="flex-shrink: 1; flex-grow: 1;" />
+            <ui:Button text="Restart" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RestartButton" style="flex-shrink: 1; flex-grow: 1;" />
+        </ui:VisualElement>
+        <ui:Label tabindex="-1" text="&lt;u&gt;Show Logs&lt;/u&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LogsButton" style="-unity-text-align: upper-center; display: none;" />
+    </ui:VisualElement>
+    <ui:Instance template="Separator" name="Separator" />
+    <ui:Instance template="Header" name="SourceHeader">
+        <AttributeOverrides element-name="Title" text="Source Code" />
+    </ui:Instance>
+    <ui:Label tabindex="-1" text="&lt;a href=&quot;https://github.com/rivet-gg/rivet.git&quot;&gt;rivet-gg/rivet&lt;/a&gt;&#10;&lt;a href=&quot;https://github.com/rivet-gg/plugin-unity.git&quot;&gt;rivet-gg/plugin-unity&lt;/a&gt;&#10;&lt;a href=&quot;https://github.com/rivet-gg/modules.git&quot;&gt;rivet-gg/modules&lt;/a&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SourceBody" style="white-space: normal;" />
+    <ui:Instance template="Separator" name="Separator" />
+    <ui:Instance template="Header" name="SupportHeader">
+        <AttributeOverrides element-name="Title" text="Support" />
+    </ui:Instance>
+    <ui:Label tabindex="-1" text="&lt;a href=&quot;https://rivet.gg/discord&quot;&gt;Discord&lt;/a&gt;&#10;&lt;a href=&quot;https://rivet.gg/docs/unity&quot;&gt;Documentation&lt;/a&gt;&#10;&lt;a href=&quot;https://rivet.gg/support&quot;&gt;Enterprise&lt;/a&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SupportBody" style="white-space: normal;" />
+</ui:UXML>
