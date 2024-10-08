@@ -193,7 +193,7 @@ namespace Rivet.Editor
                 _ => LogType.META
             };
 
-            // Strip [stdout] and [stderr] prefixes
+            // Clean up message
             message = StripLogPrefix(message);
 
             AddLogLine(message, logType);

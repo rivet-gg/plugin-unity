@@ -194,9 +194,8 @@ namespace Rivet.Editor.UI.Dock
             // Bootstrap
             _ = RivetGlobal.Singleton.Bootstrap();
 
-            // TODO:
-            // Start backend
-            // _ = BackendManager.StartTask();
+            // Auto-start backend
+            _ = BackendManager.StartTask();
         }
 
         public void OnDisable()
