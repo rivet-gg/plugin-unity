@@ -1,3 +1,12 @@
-#BuildDeployButton .icon {
-    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/hammer.svg?fileID=7388822144124034973&guid=57861a0f5a3f5403995884fd2bd0639b&type=3#hammer");
+#AddButton .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/plus.svg?fileID=7388822144124034973&guid=be349c2e728b24cb18e09addf902709c&type=3#plus");
+}
+
+#ModulesHeader .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/puzzle.svg?fileID=7388822144124034973&guid=082b7f4beb7e042028ea32b7567dc2d3&type=3#puzzle");
+    display: flex;
+}
+
+#CreateButton .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/pen-to-square.svg?fileID=7388822144124034973&guid=d163064dfce68421abbdd81e072c9b86&type=3#pen-to-square");
 }

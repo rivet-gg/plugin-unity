@@ -15,7 +15,10 @@
         <ui:Instance template="TabBarButton" name="Deploy" style="flex-grow: 1;">
             <AttributeOverrides element-name="Label" text="Deploy" />
         </ui:Instance>
-        <ui:Instance template="TabBarButton" name="Settings" style="flex-grow: 1;">
+        <ui:Instance template="TabBarButton" name="Modules" style="flex-grow: 1;">
+            <AttributeOverrides element-name="Label" text="Modules" />
+        </ui:Instance>
+        <ui:Instance template="TabBarButton" name="Settings" style="flex-grow: 1; display: none;">
             <AttributeOverrides element-name="Label" text="Settings" />
         </ui:Instance>
     </ui:VisualElement>

@@ -1,0 +1,8 @@
+#BuildDeployButton .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/hammer.svg?fileID=7388822144124034973&guid=57861a0f5a3f5403995884fd2bd0639b&type=3#hammer");
+}
+
+#DeployHeader .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/cloud-arrow-up.svg?fileID=7388822144124034973&guid=44dad88c1451c446d807e891e2bad2d8&type=3#cloud-arrow-up");
+    display: flex;
+}

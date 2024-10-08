@@ -16,6 +16,10 @@
     background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/cloud-arrow-up.svg?fileID=7388822144124034973&guid=44dad88c1451c446d807e891e2bad2d8&type=3#cloud-arrow-up");
 }
 
+#TabBar #Modules .icon {
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/puzzle.svg?fileID=7388822144124034973&guid=082b7f4beb7e042028ea32b7567dc2d3&type=3#puzzle");
+}
+
 #TabBar #Settings .icon {
     background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/gear.svg?fileID=7388822144124034973&guid=4395aa38d356747bc8b01eb63a802209&type=3#gear");
 }

@@ -7,16 +7,18 @@
         <AttributeOverrides element-name="Title" text="Environment" />
     </ui:Instance>
     <ui:VisualElement name="EnvironmentBody" style="flex-grow: 0; flex-shrink: 0;">
-        <ui:Label tabindex="-1" text="Specify which backend to connect to." parse-escape-sequences="true" display-tooltip-when-elided="true" style="margin-top: 0; margin-bottom: 4px; opacity: 1; white-space: normal;" />
+        <ui:Label tabindex="-1" text="Configure which environment to connect to." parse-escape-sequences="true" display-tooltip-when-elided="true" style="margin-top: 0; margin-bottom: 4px; opacity: 1; white-space: normal;" />
         <ui:DropdownField choices="Local (Development),Remote (Live Servers)" index="0" name="TypeDropdown" label="Type" style="height: 19px; margin-bottom: 4px;" />
         <ui:DropdownField name="EnvironmentDropdown" label="Environment" index="0" style="height: 19px;" />
     </ui:VisualElement>
     <ui:Instance template="Separator" name="Separator" />
-    <ui:Instance template="Header" name="LocalGameServerHeader" style="height: 24px;">
-        <AttributeOverrides element-name="Title" text="Local Game Server" />
+    <ui:Instance template="Header" name="PlayHeader">
+        <AttributeOverrides element-name="Title" text="Play" />
     </ui:Instance>
-    <ui:VisualElement name="LocalGameServerBody" style="flex-grow: 0; flex-shrink: 0;">
-        <ui:Label tabindex="-1" text="Requires restart when game edited." parse-escape-sequences="true" display-tooltip-when-elided="true" style="overflow: hidden; white-space: normal; margin-bottom: 6px;" />
+    <ui:VisualElement name="PlayBody" style="flex-grow: 0; flex-shrink: 0;">
+        <ui:Label tabindex="-1" text="Spawn multiple players to test multiplayer. Can be used alongside Play in Editor." parse-escape-sequences="true" display-tooltip-when-elided="true" style="overflow: hidden; white-space: normal; margin-bottom: 6px;" />
+        <ui:DropdownField choices="Run Client &amp; Server,Run Client Only,Run Server Only" index="0" name="TypeDropdown" label="Type" style="height: 19px; margin-bottom: 4px;" />
+        <ui:SliderInt label="Client Count" high-value="8" low-value="1" direction="Horizontal" show-input-field="true" name="PlayerCountSlider" />
         <ui:VisualElement name="ButtonRow" style="flex-grow: 1; flex-direction: row; margin-bottom: 4px;">
             <ui:Instance template="IconButton" name="StartButton" style="flex-grow: 1; display: flex;">
                 <AttributeOverrides element-name="Label" text="Start" />
@@ -28,29 +30,6 @@
                 <AttributeOverrides element-name="Label" text="Restart" />
             </ui:Instance>
         </ui:VisualElement>
-        <ui:Label tabindex="-1" text="&lt;u&gt;Show Logs&lt;/u&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="LogsButton" style="-unity-text-align: upper-center; display: none;" />
-    </ui:VisualElement>
-    <ui:Instance template="Separator" name="Separator" />
-    <ui:Instance template="Header" name="PlayerHeader">
-        <AttributeOverrides element-name="Title" text="Players" />
-    </ui:Instance>
-    <ui:VisualElement name="PlayerBody" style="flex-grow: 0; flex-shrink: 0;">
-        <ui:Label tabindex="-1" text="Spawn multiple players to test multiplayer. Can be used alongside Play in Editor." parse-escape-sequences="true" display-tooltip-when-elided="true" style="overflow: hidden; white-space: normal; margin-bottom: 6px;" />
-        <ui:SliderInt label="Player Count" high-value="8" low-value="1" direction="Horizontal" show-input-field="true" name="PlayerCountSlider" />
-        <ui:Instance template="IconButton" name="StartButton" style="flex-grow: 1; display: flex;">
-            <AttributeOverrides element-name="Label" text="Start" />
-        </ui:Instance>
-    </ui:VisualElement>
-    <ui:Instance template="Separator" name="Separator" style="justify-content: center;" />
-    <ui:Instance template="Header" name="BackendHeader">
-        <AttributeOverrides element-name="Title" text="Backend" />
-    </ui:Instance>
-    <ui:VisualElement name="BackendBody" style="flex-grow: 0; flex-shrink: 0;">
-        <ui:Instance template="IconButton" name="GenerateSdkButton">
-            <AttributeOverrides element-name="Label" text="Generate SDK" />
-        </ui:Instance>
-        <ui:Instance template="IconButton" name="EditConfigButton">
-            <AttributeOverrides element-name="Label" text="Edit Config" />
-        </ui:Instance>
+        <ui:Label tabindex="-1" text="&lt;u&gt;Server Logs&lt;/u&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ServerLogsButton" style="-unity-text-align: upper-center; display: flex;" />
     </ui:VisualElement>
 </ui:UXML>

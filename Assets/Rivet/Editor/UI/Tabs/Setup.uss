@@ -1,0 +1,30 @@
+.setup-step {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-direction: row;
+    display: flex;
+    visibility: visible;
+    align-items: flex-start;
+    padding-right: 4px;
+    padding-left: 4px;
+}
+
+.description {
+    flex-grow: 1;
+    flex-shrink: 1;
+    white-space: normal;
+    margin-left: 8px;
+    margin-right: 4px;
+}
+
+.action-button {
+}
+
+.step-icon {
+    flex-grow: 0;
+    background-image: url("project://database/Assets/Rivet/Editor/Images/FontAwesome/wrench.svg?fileID=7388822144124034973&guid=3b4edff0fd4a14f62be12a7aafc33fb2&type=3#wrench");
+    -unity-background-scale-mode: scale-to-fit;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+}

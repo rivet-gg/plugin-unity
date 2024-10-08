@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <ui:Template name="Header" src="project://database/Assets/Rivet/Editor/UI/Elements/Header.uxml?fileID=9197481963319205126&amp;guid=1a49362105f714ca8b863d543d7fde91&amp;type=3#Header" />
+    <ui:Template name="IconButton" src="project://database/Assets/Rivet/Editor/UI/Elements/IconButton.uxml?fileID=9197481963319205126&amp;guid=32b758e0c3c244a2ab439452a6b5a3a0&amp;type=3#IconButton" />
+    <Style src="project://database/Assets/Rivet/Editor/UI/Tabs/Deploy.uss?fileID=7433441132597879392&amp;guid=9da23942e5d2e4f1bbde18a97684bcf8&amp;type=3#Deploy" />
+    <ui:Instance template="Header" name="ModulesHeader">
+        <AttributeOverrides element-name="Title" text="Modules" />
+    </ui:Instance>
+    <ui:Label tabindex="-1" text="Game servers will be started &amp; stopped automatically as players join." parse-escape-sequences="true" display-tooltip-when-elided="true" name="Description" style="overflow: hidden; white-space: normal; margin-bottom: 6px;" />
+    <ui:Label tabindex="-1" text="&lt;i&gt;Waiting for backend to start...&lt;/i&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Modules" style="overflow: hidden; white-space: normal; margin-bottom: 6px; height: 15px;" />
+    <ui:Instance template="IconButton" name="AddButton">
+        <AttributeOverrides element-name="Label" text="Add Module" />
+    </ui:Instance>
+    <ui:Instance template="IconButton" name="CreateButton">
+        <AttributeOverrides element-name="Label" text="Create Module" />
+    </ui:Instance>
+    <ui:Label tabindex="-1" text="&lt;u&gt;Module Logs&lt;/u&gt;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ModuleLogsButton" style="-unity-text-align: upper-center; display: flex;" />
+</ui:UXML>

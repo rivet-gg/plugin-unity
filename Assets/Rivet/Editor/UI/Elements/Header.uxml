@@ -3,6 +3,6 @@
     <ui:VisualElement name="Header" style="flex-grow: 0; flex-direction: row; flex-shrink: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; align-items: center; margin-bottom: 8px;">
         <ui:VisualElement name="Icon" class="icon" style="flex-grow: 0; flex-shrink: 0; width: 16px; height: 16px; -unity-background-scale-mode: scale-to-fit; margin-right: 4px;" />
         <ui:Label tabindex="-1" text="Title" parse-escape-sequences="true" display-tooltip-when-elided="true" enable-rich-text="false" name="Title" class="title" style="-unity-font-style: bold; flex-grow: 1; flex-shrink: 1; text-overflow: ellipsis; overflow: hidden;" />
-        <ui:Label tabindex="-1" text="Reload" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Action" class="action" style="margin-left: 4px;" />
+        <ui:Label tabindex="-1" text="Refresh" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Action" class="action" style="margin-left: 4px;" />
     </ui:VisualElement>
 </ui:UXML>
