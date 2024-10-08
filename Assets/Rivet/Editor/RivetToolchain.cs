@@ -1,39 +1,51 @@
-// namespace Rivet.Editor
-// {
-//     public static class RivetToolchain
-//     {
-//         public const string NativeLib = "rivet_toolchain";
-
-//         [DIlImport(NativeLib, CallingConvention = CallingConvention.Cdecl, EntryPoint = "run_task")]
-//         public static extern uint run_task();
-//     }
-// }
-
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace Rivet.Editor
 {
-    public class RivetToolchain
+    public static class RivetToolchain
     {
         const string RustLibrary = "__Internal";
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void EventCallback(ulong taskId, IntPtr eventJson);
 
         [DllImport(RustLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "run_task")]
-        private static extern IntPtr run_task(
-            [MarshalAs(UnmanagedType.LPStr)] string run_config,
+        private static extern ulong run_task(
             [MarshalAs(UnmanagedType.LPStr)] string name,
-            [MarshalAs(UnmanagedType.LPStr)] string input_json
+            [MarshalAs(UnmanagedType.LPStr)] string inputJson,
+            EventCallback callback
         );
+
+        [DllImport(RustLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "abort_task")]
+        private static extern bool abort_task(ulong taskId);
+
+        [DllImport(RustLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "shutdown")]
+        private static extern void shutdown();
 
         [DllImport(RustLibrary, CallingConvention = CallingConvention.Cdecl, EntryPoint = "free_rust_string")]
         private static extern void free_rust_string(IntPtr str);
 
-        public static string RunTaskRaw(string runConfig, string name, string inputJson)
+        public static ulong RunTask(string name, string inputJson, EventCallback callback)
         {
-            IntPtr resultPtr = run_task(runConfig, name, inputJson);
-            string result = Marshal.PtrToStringAnsi(resultPtr);
-            free_rust_string(resultPtr);
+            return run_task(name, inputJson, callback);
+        }
+
+        public static bool AbortTask(ulong taskId)
+        {
+            return abort_task(taskId);
+        }
+
+        public static void Shutdown()
+        {
+            shutdown();
+        }
+
+        public static string PtrToString(IntPtr ptr)
+        {
+            string result = Marshal.PtrToStringAnsi(ptr);
+            free_rust_string(ptr);
             return result;
         }
     }

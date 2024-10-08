@@ -90,7 +90,7 @@ namespace Rivet.Editor
             {
                 _task = new RivetTask(config.Value.Name, config.Value.Input);
                 _taskStopping = false;
-                _task.OnLog += OnTaskLog;
+                _task.TaskLog += OnTaskLog;
                 OnStateChange();
             }
 

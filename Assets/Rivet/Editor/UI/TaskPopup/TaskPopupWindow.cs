@@ -111,7 +111,7 @@ namespace Rivet.Editor.UI.TaskPopup
         private async void InitializeAndStartTask()
         {
             _task = new RivetTask(TaskName, TaskInput);
-            _task.OnLog += OnTaskLog;
+            _task.TaskLog += OnTaskLog;
 
             AddLogLine("Starting task...", LogType.META);
             EditorApplication.delayCall += () => UpdateUI();
@@ -130,7 +130,7 @@ namespace Rivet.Editor.UI.TaskPopup
 
         private void UpdateUI()
         {
-            bool running = _task != null && !_task.IsFinished;
+            bool running = _task != null && _task.IsRunning;
             _doneButton.text = running ? "Cancel" : "Close";
         }
 
