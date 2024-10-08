@@ -37,59 +37,58 @@ namespace Rivet.Editor
             }
         }
 
-        public delegate Task<TaskConfig?> GetTaskConfigDelegate();
+        public delegate Task<TaskConfig?> GetStartConfigDelegate();
+        public delegate Task<TaskConfig?> GetStopConfigDelegate();
         public delegate TaskPanelWindow? GetTaskPanelDelegate();
         public delegate void StateChangeHandler(bool running);
 
         // Config
-        private GetTaskConfigDelegate _getTaskConfig;
+        private GetStartConfigDelegate _getStartConfig;
+        private GetStopConfigDelegate _getStopConfig;
         private GetTaskPanelDelegate _getTaskPanel;
         private bool _autoRestart = false;
-        private bool _taskStopping = false;
 
         // Events
         public event StateChangeHandler StateChange;
 
         // State
         private readonly object _taskLock = new();
-        private RivetTask _task;
+        private RivetTask? _task;
+        private RivetTask? _stopTask;
         public List<LogEntry> LogEntries = new();
 
-        public TaskManager(string initMessage, GetTaskConfigDelegate getTaskConfig, GetTaskPanelDelegate getTaskPanel, bool autoRestart = false)
+        public TaskManager(string initMessage, GetStartConfigDelegate getStartConfig, GetStopConfigDelegate getStopConfig, GetTaskPanelDelegate getTaskPanel, bool autoRestart = false)
         {
-            _getTaskConfig = getTaskConfig;
+            _getStartConfig = getStartConfig;
+            _getStopConfig = getStopConfig;
             _getTaskPanel = getTaskPanel;
             _autoRestart = autoRestart;
 
             LogEntries.Add(new LogEntry(initMessage, LogType.META));
         }
 
-        public async Task StartTask(bool restart = true)
+        public async Task StartTask()
         {
             lock (_taskLock)
             {
-                // Do nothing if already stopping another task
-                if (_taskStopping)
-                    return;
-
                 // Do nothing if task already running
-                if (!restart && _task != null)
+                if (_task != null || _stopTask != null)
                     return;
             }
 
             // Kill old task
             StopTask();
 
-            // Start task
-            var config = await _getTaskConfig();
+            // Start new task
+            var config = await _getStartConfig();
             if (config == null)
             {
                 RivetLogger.Log("No task config provided.");
+                return;
             }
             lock (_taskLock)
             {
                 _task = new RivetTask(config.Value.Name, config.Value.Input);
-                _taskStopping = false;
                 _task.TaskLog += OnTaskLog;
                 OnStateChange();
             }
@@ -98,8 +97,19 @@ namespace Rivet.Editor
 
             // Run task
             var output = await _task.RunAsync();
+
+            await OnTaskOutput(output, _task);
+        }
+
+        private async Task OnTaskOutput(Result<JObject> output, RivetTask sourceTask)
+        {
             lock (_taskLock)
             {
+                if (_task != sourceTask)
+                {
+                    return;
+                }
+
                 _task = null;
                 OnStateChange();
             }
@@ -115,32 +125,62 @@ namespace Rivet.Editor
                     break;
             }
 
-            // TODO: Re-enable task restarting
-            // // Restart if task was not stopped
-            // bool shouldRestart;
-            // lock (_taskLock) shouldRestart = _autoRestart && _task == null && !_taskStopping;
-            // if (shouldRestart)
-            // {
-            //     AddLogLine("Restarting in 2 seconds", LogType.META);
-            //     await Task.Delay(2000);
-            //     await StartTask();
-            // }
+            // Restart if task was not stopped
+            if (_autoRestart)
+            {
+                AddLogLine("Restarting in 2 seconds", LogType.META);
+                await Task.Delay(2000);
+                await StartTask();
+            }
+
         }
 
-        public void StopTask()
+        public async Task StopTask()
         {
+            bool shouldStop;
             lock (_taskLock)
             {
-                if (_task != null)
+                shouldStop = _task != null && _stopTask == null;
+            }
+
+            if (shouldStop)
+            {
+                // Abort running task
+                var localTask = _task;
+                _task = null;
+                localTask.Kill();
+
+                AddLogLine("Stopping", LogType.META);
+
+                // Run stop task
+                //
+                // Save in global scope so it doesn't get dropped before getting called
+                var config = await _getStopConfig();
+                if (config == null)
                 {
-                    _taskStopping = true;
-                    _task.Kill();
-                    _task = null;
-
-                    AddLogLine("Stop", LogType.META);
-
+                    RivetLogger.Log("No task config provided.");
+                    return;
+                }
+                lock (_taskLock)
+                {
+                    _stopTask = new RivetTask(config.Value.Name, config.Value.Input);
                     OnStateChange();
                 }
+
+                await _stopTask.RunAsync();
+
+                OnStopFinish();
+            }
+        }
+
+        private void OnStopFinish()
+        {
+            AddLogLine("Stopped", LogType.META);
+
+            lock (_taskLock)
+            {
+                _stopTask = null;
+                OnStateChange();
             }
         }
 

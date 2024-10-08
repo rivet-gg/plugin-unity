@@ -30,8 +30,10 @@ namespace Rivet.Editor.UI.Dock
         [SerializeField]
         private VisualTreeAsset m_VisualTreeAsset;
 
-        private VisualElement _root {
-            get {
+        private VisualElement _root
+        {
+            get
+            {
                 return rootVisualElement;
             }
         }
@@ -204,13 +206,13 @@ namespace Rivet.Editor.UI.Dock
             // Task managers
             LocalGameServerManager = new(
                 initMessage: "Open \"Develop\" and press \"Start\" to start game server.",
-                getTaskConfig: async () =>
+                getStartConfig: async () =>
                 {
                     if (LocalGameServerExecutablePath != null)
                     {
                         return new TaskConfig
                         {
-                            Name = "exec_command",
+                            Name = "game_server.start",
                             Input = new JObject
                             {
                                 ["cwd"] = Builder.ProjectRoot(),
@@ -224,39 +226,36 @@ namespace Rivet.Editor.UI.Dock
                         return null;
                     }
                 },
+                getStopConfig: async () =>
+                {
+                    return new TaskConfig
+                    {
+                        Name = "game_server.stop",
+                        Input = new JObject { }
+                    };
+                },
                 getTaskPanel: () => GameServerWindow.GetWindowIfExists()
             );
 
             BackendManager = new(
                 initMessage: "Auto-started by Rivet plugin.",
-                getTaskConfig: async () =>
+                getStartConfig: async () =>
                 {
-                    // Choose port to run on. This is to avoid potential conflicts with
-                    // multiple projects running at the same time.
-                    var chooseRes = await new RivetTask("backend_choose_local_port", new JObject()).RunAsync();
-                    int port;
-                    switch (chooseRes)
-                    {
-                        case ResultOk<JObject> ok:
-                            port = (int)ok.Data["port"];
-                            LocalBackendPort = port;
-                            break;
-                        case ResultErr<JObject> err:
-                            RivetLogger.Error($"Failed to choose port: {err}");
-                            return null;
-                        default:
-                            return null;
-                    }
-
-
                     return new TaskConfig
                     {
-                        Name = "backend_dev",
+                        Name = "backend.start",
                         Input = new JObject
                         {
-                            ["port"] = port,
                             ["cwd"] = Builder.ProjectRoot(),
                         }
+                    };
+                },
+                getStopConfig: async () =>
+                {
+                    return new TaskConfig
+                    {
+                        Name = "backend.stop",
+                        Input = new JObject { }
                     };
                 },
                 getTaskPanel: () => BackendWindow.GetWindowIfExists(),
@@ -264,15 +263,17 @@ namespace Rivet.Editor.UI.Dock
             );
 
             // Shut down on reload
-            AssemblyReloadEvents.beforeAssemblyReload += () => {
+            AssemblyReloadEvents.beforeAssemblyReload += () =>
+            {
                 RivetLogger.Log("Before Assembly Reload");
                 ShutdownPlugin();
             };
 
-            // // Start backend
+            // Bootstrap
+            _ = GetBootstrapData();
+
+            // Start backend
             // _ = BackendManager.StartTask();
-
-
         }
 
         public void OnDisable()
@@ -290,11 +291,6 @@ namespace Rivet.Editor.UI.Dock
             RivetLogger.Log("Shutdown Plugin");
             LocalGameServerManager.StopTask();
             BackendManager.StopTask();
-        }
-
-        public void OnShow() {
-            // Fetch data
-            _ = GetBootstrapData();
         }
 
         void SetTab(MainTab tab)
