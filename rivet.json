@@ -13,9 +13,6 @@
 							"environment": {
 								"SERVER_HOSTNAME": "0.0.0.0"
 							},
-							"tags": {
-
-							},
 							"ports": {
 								"game": {
 									"protocol": "udp",
@@ -23,8 +20,8 @@
 								}
 							},
 							"resources": {
-								"cpu": 250,
-								"memory": 250
+								"cpu": 500,
+								"memory": 500
 							}
 						}
 					}

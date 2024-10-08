@@ -45,7 +45,7 @@ namespace Rivet.Editor.UI.TaskPopup
         private RivetTask _task;
 
         // Events
-        public event Action<object> OnTaskOutput;
+        public event Action<object>? OnTaskOutput;
 
         public static TaskPopupWindow RunTask(string title, string taskName, JObject taskInput)
         {
@@ -124,14 +124,14 @@ namespace Rivet.Editor.UI.TaskPopup
             catch (Exception ex)
             {
                 AddLogLine($"Task failed with error: {ex.Message}", LogType.STDERR);
-                UpdateUI();
+                EditorApplication.delayCall += () => UpdateUI();
             }
         }
 
         private void UpdateUI()
         {
             bool running = _task != null && _task.IsRunning;
-            _doneButton.text = running ? "Cancel" : "Close";
+            _doneButton.text = running ? "Cancel" : "Done";
         }
 
         private void OnTaskCompleted(Result<JObject> output)
@@ -145,7 +145,7 @@ namespace Rivet.Editor.UI.TaskPopup
                     AddLogLine(err.Message, LogType.STDERR);
                     break;
             }
-            OnTaskOutput.Invoke(output);
+            OnTaskOutput?.Invoke(output);
 
             UpdateUI();
         }

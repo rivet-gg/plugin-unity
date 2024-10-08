@@ -69,7 +69,7 @@ namespace Rivet.Editor.UI.Dock.Tabs
             _lgsShowLogs = _root.Q("PlayBody").Q("ServerLogsButton");
 
             _buildDeployButton = _root.Q("BuildDeployButton").Q<Button>("Button");
-            _stepsDropdown = _root.Q<DropdownField>("StepsDropdown");
+            _stepsDropdown = _root.Q<DropdownField>("BuildStepsDropdown");
 
             // Callbacks
             _dock.LocalGameServerManager.StateChange += OnLocalGameServerStateChange;
@@ -279,12 +279,12 @@ namespace Rivet.Editor.UI.Dock.Tabs
             }
 
             // Run deploy with CLI using TaskPopupWindow
-            var task = TaskPopupWindow.RunTask("Build & Deploy", "deploy", new JObject
+            TaskPopupWindow.RunTask("Build & Deploy", "deploy", new JObject
             {
                 ["cwd"] = Builder.ProjectRoot(),
                 ["environment_id"] = environmentId,
                 ["game_server"] = deployGameServer,
-                ["modules"] = deployModules,
+                ["backend"] = deployModules,
             });
         }
 
