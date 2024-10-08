@@ -79,8 +79,18 @@ namespace Rivet.Editor.UI.Dock.Tabs
 
             _environmentTypeDropdown.RegisterValueChangedCallback(ev =>
             {
-                plugin.EnvironmentType = (EnvironmentType)_environmentTypeDropdown.index;
-                _dock.OnSelectedEnvironmentChange();
+                if (!plugin.IsAuthenticated && _environmentTypeDropdown.index == 1)
+                {
+                    // Force sign in
+                    _environmentTypeDropdown.index = 0;
+                    _ = Dock.Singleton?.StartSignIn();
+                }
+                else
+                {
+                    // Change environment
+                    plugin.EnvironmentType = (EnvironmentType)_environmentTypeDropdown.index;
+                    _dock.OnSelectedEnvironmentChange();
+                }
             });
             _remoteEnvironmentDropdown.RegisterValueChangedCallback(ev =>
             {
@@ -107,7 +117,6 @@ namespace Rivet.Editor.UI.Dock.Tabs
 
             _buildDeployButton.RegisterCallback<ClickEvent>(ev => OnBuildAndDeploy());
 
-
             // Initial visibility update
             UpdatePlayerCountVisibility();
         }
@@ -116,6 +125,10 @@ namespace Rivet.Editor.UI.Dock.Tabs
         {
             var plugin = RivetGlobal.Singleton;
 
+            // Toggle remote environment
+            _environmentTypeDropdown.choices[1] = plugin.IsAuthenticated ? "Remote (Live Servers)" : "Remote (Live Servers) (Requires Sign In)";
+
+            // Add environment list
             if (plugin.CloudData is { } cloudData)
             {
                 // Add environments
@@ -127,8 +140,11 @@ namespace Rivet.Editor.UI.Dock.Tabs
                 environments.Add("+ New Environment");
                 _remoteEnvironmentDropdown.choices = environments;
             }
-
             OnSelectedEnvironmentChange();
+
+            // Disable sign in button
+            _buildDeployButton.SetEnabled(plugin.IsAuthenticated);
+            _buildDeployButton.Q<Label>(name: "Label").text = plugin.IsAuthenticated ? "Build & Deploy" : "Build & Deploy (Requires Sign In)";
         }
 
         /// <summary>
