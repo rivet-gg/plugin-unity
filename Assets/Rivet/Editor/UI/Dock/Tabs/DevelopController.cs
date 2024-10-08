@@ -126,7 +126,7 @@ namespace Rivet.Editor.UI.Dock.Tabs
             var plugin = RivetGlobal.Singleton;
 
             // Toggle remote environment
-            _environmentTypeDropdown.choices[1] = plugin.IsAuthenticated ? "Remote (Live Servers)" : "Remote (Live Servers) (Requires Sign In)";
+            _environmentTypeDropdown.choices[1] = plugin.IsAuthenticated ? "Remote" : "Remote (Requires Sign In)";
 
             // Add environment list
             if (plugin.CloudData is { } cloudData)
@@ -138,7 +138,7 @@ namespace Rivet.Editor.UI.Dock.Tabs
                     string buildName = env.Name;
                     if (cloudData.CurrentBuilds.TryGetValue(env.Id, out var build) && build.Tags.TryGetValue("version", out var versionTag))
                     {
-                        buildName = $" ({versionTag})";
+                        buildName += $" ({versionTag})";
                     }
                     environments.Add(buildName);
                 }
