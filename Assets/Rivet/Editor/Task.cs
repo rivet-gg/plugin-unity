@@ -45,10 +45,7 @@ namespace Rivet.Editor
 
         private void Run(string name, string inputJson)
         {
-            RivetLogger.Log($"starting run");
             _taskId = RivetToolchain.RunTask(name, inputJson, OnOutputEvent);
-            RivetLogger.Log($"run finished");
-            RivetLogger.Log($"running {_taskId}");
         }
 
         private void OnOutputEvent(ulong taskId, IntPtr eventJsonPtr)
@@ -59,16 +56,13 @@ namespace Rivet.Editor
 
         private void HandleOnOutputEvent(string eventJson)
         {
-            RivetLogger.Log($"got event {eventJson}");
-
             var eventObj = JObject.Parse(eventJson);
             if (eventObj.ContainsKey("log"))
             {
-                OnLogEvent(eventObj);
+                OnLogEvent((string)eventObj["log"]);
             }
             else if (eventObj.ContainsKey("result"))
             {
-                RivetLogger.Log("got result");
                 // 1st result = event enum type
                 // 2nd result = result enum type
                 _logResult = eventObj["result"]["result"] as JObject;
@@ -76,13 +70,12 @@ namespace Rivet.Editor
             }
             else if (eventObj.ContainsKey("port_update"))
             {
-                var backendPort = eventObj["port_update"]["backend_port"].Value<int>();
-                var editorPort = eventObj["port_update"]["editor_port"].Value<int>();
-                // TODO:
-                // Assuming you have a similar configuration saving mechanism
-                // RivetPluginBridge.Instance.LocalBackendPort = port;
-                // RivetPluginBridge.Instance.SaveConfiguration();
-                RivetLogger.Log($"Set backend port {backendPort} {editorPort}");
+                var plugin = RivetGlobal.Singleton;
+                plugin.LocalBackendPort = eventObj["port_update"]["backend_port"].Value<int>();
+                plugin.LocalEditorPort = eventObj["port_update"]["editor_port"].Value<int>();
+                SharedSettings.UpdateFromPlugin();
+
+                RivetLogger.Log($"Port update: backend={plugin.LocalBackendPort} editor={plugin.LocalEditorPort}");
             }
             else if (eventObj.ContainsKey("backend_config_update"))
             {
@@ -95,9 +88,9 @@ namespace Rivet.Editor
             }
         }
 
-        private void OnLogEvent(JObject eventObj)
+        private void OnLogEvent(string log)
         {
-            TaskLog?.Invoke(eventObj["log"].ToString(), LogType.STDOUT);
+            TaskLog?.Invoke(log, LogType.STDOUT);
         }
 
         private void OnFinish()
@@ -121,19 +114,19 @@ namespace Rivet.Editor
                 outputResult = _logResult;
             }
 
-            RivetLogger.Log($"[{_name}] Response: {outputResult.ToString(Newtonsoft.Json.Formatting.None)}");;
-
             TaskOutput?.Invoke(outputResult);
             if (outputResult.ContainsKey("Ok"))
             {
-                RivetLogger.Log($"[{_name}] Success: {outputResult["Ok"]}");
+                RivetLogger.Log($"[{_name}] Success: {outputResult["Ok"].ToString(Newtonsoft.Json.Formatting.None)}");
                 TaskOk?.Invoke(outputResult["Ok"] as JObject);
             }
             else if (outputResult.ContainsKey("Err"))
             {
-                RivetLogger.Error($"[{_name}] Error: {outputResult["Err"]}");
+                RivetLogger.Error($"[{_name}] Error: {outputResult["Err"].ToString(Newtonsoft.Json.Formatting.None)}");
                 TaskError?.Invoke(outputResult["Err"].ToString());
-            } else {
+            }
+            else
+            {
                 RivetLogger.Error($"[{_name}] Missing Err or Ok in result: {outputResult.ToString(Newtonsoft.Json.Formatting.None)}");
 
             }

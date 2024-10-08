@@ -4,7 +4,7 @@ The Rivet Unity Plugin allows you to connect your game with Rivet, and easily
 build and ship your multiplayer games to the world in under a minute.
 
 More learning content related to Unity and Rivet can be found in the [Rivet
-Learning Center](https://rivet.gg/learn/unity). You can also find an example of
+Learning Center](https://rivet.gg/docs/unity). You can also find an example of
 this plugin being used in the [Rivet examples
 repository](https://github.com/rivet-gg/examples/tree/main/unity/tanks-fishnet).
 

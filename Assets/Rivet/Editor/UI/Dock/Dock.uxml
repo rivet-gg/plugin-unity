@@ -11,7 +11,7 @@
         <ui:VisualElement name="Links" style="flex-grow: 0; flex-direction: row; flex-shrink: 1;">
             <ui:Button text="Sign In" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SignInButton" />
             <ui:Button text="Hub" parse-escape-sequences="true" display-tooltip-when-elided="true" name="HubButton" />
-            <ui:Button text="Documentation" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DocsButton" />
+            <ui:Button text="Docs" parse-escape-sequences="true" display-tooltip-when-elided="true" name="DocsButton" />
             <ui:Button text="Feedback" parse-escape-sequences="true" display-tooltip-when-elided="true" name="FeedbackButton" />
         </ui:VisualElement>
     </ui:VisualElement>

@@ -22,7 +22,7 @@ namespace Rivet.Editor.UI.Dock
         public static Dock? Singleton;
 
         [SerializeField]
-        private VisualTreeAsset m_VisualTreeAsset;
+        private VisualTreeAsset _visualAssetTree;
 
         private VisualElement _root
         {
@@ -51,6 +51,9 @@ namespace Rivet.Editor.UI.Dock
         private VisualElement _settingsTabBody;
         private SettingsController _settingsController;
 
+        // MARK: Buttons
+        private Button _signInButton;
+        private Button _hubButton;
 
         // MARK: Tasks
         public TaskManager LocalGameServerManager;
@@ -66,38 +69,44 @@ namespace Rivet.Editor.UI.Dock
 
         public void CreateGUI()
         {
-            m_VisualTreeAsset.CloneTree(rootVisualElement);
+            _visualAssetTree.CloneTree(rootVisualElement);
 
-            // Bind links
+            // Query
             var links = rootVisualElement.Q(name: "Header").Q(name: "Links");
-            links.Q(name: "SignInButton").RegisterCallback<ClickEvent>((ev) => Application.OpenURL("https://rivet.gg/learn/unity"));
-            links.Q(name: "HubButton").RegisterCallback<ClickEvent>((ev) => Application.OpenURL("https://rivet.gg/learn/unity"));
-            links.Q(name: "DocsButton").RegisterCallback<ClickEvent>((ev) => Application.OpenURL("https://rivet.gg/learn/unity"));
-            links.Q(name: "FeedbackButton").RegisterCallback<ClickEvent>((ev) => Application.OpenURL("https://hub.rivet.gg/?modal=feedback&utm=unity"));
+            _signInButton = links.Q<Button>(name: "SignInButton");
+            _hubButton = links.Q<Button>(name: "HubButton");
 
             var tabBar = _root.Q(name: "TabBar");
             var tabBody = _root.Q(name: "TabBody");
 
             _setupTabButton = tabBar.Q(name: "Setup");
             _setupTabBody = tabBody.Q(name: "Setup");
-            _setupTabButton.RegisterCallback<ClickEvent>(ev => SetTab(MainTab.Setup));
             _setupController = new SetupController(this, _setupTabBody);
 
             _developTabButton = tabBar.Q(name: "Develop");
             _developTabBody = tabBody.Q(name: "Develop");
-            _developTabButton.RegisterCallback<ClickEvent>(ev => SetTab(MainTab.Develop));
             _developController = new DevelopController(this, _developTabBody);
 
             _modulesTabButton = tabBar.Q(name: "Modules");
             _modulesTabBody = tabBody.Q(name: "Modules");
-            _modulesTabButton.RegisterCallback<ClickEvent>(ev => SetTab(MainTab.Modules));
             _modulesController = new ModulesController(this, _modulesTabBody);
 
             _settingsTabButton = tabBar.Q(name: "Settings");
             _settingsTabBody = tabBody.Q(name: "Settings");
-            _settingsTabButton.RegisterCallback<ClickEvent>(ev => SetTab(MainTab.Settings));
             _settingsController = new SettingsController(this, _settingsTabBody);
 
+            // Callbacks
+            _signInButton.RegisterCallback<ClickEvent>((ev) => { _ = StartSignIn(); });
+            _hubButton.RegisterCallback<ClickEvent>((ev) => OpenHub());
+            links.Q(name: "DocsButton").RegisterCallback<ClickEvent>((ev) => Application.OpenURL("https://rivet.gg/docs/unity"));
+            links.Q(name: "FeedbackButton").RegisterCallback<ClickEvent>((ev) => Application.OpenURL("https://hub.rivet.gg/?modal=feedback&utm=unity"));
+
+            _setupTabButton.RegisterCallback<ClickEvent>(ev => SetTab(MainTab.Setup));
+            _developTabButton.RegisterCallback<ClickEvent>(ev => SetTab(MainTab.Develop));
+            _modulesTabButton.RegisterCallback<ClickEvent>(ev => SetTab(MainTab.Modules));
+            _settingsTabButton.RegisterCallback<ClickEvent>(ev => SetTab(MainTab.Settings));
+
+            // Set initial tab
             SetTab(MainTab.Setup);
         }
 
@@ -119,11 +128,11 @@ namespace Rivet.Editor.UI.Dock
             var plugin = RivetGlobal.Singleton;
             LocalGameServerManager = new(
                 initMessage: "Open \"Develop\" and press \"Start\" to start game server.",
-                getStartConfig: async () =>
+                getStartConfig: () =>
                 {
                     if (plugin.LocalGameServerExecutablePath != null)
                     {
-                        return new TaskConfig
+                        return Task.FromResult<TaskConfig?>(new TaskConfig
                         {
                             Name = "game_server.start",
                             Input = new JObject
@@ -132,7 +141,7 @@ namespace Rivet.Editor.UI.Dock
                                 ["cmd"] = plugin.LocalGameServerExecutablePath,
                                 ["args"] = new JArray { "-batchmode", "-nographics", "-server" },
                             }
-                        };
+                        });
                     }
                     else
                     {
@@ -140,37 +149,37 @@ namespace Rivet.Editor.UI.Dock
                         return null;
                     }
                 },
-                getStopConfig: async () =>
+                getStopConfig: () =>
                 {
-                    return new TaskConfig
+                    return Task.FromResult<TaskConfig?>(new TaskConfig
                     {
                         Name = "game_server.stop",
                         Input = new JObject { }
-                    };
+                    });
                 },
                 getTaskPanel: () => GameServerWindow.GetWindowIfExists()
             );
 
             BackendManager = new(
                 initMessage: "Auto-started by Rivet plugin.",
-                getStartConfig: async () =>
+                getStartConfig: () =>
                 {
-                    return new TaskConfig
+                    return Task.FromResult<TaskConfig?>(new TaskConfig
                     {
                         Name = "backend.start",
                         Input = new JObject
                         {
                             ["cwd"] = Builder.ProjectRoot(),
                         }
-                    };
+                    });
                 },
-                getStopConfig: async () =>
+                getStopConfig: () =>
                 {
-                    return new TaskConfig
+                    return Task.FromResult<TaskConfig?>(new TaskConfig
                     {
                         Name = "backend.stop",
                         Input = new JObject { }
-                    };
+                    });
                 },
                 getTaskPanel: () => BackendWindow.GetWindowIfExists(),
                 autoRestart: true
@@ -203,8 +212,8 @@ namespace Rivet.Editor.UI.Dock
         {
 
             RivetLogger.Log("Shutdown Plugin");
-            LocalGameServerManager.StopTask();
-            BackendManager.StopTask();
+            _ = LocalGameServerManager.StopTask();
+            _ = BackendManager.StopTask();
         }
 
         void SetTab(MainTab tab)
@@ -226,7 +235,14 @@ namespace Rivet.Editor.UI.Dock
 
         public void OnBootstrap()
         {
+            // Update UI
+            var isAuthenticated = RivetGlobal.Singleton.IsAuthenticated;
+            _signInButton.style.display = !isAuthenticated ? DisplayStyle.Flex : DisplayStyle.None;
+            _hubButton.style.display = isAuthenticated ? DisplayStyle.Flex : DisplayStyle.None;
+
+            // Update controllers
             _developController.OnBootstrap();
+            _settingsController.OnBootstrap();
         }
 
         /// <summary>
@@ -235,6 +251,62 @@ namespace Rivet.Editor.UI.Dock
         public void OnSelectedEnvironmentChange()
         {
             _developController.OnSelectedEnvironmentChange();
+        }
+
+        public async Task StartSignIn()
+        {
+            // TODO: Abort previous sign in
+            // TODO: Disable sign in button
+
+            // Start sign in
+            var apiEndpoint = _settingsController.ApiEndpoint;
+            var startResult = await new RivetTask("auth.start_sign_in", new JObject
+            {
+                ["api_endpoint"] = apiEndpoint
+            }).RunAsync();
+
+            string deviceLinkUrl, deviceLinkToken;
+            if (startResult is ResultOk<JObject> ok)
+            {
+                deviceLinkUrl = (string)ok.Data["device_link_url"];
+                deviceLinkToken = (string)ok.Data["device_link_token"];
+            }
+            else
+            {
+                return;
+            }
+
+            // Open URL
+            Application.OpenURL(deviceLinkUrl);
+
+            // Wait for sign in
+            var waitTask = await new RivetTask("auth.wait_for_sign_in", new JObject
+            {
+                ["api_endpoint"] = apiEndpoint,
+                ["device_link_token"] = deviceLinkToken,
+            }).RunAsync();
+            RivetLogger.Log("Authentication complete");
+
+            // Bootstrap with new data
+            _ = RivetGlobal.Singleton.Bootstrap();
+        }
+
+        public async Task SignOut()
+        {
+            await new RivetTask("auth.sign_out", new JObject { }).RunAsync();
+            _ = RivetGlobal.Singleton.Bootstrap();
+        }
+
+        private void OpenHub()
+        {
+            if (RivetGlobal.Singleton.CloudData is { } cloudData)
+            {
+                Application.OpenURL($"https://hub.rivet.gg/games/{cloudData.GameId}");
+            }
+            else
+            {
+                Application.OpenURL($"https://hub.rivet.gg");
+            }
         }
     }
 }
