@@ -145,6 +145,14 @@ namespace Rivet.Editor.UI.Dock
                         }
                     });
                 },
+                getHookConfig: () =>
+                {
+                    return Task.FromResult<TaskConfig?>(new TaskConfig
+                    {
+                        Name = "game_server.hook",
+                        Input = new JObject {}
+                    });
+                },
                 getStopConfig: () =>
                 {
                     return Task.FromResult<TaskConfig?>(new TaskConfig
@@ -169,6 +177,7 @@ namespace Rivet.Editor.UI.Dock
                         }
                     });
                 },
+                getHookConfig: null,
                 getStopConfig: () =>
                 {
                     return Task.FromResult<TaskConfig?>(new TaskConfig
@@ -196,6 +205,7 @@ namespace Rivet.Editor.UI.Dock
 
             // Auto-start backend
             _ = BackendManager.StartTask();
+            _ = LocalGameServerManager.StartTask(hook: true);
         }
 
         public void OnDisable()

@@ -56,7 +56,10 @@ namespace Rivet.Editor.UI.TaskPanel
         public void UpdateLogs()
         {
             // In case the singleton doesn't exist yet
-            _logListView.itemsSource = TaskManager?.LogEntries;
+            if (TaskManager != null)
+            {
+                _logListView.itemsSource = TaskManager.LogEntries;
+            }
 
             // Rebuild view
             _logListView.Rebuild();
