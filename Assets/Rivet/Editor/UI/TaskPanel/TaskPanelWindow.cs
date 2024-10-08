@@ -2,6 +2,8 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Rivet.Editor.UI.Dock;
+using System.Runtime.InteropServices;
+using System;
 
 namespace Rivet.Editor.UI.TaskPanel
 {
@@ -55,15 +57,16 @@ namespace Rivet.Editor.UI.TaskPanel
 
         public void UpdateLogs()
         {
-            // In case the singleton doesn't exist yet
-            if (TaskManager != null)
+            if (TaskManager != null && _logListView != null)
             {
+                // Add logs
                 _logListView.itemsSource = TaskManager.LogEntries;
+
+                // Rebuild view
+                _logListView.Rebuild();
+                _logListView.ScrollToItem(-1);
             }
 
-            // Rebuild view
-            _logListView.Rebuild();
-            _logListView.ScrollToItem(-1);
         }
 
         private void OnClearPressed()

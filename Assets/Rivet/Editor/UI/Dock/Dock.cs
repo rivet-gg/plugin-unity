@@ -107,7 +107,7 @@ namespace Rivet.Editor.UI.Dock
             _settingsTabButton.RegisterCallback<ClickEvent>(ev => SetTab(MainTab.Settings));
 
             // Set initial tab
-            SetTab(MainTab.Setup);
+            SetTab(MainTab.Develop);
         }
 
         public void OnEnable()
