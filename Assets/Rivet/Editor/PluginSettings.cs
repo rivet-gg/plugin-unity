@@ -169,18 +169,12 @@ namespace Rivet.Editor
         /// </summary>
         public static void UpdateFromPlugin()
         {
-            if (Dock.Singleton is { } plugin)
+            if (RivetGlobal.Singleton is { } plugin)
             {
-                BackendEndpoint = plugin.EnvironmentType switch
-                {
-                    EnvironmentType.Local => $"http://localhost:{plugin.LocalBackendPort}",
-                    EnvironmentType.Remote => plugin.RemoteEnvironmentBackend?.Endpoint ?? "http://localhost:6420",
-                    _ => throw new System.NotImplementedException(),
-                };
+                BackendEndpoint = plugin.BackendEndpoint;
+                GameVersion = plugin.CurrentBuildSlug;
 
-                GameVersion = plugin.GameVersion ?? "unknown";
-
-                RivetLogger.Log($"Update Shared Settings [BackendEndpoint={BackendEndpoint} GameVersion={GameVersion}]");
+                RivetLogger.Log($"Update Shared Settings: BackendEndpoint={BackendEndpoint} GameVersion={GameVersion}");
             }
         }
     }

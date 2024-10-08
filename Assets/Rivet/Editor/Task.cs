@@ -45,7 +45,10 @@ namespace Rivet.Editor
 
         private void Run(string name, string inputJson)
         {
+            RivetLogger.Log($"starting run");
             _taskId = RivetToolchain.RunTask(name, inputJson, OnOutputEvent);
+            RivetLogger.Log($"run finished");
+            RivetLogger.Log($"running {_taskId}");
         }
 
         private void OnOutputEvent(ulong taskId, IntPtr eventJsonPtr)
@@ -56,6 +59,8 @@ namespace Rivet.Editor
 
         private void HandleOnOutputEvent(string eventJson)
         {
+            RivetLogger.Log($"got event {eventJson}");
+
             var eventObj = JObject.Parse(eventJson);
             if (eventObj.ContainsKey("log"))
             {
@@ -63,7 +68,10 @@ namespace Rivet.Editor
             }
             else if (eventObj.ContainsKey("result"))
             {
-                _logResult = eventObj["result"] as JObject;
+                RivetLogger.Log("got result");
+                // 1st result = event enum type
+                // 2nd result = result enum type
+                _logResult = eventObj["result"]["result"] as JObject;
                 OnFinish();
             }
             else if (eventObj.ContainsKey("port_update"))
@@ -113,16 +121,21 @@ namespace Rivet.Editor
                 outputResult = _logResult;
             }
 
+            RivetLogger.Log($"[{_name}] Response: {outputResult.ToString(Newtonsoft.Json.Formatting.None)}");;
+
             TaskOutput?.Invoke(outputResult);
             if (outputResult.ContainsKey("Ok"))
             {
                 RivetLogger.Log($"[{_name}] Success: {outputResult["Ok"]}");
                 TaskOk?.Invoke(outputResult["Ok"] as JObject);
             }
-            else
+            else if (outputResult.ContainsKey("Err"))
             {
                 RivetLogger.Error($"[{_name}] Error: {outputResult["Err"]}");
                 TaskError?.Invoke(outputResult["Err"].ToString());
+            } else {
+                RivetLogger.Error($"[{_name}] Missing Err or Ok in result: {outputResult.ToString(Newtonsoft.Json.Formatting.None)}");
+
             }
         }
 

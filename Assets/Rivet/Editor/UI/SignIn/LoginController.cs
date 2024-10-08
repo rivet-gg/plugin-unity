@@ -35,11 +35,11 @@ namespace Rivet.Editor.UI.Dock.Tabs
             _elSignIn = _root.Q<Button>(name: "SignIn");
             _elApiEndpoint = _root.Q(name: "Advanced").Q(name: "unity-content").Q<TextField>(name: "ApiEndpoint");
 
-            _elSignIn.RegisterCallback<ClickEvent>((ev) =>
-            {
-                _ = SignIn();
-            });
-            _elApiEndpoint.value = _dock.ApiEndpoint;
+            // _elSignIn.RegisterCallback<ClickEvent>((ev) =>
+            // {
+            //     _ = SignIn();
+            // });
+            // _elApiEndpoint.value = _dock.ApiEndpoint;
         }
 
         private async Task CheckLoginState()
@@ -63,53 +63,53 @@ namespace Rivet.Editor.UI.Dock.Tabs
 
         private async Task SignIn()
         {
-            // Get link token
-            var getLinkResult = await new RivetTask(
-                "start_device_link",
-                new JObject
-                {
-                    ["api_endpoint"] = _elApiEndpoint.value,
-                }
-            ).RunAsync();
+            // // Get link token
+            // var getLinkResult = await new RivetTask(
+            //     "start_device_link",
+            //     new JObject
+            //     {
+            //         ["api_endpoint"] = _elApiEndpoint.value,
+            //     }
+            // ).RunAsync();
 
-            string deviceLinkToken;
-            switch (getLinkResult)
-            {
-                case ResultOk<JObject> ok:
-                    deviceLinkToken = ok.Data["device_link_token"].ToString();
+            // string deviceLinkToken;
+            // switch (getLinkResult)
+            // {
+            //     case ResultOk<JObject> ok:
+            //         deviceLinkToken = ok.Data["device_link_token"].ToString();
 
-                    // Open browser on main thread
-                    EditorApplication.delayCall += () =>
-                    {
-                        Application.OpenURL(ok.Data["device_link_url"].ToString());
-                    };
+            //         // Open browser on main thread
+            //         EditorApplication.delayCall += () =>
+            //         {
+            //             Application.OpenURL(ok.Data["device_link_url"].ToString());
+            //         };
 
-                    break;
-                case ResultErr<JObject> err:
-                    return;
-                default:
-                    throw new System.Exception("unreachable");
-            }
+            //         break;
+            //     case ResultErr<JObject> err:
+            //         return;
+            //     default:
+            //         throw new System.Exception("unreachable");
+            // }
 
-            // Wait until the user has logged in
-            var waitForLoginResult = await new RivetTask(
-                "wait_for_login",
-                new JObject
-                {
-                    ["api_endpoint"] = _elApiEndpoint.value,
-                    ["device_link_token"] = deviceLinkToken,
-                }
-            ).RunAsync();
-            switch (getLinkResult)
-            {
-                case ResultOk<JObject> ok:
-                    _dock.ApiEndpoint = _elApiEndpoint.value;
-                    // _dock.SetScreen(Editor.UI.Screen.Main);
-                    break;
-                case ResultErr<JObject> err:
-                    return;
+            // // Wait until the user has logged in
+            // var waitForLoginResult = await new RivetTask(
+            //     "wait_for_login",
+            //     new JObject
+            //     {
+            //         ["api_endpoint"] = _elApiEndpoint.value,
+            //         ["device_link_token"] = deviceLinkToken,
+            //     }
+            // ).RunAsync();
+            // switch (getLinkResult)
+            // {
+            //     case ResultOk<JObject> ok:
+            //         _dock.ApiEndpoint = _elApiEndpoint.value;
+            //         // _dock.SetScreen(Editor.UI.Screen.Main);
+            //         break;
+            //     case ResultErr<JObject> err:
+            //         return;
 
-            }
+            // }
         }
     }
 }
