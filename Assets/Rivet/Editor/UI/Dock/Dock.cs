@@ -139,8 +139,8 @@ namespace Rivet.Editor.UI.Dock
                             ["cmd"] = Builder.GetDevDedicatedServerExecutablePath(),
                             ["args"] = new JArray { "-batchmode", "-nographics", "-server" },
                             ["envs"] = new JObject {
-                                ["BACKEND_ENDPOINT"] = SharedSettings.BackendEndpoint,
-                                ["GAME_VERSION"] = SharedSettings.GameVersion,
+                                ["BACKEND_ENDPOINT"] = plugin.BackendEndpoint,
+                                ["GAME_VERSION"] = plugin.CurrentBuildSlug,
                             }
                         }
                     });
