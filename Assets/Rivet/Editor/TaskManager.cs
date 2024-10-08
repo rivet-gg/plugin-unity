@@ -192,7 +192,33 @@ namespace Rivet.Editor
                 RivetTask.LogType.STDERR => LogType.STDERR,
                 _ => LogType.META
             };
-            AddLogLine(message, logType);
+            
+            // Strip [stdout] and [stderr] prefixes
+            message = StripLogPrefix(message);
+
+            // Filter out Unity stack traces
+            if (!IsUnityStackTrace(message))
+            {
+                AddLogLine(message, logType);
+            }
+        }
+
+        private string StripLogPrefix(string message)
+        {
+            if (message.StartsWith("[stdout] "))
+            {
+                return message.Substring(9);
+            }
+            else if (message.StartsWith("[stderr] "))
+            {
+                return message.Substring(9);
+            }
+            return message;
+        }
+
+        private bool IsUnityStackTrace(string message)
+        {
+            return (message.Contains(" (at ") && message.EndsWith(")")) || message.StartsWith("UnityEngine.");
         }
 
         public void AddLogLine(string message, LogType type)

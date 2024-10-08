@@ -17,7 +17,7 @@
     </ui:Instance>
     <ui:VisualElement name="PlayBody" style="flex-grow: 0; flex-shrink: 0;">
         <ui:Label tabindex="-1" text="Test your game on this machine." parse-escape-sequences="true" display-tooltip-when-elided="true" style="overflow: hidden; white-space: normal; margin-bottom: 6px;" />
-        <ui:DropdownField choices="Run Client &amp; Server,Run Client Only,Run Server Only" index="0" name="TypeDropdown" label="Type" style="height: 19px; margin-bottom: 4px;" />
+        <ui:DropdownField choices="Run Client &amp; Server,Run Client Only,Run Server Only" index="2" name="TypeDropdown" label="Type" style="height: 19px; margin-bottom: 4px;" />
         <ui:SliderInt label="Client Count" high-value="8" low-value="1" direction="Horizontal" show-input-field="true" name="PlayerCountSlider" />
         <ui:VisualElement name="ButtonRow" style="flex-grow: 1; flex-direction: row; margin-bottom: 4px;">
             <ui:Instance template="IconButton" name="StartButton" style="flex-grow: 1; display: flex;">

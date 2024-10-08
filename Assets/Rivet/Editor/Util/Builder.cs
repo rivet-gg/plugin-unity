@@ -154,6 +154,8 @@ namespace Rivet.Editor.Util
                 subtarget = (int)StandaloneBuildSubtarget.Server
             };
 
+            return FindServerExecutablePath(buildPlayerOptions.locationPathName, buildPlayerOptions.target);
+
             // Build the server
             RivetLogger.Log("Building dedicated server...");
             var report = BuildPipeline.BuildPlayer(buildPlayerOptions);
