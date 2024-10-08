@@ -19,6 +19,7 @@ const target = {
         platform === "darwin" ? "apple-darwin" :
         "unknown-linux-gnu"
     }`,
+    prefix: platform === "windows" ? "" : "lib",
 };
 
 async function copyFile(src: string, dest: string): Promise<void> {
@@ -51,12 +52,13 @@ const ffiSrc = join(
     toolchainRepoPath,
     "target",
     "debug",
-    `librivet_toolchain_ffi.${target.ext}`,
+    `${target.prefix}rivet_toolchain_ffi.${target.ext}`,
 );
 const ffiDest = join(
     assetsPath,
-    `librivet_toolchain_ffi_${target.os}_${target.arch}.${target.ext}`,
+    `${target.prefix}rivet_toolchain_ffi_${target.os}_${target.arch}.${target.ext}`,
 );
+console.log(`Copying ${ffiSrc} -> ${ffiDest}`);
 await copyFile(ffiSrc, ffiDest);
 
-console.log(`Copied ${ffiSrc} -> ${ffiDest}`);
+console.log(`Finished building`);

@@ -3,21 +3,19 @@
 import "./build_dev.ts";
 
 import { glob } from "npm:glob";
-import { dirname, fromFileUrl, join } from "jsr:@std/path";
+import { dirname, fromFileUrl, join, normalize } from "jsr:@std/path";
 
 const __dirname = dirname(fromFileUrl(import.meta.url));
-const projectDir = `${__dirname}/..`;
+const projectDir = normalize(`${__dirname}/..`);
 
 // Determine the Unity executable path based on the platform
 let unityPath: string;
 switch (Deno.build.os) {
     case "windows":
-        unityPath =
-            "C:\\Program Files\\Unity\\Hub\\Editor\\*\\Editor\\Unity.exe";
+        unityPath = "C:/Program Files/Unity/Hub/Editor/*/Editor/Unity.exe";
         break;
     case "darwin":
-        unityPath =
-            "/Applications/Unity/Hub/Editor/*/Unity.app/Contents/MacOS/Unity";
+        unityPath = "/Applications/Unity/Hub/Editor/*/Unity.app/Contents/MacOS/Unity";
         break;
     case "linux":
         unityPath = "/opt/unity/editor/*/Editor/Unity";
@@ -27,12 +25,12 @@ switch (Deno.build.os) {
 }
 
 // Find the latest Unity version installed
-const unityVersions = await glob(unityPath);
+const unityVersions = await glob(unityPath, { windowsPathsNoEscape: true });
 if (unityVersions.length === 0) {
     throw new Error("No Unity installation found");
 }
-unityVersions.sort();
-const latestUnity = unityVersions[unityVersions.length - 1];
+unityVersions.sort((a, b) => b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' }));
+const latestUnity = unityVersions[0];
 
 // Delete the multiple project file lock
 const lockFilePath = join(projectDir, "Temp", "UnityLockfile");
