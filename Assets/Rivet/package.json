@@ -1,7 +1,7 @@
 {
     "name": "com.rivet.rivet",
     "displayName": "Rivet",
-    "version": "{{VERSION}}",
+    "version": "2.0.0-rc.2",
     "unity": "2022.0",
     "description": "Open-Source Multiplayer Tooling",
     "keywords": [
