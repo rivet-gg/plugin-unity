@@ -29,7 +29,7 @@ You can install the Rivet Unity plugin in a couple ways:
 
 ## 🚀 Getting started
 
-Head over to our [Learning Center](https://rivet.gg/learn/unity) to get started
+Head over to our [Learning Center](https://rivet.gg/docs/unity/tutorials/quickstart-fishnet) to get started
 with Rivet and Unity.
 
 ## 🧐 Features
